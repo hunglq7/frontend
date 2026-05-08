@@ -1,14 +1,14 @@
-import { UploadOutlined } from "@ant-design/icons";
+import { useAuthStore } from "#src/store/auth";
 
+import { UploadOutlined } from "@ant-design/icons";
 import { Avatar, Button, Upload } from "antd";
 import ImgCrop from "antd-img-crop";
-import { useAuthStore } from "#src/store/auth";
 
 interface FormAvatarItemProps {
 	value?: string
 	onChange?: (value: any) => void
 }
-
+const TRAILING_SLASH_REGEX = /\/$/;
 export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 	const { token } = useAuthStore();
 
@@ -27,7 +27,7 @@ export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 						accept="image/*"
 						showUploadList={false}
 						name="file"
-						action={`${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/upload`}
+						action={`${import.meta.env.VITE_API_BASE_URL.replace(TRAILING_SLASH_REGEX, "")}/upload`}
 						headers={{
 							authorization: `Bearer ${token}`,
 						}}
