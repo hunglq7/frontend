@@ -19,12 +19,7 @@ import {
 	ThunderboltOutlined,
 	UserOutlined,
 } from "@ant-design/icons";
-import {
-	EmbeddedIcon,
-	ExternalIcon,
-	OutsidePageIcon,
-	ProfileCardIcon,
-} from "./local-icons";
+import { EmbeddedIcon, ExternalIcon, ProfileCardIcon } from "./local-icons";
 import { RiAccountCircleLine, RiReactjsLine, RiUserSettingsLine } from "./ri";
 
 /**
@@ -41,7 +36,6 @@ export const menuIcons: Record<string, any> = {
 	NodeExpandOutlined,
 	SisternodeOutlined,
 	SubnodeOutlined,
-	OutsidePageIcon,
 	AntDesignOutlined,
 	ContainerOutlined,
 	ExternalIcon,

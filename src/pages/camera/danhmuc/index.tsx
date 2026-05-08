@@ -10,13 +10,14 @@ import {
 import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, ScanOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, ScanOutlined, StopOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Popconfirm, Progress, Row, Select, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import * as XLSX from "xlsx";
 import { Detail } from "./component/detail";
+import { ScanModal } from "./component/ScanModal";
 import { getConstantColumns } from "./constants";
 
 export default function DanhMucCamera() {
@@ -30,6 +31,15 @@ export default function DanhMucCamera() {
 	const [searchIp, setSearchIp] = useState("");
 	const [searchLocation, setSearchLocation] = useState("");
 	const [searchStatus, setSearchStatus] = useState<boolean | null>(null);
+	const [scanning, setScanning] = useState(false);
+	const [scanProgress, setScanProgress] = useState(0);
+	const [_scanResults, _setScanResults] = useState<{ activated: number, deactivated: number } | null>(null);
+	const [scanAbortController, setScanAbortController] = useState<AbortController | null>(null);
+	const [currentScanningCamera, setCurrentScanningCamera] = useState<DanhmucCameraItemType | null>(null);
+	const [scanModalVisible, setScanModalVisible] = useState(false);
+	const [onlineCamerasCount, setOnlineCamerasCount] = useState(0);
+	const [offlineCamerasCount, setOfflineCamerasCount] = useState(0);
+	const [totalScannedCameras, setTotalScannedCameras] = useState(0);
 	const actionRef = useRef<ActionType>(null);
 
 	const handleImportExcel = async (file: File) => {
@@ -77,6 +87,15 @@ export default function DanhMucCamera() {
 		window.$message?.success(t("common.deleteSuccess"));
 	};
 
+	const handleCancelScan = () => {
+		if (scanAbortController) {
+			scanAbortController.abort();
+			setScanning(false);
+			setScanModalVisible(false);
+			window.$message?.warning(t("camera.scanCancelled") || "Scan cancelled");
+		}
+	};
+
 	const handleScanAllCameras = async () => {
 		try {
 			const cameras = await fetchDanhmucCamerasList();
@@ -85,28 +104,85 @@ export default function DanhMucCamera() {
 				return;
 			}
 
-			// Scan cameras in batches of 3 to avoid overwhelming the backend
-			const batchSize = 3;
-			for (let i = 0; i < cameras.length; i += batchSize) {
-				const batch = cameras.slice(i, i + batchSize);
-				const scanPromises = batch.map(camera =>
-					fetchScanDanhMucCameraItem(camera.id!).catch((error) => {
-						console.error(`Failed to scan camera ${camera.id}:`, error);
-					}),
-				);
-				await Promise.all(scanPromises);
-				// Small delay between batches
-				if (i + batchSize < cameras.length) {
-					await new Promise(resolve => setTimeout(resolve, 500));
-				}
-			}
+			const abortController = new AbortController();
+			setScanAbortController(abortController);
+			setScanning(true);
+			setScanModalVisible(true);
+			setScanProgress(0);
+			setScanResults(null);
+			setOnlineCamerasCount(0);
+			setOfflineCamerasCount(0);
+			setTotalScannedCameras(cameras.length);
+			setCurrentScanningCamera(null);
 
-			window.$message?.success(t("camera.scanAllSuccess") || "All cameras scanned successfully");
-			await actionRef.current?.reload?.();
+			let activatedCount = 0;
+			let deactivatedCount = 0;
+			let processedCount = 0;
+
+			const cameraQueue = [...cameras];
+			const maxConcurrent = Math.min(6, cameras.length);
+
+			const worker = async () => {
+				while (cameraQueue.length > 0 && !abortController.signal.aborted) {
+					const camera = cameraQueue.shift();
+					if (!camera) {
+						break;
+					}
+
+					setCurrentScanningCamera(camera);
+
+					try {
+						const result = await fetchScanDanhMucCameraItem(camera.id!);
+						if (result.is_online) {
+							activatedCount++;
+							setOnlineCamerasCount(prev => prev + 1);
+						}
+						else {
+							deactivatedCount++;
+							setOfflineCamerasCount(prev => prev + 1);
+						}
+						console.warn(`Successfully scanned camera ${camera.id}: ${camera.name} - ${result.is_online ? "Online" : "Offline"}`);
+					}
+					catch (error) {
+						if ((error as Error).name === "AbortError") {
+							return;
+						}
+						deactivatedCount++;
+						setOfflineCamerasCount(prev => prev + 1);
+						console.error(`Failed to scan camera ${camera.id}:`, error);
+					}
+					finally {
+						processedCount++;
+						setScanProgress(Math.round((processedCount / cameras.length) * 100));
+					}
+				}
+			};
+
+			const workers = Array.from({ length: maxConcurrent }).fill(null).map(() => worker());
+			await Promise.all(workers);
+
+			if (!abortController.signal.aborted) {
+				setScanResults({ activated: activatedCount, deactivated: deactivatedCount });
+				setScanning(false);
+
+				window.$message?.success(
+					`Quét hoàn thành: ${activatedCount} camera kích hoạt, ${deactivatedCount} camera ngừng kích hoạt`,
+				);
+			}
 		}
 		catch (error) {
-			console.error("Scan all cameras failed", error);
-			window.$message?.error(t("camera.scanAllFailed") || "Failed to scan cameras");
+			if ((error as Error).name === "AbortError") {
+				console.error("Scan was cancelled");
+			}
+			else {
+				console.error("Scan all cameras failed", error);
+				setScanning(false);
+				setScanModalVisible(false);
+				window.$message?.error(t("camera.scanAllFailed") || "Failed to scan cameras");
+			}
+		}
+		finally {
+			setScanAbortController(null);
 		}
 	};
 
@@ -133,7 +209,8 @@ export default function DanhMucCamera() {
 			const matchName = searchName === "" || (camera.name?.toLowerCase().includes(searchName.toLowerCase()) ?? false);
 			const matchIp = searchIp === "" || (camera.ip_address?.toLowerCase().includes(searchIp.toLowerCase()) ?? false);
 			const matchLocation = searchLocation === "" || (camera.location?.toLowerCase().includes(searchLocation.toLowerCase()) ?? false);
-			const matchStatus = searchStatus === null || camera.is_online === searchStatus;
+			const cameraOnline = Boolean(camera.is_online);
+			const matchStatus = searchStatus === null || cameraOnline === searchStatus;
 
 			return matchName && matchIp && matchLocation && matchStatus;
 		});
@@ -147,21 +224,41 @@ export default function DanhMucCamera() {
 		actionRef.current?.reload?.();
 	};
 
-	// Reload table when search filters change
+	// Reload table when search filters change (with debounce)
 	useEffect(() => {
-		actionRef.current?.reload?.();
+		const timeoutId = setTimeout(() => {
+			actionRef.current?.reload?.();
+		}, 300); // 300ms debounce
+
+		return () => clearTimeout(timeoutId);
 	}, [searchName, searchIp, searchLocation, searchStatus]);
 
 	const handleExportExcel = async () => {
 		try {
 			const data = await fetchDanhmucCamerasList();
-			const exportData = data.map((item, index) => ({
+			const filteredData = filterCameras(data);
+
+			const formatDate = (dateStr: string | null) => {
+				if (!dateStr) {
+					return "";
+				}
+				const date = new Date(dateStr);
+				if (Number.isNaN(date.getTime())) {
+					return dateStr;
+				}
+				const day = String(date.getDate()).padStart(2, "0");
+				const month = String(date.getMonth() + 1).padStart(2, "0");
+				const year = date.getFullYear();
+				return `${day}/${month}/${year}`;
+			};
+
+			const exportData = filteredData.map((item, index) => ({
 				"STT": index + 1,
 				"Tên thiết bị": item.name,
 				"Địa chỉ IP": item.ip_address,
 				"Vị trí lắp đặt": item.location,
 				"Trạng thái": item.is_online ? t("camera.enabled") : t("camera.deactivated"),
-				"Lần kiểm tra cuối": item.last_check,
+				"Lần kiểm tra cuối": formatDate(item.last_check),
 			}));
 			const worksheet = XLSX.utils.json_to_sheet(exportData, {
 				header: ["STT", "Tên thiết bị", "Địa chỉ IP", "Vị trí lắp đặt", "Trạng thái", "Lần kiểm tra cuối"],
@@ -207,7 +304,7 @@ export default function DanhMucCamera() {
 					okText={t("common.confirm")}
 					cancelText={t("common.cancel")}
 				>
-					<BasicButton type="link" size="small" danger>
+					<BasicButton key="delete-btn" type="link" size="small" danger>
 						{t("common.delete")}
 					</BasicButton>
 				</Popconfirm>,
@@ -286,13 +383,24 @@ export default function DanhMucCamera() {
 				search={false}
 				columns={columns}
 				request={async () => {
-					const data = await fetchDanhmucCamerasList();
-					const filteredData = filterCameras(data);
-					return {
-						data: filteredData,
-						success: true,
-						total: filteredData.length,
-					};
+					try {
+						const data = await fetchDanhmucCamerasList();
+						const filteredData = filterCameras(data);
+						return {
+							data: filteredData,
+							success: true,
+							total: filteredData.length,
+						};
+					}
+					catch (error) {
+						console.error("Failed to load cameras:", error);
+						// Return empty data to stop loading
+						return {
+							data: [],
+							success: false,
+							total: 0,
+						};
+					}
 				}}
 				rowSelection={{
 					selectedRowKeys,
@@ -317,21 +425,23 @@ export default function DanhMucCamera() {
 							type="default"
 							icon={<ScanOutlined />}
 							onClick={handleScanAllCameras}
+							disabled={scanning}
 							style={{ marginLeft: 8 }}
 						>
-							{t("camera.scanAll") || "Check Status"}
+							{scanning ? "Đang quét..." : (t("camera.scanAll") || "Check Status")}
 						</BasicButton>,
 						<Button key="template" onClick={handleDownloadTemplate}>
-							{t("download Template") || "Download Template"}
+							{t("common.downloadTemplate") || "Download Template"}
 						</Button>,
 						<Upload
+							key="upload"
 							accept=".xlsx,.xls"
 							showUploadList={false}
 							beforeUpload={handleUploadFile}
 							disabled={importing}
 						>
 							<Button key="import" icon={<UploadOutlined />} loading={importing}>
-								{t("import excel") || "Import Excel"}
+								{t("common.importExcel") || "Import Excel"}
 							</Button>
 						</Upload>,
 						<Button key="export" onClick={handleExportExcel}>
@@ -363,7 +473,7 @@ export default function DanhMucCamera() {
 									{selectedRowKeys.length}
 									)
 								</Button>
-							</Popconfirm>
+							</Popconfirm>,
 						);
 					}
 
@@ -378,6 +488,17 @@ export default function DanhMucCamera() {
 				detailData={detailData}
 				onCloseChange={() => setIsOpen(false)}
 				refreshTable={() => actionRef.current?.reload?.()}
+			/>
+
+			<ScanModal
+				visible={scanModalVisible}
+				scanning={scanning}
+				progress={scanProgress}
+				onlineCount={onlineCamerasCount}
+				offlineCount={offlineCamerasCount}
+				currentCamera={currentScanningCamera}
+				totalCameras={totalScannedCameras}
+				onCancel={handleCancelScan}
 			/>
 		</BasicContent>
 	);

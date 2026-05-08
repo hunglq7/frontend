@@ -10,10 +10,13 @@ export function useCurrentRoute() {
 	const matches = useMatches();
 
 	const currentRoute = useMemo(() => {
-		const match = matches.at(-1);
+		// Filter out the 404 fallback route (id: "404") and get the last actual route
+		const actualMatches = matches.filter((match) => match.id !== "404");
+		const match =
+			actualMatches.length > 0 ? actualMatches.at(-1) : matches.at(-1);
 
 		return match;
-	}, [matches, location]);
+	}, [matches]);
 
 	return currentRoute;
 }

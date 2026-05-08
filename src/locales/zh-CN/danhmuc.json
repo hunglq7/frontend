@@ -24,5 +24,8 @@
 	"tenViTri": "Tên vị trí",
 	"moTa": "Mô tả",
 	"tenViTriPlaceholder": "Nhập tên vị trí",
-	"moTaPlaceholder": "Nhập mô tả"
+	"moTaPlaceholder": "Nhập mô tả",
+	"tenChucVuPlaceholder": "Nhập tên chức vụ",
+	"tenChucVu": "Tên chức vụ",
+	"chucVuManagement": "Danh mục chức vụ"
 }

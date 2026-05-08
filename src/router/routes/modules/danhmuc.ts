@@ -4,7 +4,7 @@ import { lazy } from "react";
 
 const DanhMucDonVi = lazy(() => import("#src/pages/danhmuc/donvi"));
 const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));
-
+const DanhMucChucVu = lazy(() => import("#src/pages/danhmuc/chucvu"));
 const routes: AppRouteRecordRaw[] = [
 	{
 		path: "/danhmuc",
@@ -36,6 +36,15 @@ const routes: AppRouteRecordRaw[] = [
 				handle: {
 					icon: "TableOutlined",
 					title: "danhmuc.viTriLapDatManagement",
+					ignoreAccess: true,
+				},
+			},
+			{
+				path: "/danhmuc/chucvu",
+				Component: DanhMucChucVu,
+				handle: {
+					icon: "TableOutlined",
+					title: "danhmuc.chucVuManagement",
 					ignoreAccess: true,
 				},
 			},

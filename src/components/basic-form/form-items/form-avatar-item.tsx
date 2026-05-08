@@ -2,6 +2,7 @@ import { UploadOutlined } from "@ant-design/icons";
 
 import { Avatar, Button, Upload } from "antd";
 import ImgCrop from "antd-img-crop";
+import { useAuthStore } from "#src/store/auth";
 
 interface FormAvatarItemProps {
 	value?: string
@@ -9,11 +10,7 @@ interface FormAvatarItemProps {
 }
 
 export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
-	// const { t } = useTranslation();
-
-	// const onSelect: TreeProps["onSelect"] = (selectedKeys) => {
-	// 	onChange?.(selectedKeys);
-	// };
+	const { token } = useAuthStore();
 
 	return (
 		<>
@@ -30,9 +27,9 @@ export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 						accept="image/*"
 						showUploadList={false}
 						name="file"
-						action={`${import.meta.env.VITE_API_BASE_URL}/upload`}
+						action={`${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/upload`}
 						headers={{
-							authorization: "authorization-text",
+							authorization: `Bearer ${token}`,
 						}}
 						onChange={(info) => {
 							// if (info.file.status !== 'uploading') {
@@ -48,7 +45,7 @@ export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 						}}
 					>
 						<Button icon={<UploadOutlined />}>
-							更换头像
+							Upload
 						</Button>
 					</Upload>
 				</ImgCrop>

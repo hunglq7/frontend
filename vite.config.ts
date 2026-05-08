@@ -40,11 +40,11 @@ const DANHMUC_REWRITE_REGEXP = /^\/danhmuc/;
 export default defineConfig({
 	base: isDev ? "/" : "/react-antd-admin/",
 	plugins: [
-		vitePluginFakeServer({
-			basename: "/api",
-			enableProd: false,
-			timeout: 1000,
-		}),
+		// vitePluginFakeServer({
+		// 	basename: "/api",
+		// 	enableProd: false,
+		// 	timeout: 1000,
+		// }),
 		// https://github.com/pd4d10/vite-plugin-svgr#options
 		svgrPlugin({
 			// https://react-svgr.com/docs/options/
@@ -143,7 +143,7 @@ export default defineConfig({
 			"/danhmuc": {
 				target: "http://192.168.0.110:8000",
 				changeOrigin: true,
-				rewrite: path => path.replace(DANHMUC_REWRITE_REGEXP, ""),
+				rewrite: (path) => path.replace(DANHMUC_REWRITE_REGEXP, ""),
 			},
 			"/danh-muc-may-cao": {
 				target: "http://192.168.0.110:8000",

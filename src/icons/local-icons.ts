@@ -4,7 +4,6 @@ export { default as LayoutCenterIcon } from "~icons/svg/layout-center";
 export { default as LayoutLeftIcon } from "~icons/svg/layout-left";
 export { default as LayoutRightIcon } from "~icons/svg/layout-right";
 export { default as MixedNavigationIcon } from "~icons/svg/mixed-navigation";
-export { default as OutsidePageIcon } from "~icons/svg/outside-page";
 export { default as ProfileCardIcon } from "~icons/svg/profile-card";
 export { default as ServerErrorIcon } from "~icons/svg/server-error";
 export { default as SideNavigationIcon } from "~icons/svg/side-navigation";

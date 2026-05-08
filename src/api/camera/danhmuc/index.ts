@@ -41,10 +41,18 @@ export function fetchUpdateDanhMucCameraItem(
 	});
 }
 
+export interface ScanCameraResult {
+	is_online: boolean;
+}
+
 export function fetchScanDanhMucCameraItem(id: number) {
-	return request.put(`cameras/${id}/scan`, {
-		ignoreLoading: true,
-	});
+	return request
+		.put<ScanCameraResult>(`cameras/${id}/scan`, {
+			ignoreLoading: true,
+			timeout: 20000,
+			retry: 0,
+		})
+		.json();
 }
 
 /* Xóa một danh mục camera */

@@ -29,74 +29,73 @@ export * from "./types";
 // }
 
 export function fetchLogin(data: LoginInfo) {
-	return request.post("auth/login", { json: data }).json<{
-		access_token: string
-		refresh_token: string
-		token_type: string
-		user_id: number
+	return request.post("api/auth/login", { json: data }).json<{
+		access_token: string;
+		refresh_token: string;
+		token_type: string;
+		user_id: number;
 	}>();
 }
 
 export function fetchRegister(data: UserRegisterPayload) {
-	return request.post("auth/register", { json: data }).json<{
-		access_token: string
-		refresh_token: string
-		token_type: string
-		user_id: number
+	return request.post("api/auth/register", { json: data }).json<{
+		access_token: string;
+		refresh_token: string;
+		token_type: string;
+		user_id: number;
 	}>();
 }
 
-export function fetchLogout() {
-	return request.post("auth/logout").json();
+export function fetchLogout(refreshToken: string) {
+	return request.post("api/auth/logout", { json: { refreshToken } }).json();
 }
 
 export function fetchAsyncRoutes() {
 	return request.get("api/Users/get-async-routes").json();
 }
 
-export function fetchUserInfo(): UserInfoType {
+export async function fetchUserInfo(): Promise<UserInfoType> {
 	const token = useAuthStore.getState().token;
 	if (!token) {
 		throw new Error("No token");
 	}
 
 	try {
-		// Decode JWT token to get user info
 		const payload = token.split(".")[1];
 		const base64 = base64UrlDecode(payload);
 		const jsonPayload = decodeURIComponent(
 			atob(base64)
 				.split("")
-				.map(c => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
+				.map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
 				.join(""),
 		);
 		const decoded = JSON.parse(jsonPayload);
-		const roles: string[] = decoded.roles
-			? Array.isArray(decoded.roles)
-				? decoded.roles.map((role: string) => String(role).toLowerCase())
-				: [String(decoded.roles).toLowerCase()]
-			: [];
+		const userId = decoded.sub || decoded.id;
+		if (!userId) {
+			throw new Error("No user id in token");
+		}
+
+		const user = await request.get(`api/users/${userId}`).json<UserInfoType>();
 		return {
-			id: decoded.sub || "",
-			username: decoded.username || "",
-			email: decoded.email || "",
-			phoneNumber: "",
-			description: "",
-			avatar: decoded.avatar || "",
-			roles,
+			id: String(user.id),
+			username: user.username || "",
+			email: user.email || "",
+			phoneNumber: (user as any).phone || "",
+			description: user.description || "",
+			avatar: user.avatar || "",
+			roles: Array.isArray(user.roles) ? user.roles.map(String) : [],
 		};
-	}
-	catch (error) {
-		console.error("Failed to decode token", error);
+	} catch (error) {
+		console.error("Failed to fetch user info", error);
 		throw error;
 	}
 }
 
 export interface RefreshTokenResult {
-	access_token: string
-	refresh_token: string
-	token_type: string
-	user_id: number
+	access_token: string;
+	refresh_token: string;
+	token_type: string;
+	user_id: number;
 }
 
 export function fetchRefreshToken(data: { readonly refresh_token: string }) {
@@ -107,24 +106,40 @@ export function fetchRefreshToken(data: { readonly refresh_token: string }) {
 
 export function fetchUserList(skip = 0, limit = 100) {
 	return request
-		.get("users", { searchParams: { skip, limit } })
+		.get("api/users", { searchParams: { skip, limit } })
 		.json<UserListResponse>();
 }
 
 export function fetchCreateUser(data: UserSavePayload) {
-	return request.post("users", { json: data }).json<UserItemType>();
+	return request.post("api/users", { json: data }).json<UserItemType>();
 }
 
-export function fetchUpdateUser(id: number, data: UserUpdatePayload) {
-	return request.put(`users/${id}`, { json: data }).json<UserItemType>();
+export async function fetchUpdateUser(
+	id: number,
+	data: UserUpdatePayload,
+): Promise<UserInfoType> {
+	const response = await request
+		.put(`api/users/${id}`, { json: data })
+		.json<UserItemType>();
+	return {
+		id: String(response.id),
+		username: response.username || "",
+		email: response.email || "",
+		phoneNumber: (response as any).phone || "",
+		description: response.description || "",
+		avatar: response.avatar || "",
+		roles: Array.isArray(response.roles) ? response.roles.map(String) : [],
+	};
 }
 
 export function fetchDeleteUser(id: number) {
-	return request.delete(`users/${id}`).json<{ deleted: number }>();
+	return request.delete(`api/users/${id}`).json<{ deleted: number }>();
 }
 
 export function fetchDeleteUsers(ids: number[]) {
-	return request.delete("users", { json: { ids } }).json<{ deleted: number }>();
+	return request
+		.delete("api/users", { json: { ids } })
+		.json<{ deleted: number }>();
 }
 
 export function fetchUploadAvatar(file: File) {

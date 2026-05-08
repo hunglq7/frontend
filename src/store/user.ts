@@ -17,34 +17,34 @@ const initialState = {
 type UserState = UserInfoType;
 
 interface UserAction {
-	getUserInfo: () => Promise<UserInfoType>
-	setAvatar: (avatar: string) => void
-	reset: () => void
-};
+	getUserInfo: () => Promise<UserInfoType>;
+	setAvatar: (avatar: string) => void;
+	setUserInfo: (userInfo: Partial<UserInfoType>) => void;
+	reset: () => void;
+}
 
-export const useUserStore = create<UserState & UserAction>()(
+export const useUserStore = create<UserState & UserAction>()((set) => ({
+	...initialState,
 
-	set => ({
-		...initialState,
+	getUserInfo: async () => {
+		const response = await fetchUserInfo();
+		set({
+			...response,
+		});
+		return response;
+	},
 
-		getUserInfo: async () => {
-			const response = await fetchUserInfo();
-			set({
-				...response,
-			});
-			return response;
-		},
+	setAvatar: (avatar: string) => {
+		set({ avatar });
+	},
 
-		setAvatar: (avatar: string) => {
-			set({ avatar });
-		},
+	setUserInfo: (userInfo: Partial<UserInfoType>) => {
+		set(userInfo);
+	},
 
-		reset: () => {
-			return set({
-				...initialState,
-			});
-		},
-
-	}),
-
-);
+	reset: () => {
+		return set({
+			...initialState,
+		});
+	},
+}));

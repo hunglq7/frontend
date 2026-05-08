@@ -15,13 +15,15 @@ export default function LineChart() {
 	const DATA_KEYS = {
 		week: [
 			t("home.monday"),
-			t("home.thursday"),
+			t("home.tuesday"),
 			t("home.wednesday"),
 			t("home.thursday"),
 			t("home.friday"),
 			t("home.saturday"),
 			t("home.sunday"),
 		],
+		month: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
+		year: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
 	};
 
 	const option: EChartsOption = {

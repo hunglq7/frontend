@@ -6,7 +6,7 @@ export * from "./types";
 /* Lấy danh sách vị trí lắp đặt */
 export function fetchViTriLapDatList() {
 	return request
-		.get<ViTriLapDatItemType[]>("vi-tri-lap-dat", {
+		.get<ViTriLapDatItemType[]>("api/vi-tri-lap-dat", {
 			ignoreLoading: true,
 		})
 		.json();
@@ -14,7 +14,7 @@ export function fetchViTriLapDatList() {
 
 /* Thêm mới vị trí lắp đặt */
 export function fetchAddViTriLapDatItem(data: Omit<ViTriLapDatItemType, "id">) {
-	return request.post("vi-tri-lap-dat", {
+	return request.post("api/vi-tri-lap-dat", {
 		json: data,
 		ignoreLoading: true,
 	});
@@ -25,7 +25,7 @@ export function fetchUpdateViTriLapDatItem(
 	id: number,
 	data: Omit<ViTriLapDatItemType, "id">,
 ) {
-	return request.put(`vi-tri-lap-dat/${id}`, {
+	return request.put(`api/vi-tri-lap-dat/${id}`, {
 		json: data,
 		ignoreLoading: true,
 	});
@@ -33,12 +33,12 @@ export function fetchUpdateViTriLapDatItem(
 
 /* Xóa một vị trí lắp đặt */
 export function fetchDeleteViTriLapDatItem(id: number) {
-	return request.delete(`vi-tri-lap-dat/${id}`, { ignoreLoading: true });
+	return request.delete(`api/vi-tri-lap-dat/${id}`, { ignoreLoading: true });
 }
 
 /* Xóa nhiều vị trí lắp đặt */
 export function fetchDeleteMultipleViTriLapDatItems(ids: number[]) {
-	return request.delete("vi-tri-lap-dat", {
+	return request.delete("api/vi-tri-lap-dat", {
 		json: { ids },
 		ignoreLoading: true,
 	});

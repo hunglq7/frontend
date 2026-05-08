@@ -183,7 +183,11 @@ export default function LayoutTabbar() {
 		if (normalizedPath !== activeKey) {
 			setActiveKey(normalizedPath);
 
-			const routeTitle = currentRoute?.handle?.title as string;
+			// Get title from currentRoute first, fallback to flatRouteList
+			let routeTitle = currentRoute?.handle?.title as string;
+			if (!routeTitle || routeTitle === "404") {
+				routeTitle = flatRouteList[normalizedPath]?.handle?.title as string;
+			}
 
 			addTab(normalizedPath, {
 				key: normalizedPath,
@@ -195,7 +199,7 @@ export default function LayoutTabbar() {
 				draggable: normalizedPath !== import.meta.env.VITE_BASE_HOME_PATH,
 			});
 		}
-	}, [location, currentRoute, setActiveKey, addTab]);
+	}, [location, currentRoute, setActiveKey, addTab, flatRouteList]);
 
 	return (
 		<div className={classes.tabsContainer}>

@@ -1,6 +1,7 @@
 import { BasicContent } from "#src/components/basic-content";
 import { FormAvatarItem } from "#src/components/basic-form";
 import { useUserStore } from "#src/store/user";
+import { fetchUpdateUser } from "#src/api/user";
 
 import {
 	ProForm,
@@ -9,43 +10,71 @@ import {
 	ProFormTextArea,
 } from "@ant-design/pro-components";
 import { Form, Input } from "antd";
+import { useEffect } from "react";
+
+const URL_TRAILING_SLASH_REGEX = /\/$/;
 
 export default function Profile() {
-	const currentUser = useUserStore();
-	const getAvatarURL = () => {
-		if (currentUser) {
-			if (currentUser.avatar) {
-				return currentUser.avatar;
-			}
-			const url = "https://avatar.vercel.sh/blur.svg?text=2";
-			return url;
+	const { avatar, username, email, phoneNumber, description, id, getUserInfo, setUserInfo } = useUserStore();
+
+	useEffect(() => {
+		// Lấy thông tin user mới nhất từ server khi component mount
+		if (id) {
+			getUserInfo();
 		}
-		return "";
+	}, [id, getUserInfo]);
+
+	const handleFinish = async (values: any) => {
+		try {
+			if (!id) {
+				window.$message?.error("User ID không hợp lệ!");
+				return;
+			}
+
+			const updatePayload = {
+				username: values.username,
+				email: values.email,
+				phone: values.phoneNumber,
+				avatar: values.avatar,
+				description: values.description,
+			};
+
+			const result = await fetchUpdateUser(Number(id), updatePayload);
+			setUserInfo(result);
+			window.$message?.success("Cập nhật thông tin thành công!");
+		} catch (error) {
+			console.error("Update error:", error);
+			window.$message?.error("Cập nhật thông tin thất bại!");
+		}
 	};
 
-	const handleFinish = async () => {
-		window.$message?.success("更新基本信息成功");
+	const getAvatarSrc = (avatar: string) => {
+		if (!avatar) return "https://avatar.vercel.sh/blur.svg?text=2";
+		return avatar.startsWith("http") ? avatar : `${import.meta.env.VITE_API_BASE_URL.replace(URL_TRAILING_SLASH_REGEX, '')}${avatar}`;
 	};
 
 	return (
 		<BasicContent className="max-w-md ml-10">
-			<h3>我的资料</h3>
+			<h3>Thông tin tài khoản</h3>
 			<ProForm
 				layout="vertical"
 				onFinish={handleFinish}
 				initialValues={{
-					...currentUser,
-					avatar: getAvatarURL(),
+					avatar: getAvatarSrc(avatar),
+					username,
+					email,
+					phoneNumber,
+					description,
 				}}
 				requiredMark
 			>
 				<Form.Item
 					name="avatar"
-					label="头像"
+					label="Ảnh đại diện"
 					rules={[
 						{
 							required: true,
-							message: "请输入您的昵称!",
+							message: "Ảnh đại diện không được để trống!",
 						},
 					]}
 				>
@@ -53,31 +82,31 @@ export default function Profile() {
 				</Form.Item>
 				<ProFormText
 					name="username"
-					label="用户名"
+					label="Tài khoản"
 					rules={[
 						{
 							required: true,
-							message: "请输入您的用户名!",
+							message: "Vui lòng nhập tên đăng nhập!",
 						},
 					]}
 				/>
 				<ProFormText
 					name="email"
-					label="邮箱"
+					label="Email"
 					rules={[
 						{
 							required: true,
-							message: "请输入您的邮箱!",
+							message: "Vui lòng nhập email!",
 						},
 					]}
 				/>
 				<ProFormDigit
 					name="phoneNumber"
-					label="联系电话"
+					label="Số điện thoại"
 					rules={[
 						{
 							required: true,
-							message: "请输入您的联系电话!",
+							message: "Vui lòng nhập số điện thoại!",
 						},
 					]}
 				>
@@ -86,8 +115,8 @@ export default function Profile() {
 				<ProFormTextArea
 					allowClear
 					name="description"
-					label="个人简介"
-					placeholder="个人简介"
+					label="Mô tả cá nhân"
+					placeholder="Mô tả về bản thân bạn"
 				/>
 			</ProForm>
 		</BasicContent>
