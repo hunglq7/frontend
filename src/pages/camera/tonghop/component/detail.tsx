@@ -1,8 +1,8 @@
 import type { TonghopCameraItemType } from "#src/api/camera/tonghop/types";
-import { BasicButton } from "#src/components/basic-button";
 import { Form, Input, InputNumber, Modal } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { BasicButton } from "#src/components/basic-button";
 
 interface DetailProps {
 	open: boolean

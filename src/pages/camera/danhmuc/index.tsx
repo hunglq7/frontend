@@ -1,5 +1,10 @@
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, ScanOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import * as XLSX from "xlsx";
 import {
 	fetchDanhmucCamerasList,
 	fetchDeleteDanhMucCameraItem,
@@ -8,14 +13,9 @@ import {
 	fetchScanDanhMucCameraItem,
 } from "#src/api/camera/danhmuc/index";
 import { BasicButton } from "#src/components/basic-button";
+
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, ScanOutlined, StopOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Popconfirm, Progress, Row, Select, Upload } from "antd";
-import { useEffect, useRef, useState } from "react";
-
-import { useTranslation } from "react-i18next";
-import * as XLSX from "xlsx";
 import { Detail } from "./component/detail";
 import { ScanModal } from "./component/ScanModal";
 import { getConstantColumns } from "./constants";
@@ -33,7 +33,6 @@ export default function DanhMucCamera() {
 	const [searchStatus, setSearchStatus] = useState<boolean | null>(null);
 	const [scanning, setScanning] = useState(false);
 	const [scanProgress, setScanProgress] = useState(0);
-	const [_scanResults, _setScanResults] = useState<{ activated: number, deactivated: number } | null>(null);
 	const [scanAbortController, setScanAbortController] = useState<AbortController | null>(null);
 	const [currentScanningCamera, setCurrentScanningCamera] = useState<DanhmucCameraItemType | null>(null);
 	const [scanModalVisible, setScanModalVisible] = useState(false);
@@ -109,7 +108,7 @@ export default function DanhMucCamera() {
 			setScanning(true);
 			setScanModalVisible(true);
 			setScanProgress(0);
-			setScanResults(null);
+			// setScanResults(null);
 			setOnlineCamerasCount(0);
 			setOfflineCamerasCount(0);
 			setTotalScannedCameras(cameras.length);
@@ -162,7 +161,7 @@ export default function DanhMucCamera() {
 			await Promise.all(workers);
 
 			if (!abortController.signal.aborted) {
-				setScanResults({ activated: activatedCount, deactivated: deactivatedCount });
+				// setScanResults({ activated: activatedCount, deactivated: deactivatedCount });
 				setScanning(false);
 
 				window.$message?.success(

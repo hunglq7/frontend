@@ -1,6 +1,6 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import ContainerLayout from "#src/layout/container-layout";
 import { lazy } from "react";
+import ContainerLayout from "#src/layout/container-layout";
 
 const DanhMucCamera = lazy(() => import("#src/pages/camera/danhmuc"));
 const DanhMucCameraCatalog = lazy(

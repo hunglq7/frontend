@@ -1,6 +1,6 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types";
 
 export function getConstantColumns(
 	t: TFunction<"translation", undefined>,

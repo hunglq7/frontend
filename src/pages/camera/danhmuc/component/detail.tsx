@@ -1,11 +1,11 @@
 import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { TreeDataNodeWithId } from "#src/components/basic-form";
-import { fetchAddDanhMucCameraItem, fetchDanhmucCamerasList, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc/index";
-import { BasicButton } from "#src/components/basic-button";
 import { useMutation } from "@tanstack/react-query";
 import { Drawer, Form, Input, Radio } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { fetchAddDanhMucCameraItem, fetchDanhmucCamerasList, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc/index";
+import { BasicButton } from "#src/components/basic-button";
 
 interface DetailProps {
 	treeData: TreeDataNodeWithId[]

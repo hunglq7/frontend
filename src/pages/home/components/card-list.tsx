@@ -50,7 +50,7 @@ export default function CardList() {
 			{
 				CARD_LIST.map((cardItem) => {
 					return (
-						<Col {...wrapperCol} key={cardItem.title}>
+						<Col key={cardItem.title} {...wrapperCol}>
 							<Card className="">
 								<div className="flex justify-between items-center">
 									<div className="flex flex-col">

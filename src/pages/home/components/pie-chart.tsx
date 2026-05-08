@@ -1,16 +1,16 @@
-import type { PieDataType } from "#src/api/home";
 import type { EChartsOption } from "echarts";
-import { fetchPie } from "#src/api/home";
+import type { PieDataType } from "#src/api/home";
 import { Card, Segmented } from "antd";
 import ReactECharts from "echarts-for-react";
-
 import { useEffect, useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { fetchPie } from "#src/api/home";
 
 export default function PieChart() {
 	const { t } = useTranslation();
 	const [data, setData] = useState<PieDataType[]>([]);
-	const [value, setValue] = useState<string | number>(
+	const [value, setValue] = useState<string | number>(() =>
 		t("home.allChannels"),
 	);
 

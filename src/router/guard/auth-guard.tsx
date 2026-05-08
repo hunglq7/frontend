@@ -1,4 +1,6 @@
 import type { UserInfoType } from "#src/api/user";
+import { useEffect } from "react";
+import { matchRoutes, Navigate, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useCurrentRoute } from "#src/hooks/use-current-route";
 import { hideLoading } from "#src/plugins/hide-loading";
 import { setupLoading } from "#src/plugins/loading";
@@ -10,11 +12,9 @@ import { generateRoutesByFrontend } from "#src/router/utils/generate-routes-from
 import { useAccessStore } from "#src/store/access";
 import { useAuthStore } from "#src/store/auth";
 import { usePreferencesStore } from "#src/store/preferences";
+
 import { useUserStore } from "#src/store/user";
 import { goLogin } from "#src/utils/request/go-login";
-
-import { useEffect } from "react";
-import { matchRoutes, Navigate, useLocation, useNavigate, useSearchParams } from "react-router";
 
 import { removeDuplicateRoutes } from "./utils";
 
@@ -89,6 +89,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 				const routeResult = results[1];
 				const routes = [];
 				const latestRoles = [];
+
 				/**
 				 * @zh 从用户接口中获取角色信息
 				 * @en Fetch role information from the user interface
@@ -96,6 +97,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 				if (userInfoResult.status === "fulfilled" && "roles" in (userInfoResult.value as UserInfoType)) {
 					latestRoles.push(...(userInfoResult.value as UserInfoType)?.roles ?? []);
 				}
+
 				/**
 				 * @zh 启用了后端路由且路由从用户接口中获取
 				 * @en If backend routing is enabled and the route is obtained from the user interface
@@ -103,6 +105,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 				if (!enableFrontendAceess && enableBackendAccess && !isSendRoutingRequest && userInfoResult.status === "fulfilled" && "menus" in (userInfoResult.value as UserInfoType)) {
 					routes.push(...await generateRoutesFromBackend((userInfoResult.value as UserInfoType)?.menus ?? []));
 				}
+
 				/**
 				 * @zh 启用了后端路由且路由从单独接口中获取
 				 * @en If backend routing is enabled and the route is obtained from a separate interface
@@ -122,18 +125,19 @@ export function AuthGuard({ children }: AuthGuardProps) {
 				setAccessStore(uniqueRoutes);
 
 				if (hasError) {
+					hideLoading();
+					const userInfoRejected = userInfoResult.status === "rejected";
 					const unAuthorized = results.some((result: any) => result.reason?.response?.status === 401);
-					if (unAuthorized) {
-						// Token invalid, logout
+					if (unAuthorized || userInfoRejected) {
+						// Token invalid, logout, or failed to fetch user info
 						useAuthStore.getState().reset();
 						useUserStore.getState().reset();
 						goLogin();
 						return;
 					}
-					else {
-						return navigate(exception500Path);
-					}
+					return navigate(exception500Path);
 				}
+
 				/**
 				 * @zh 无论成功还是失败，都隐藏加载动画
 				 * @en Hide loading animation regardless of success or failure
@@ -146,18 +150,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 				hideLoading();
 			}
 		}
-		/**
-		 * @zh 只有在以下条件下才执行获取用户信息和路由的逻辑
-		 * 1. 非路由白名单
-		 * 2. 已登录
-		 * 3. 未获取到用户信息和路由信息
-		 *
-		 * @en The logic of obtaining user information and routes is only executed under the following conditions
-		 * 1. Not in the route whitelist
-		 * 2. Logged in
-		 * 3. Unable to obtain user information and route information
-		 *
-		 */
+
 		if (!whiteRouteNames.includes(pathname) && isLogin && !isAuthorized) {
 			fetchUserInfoAndRoutes();
 		}

@@ -3,8 +3,6 @@ import { rememberRoute } from "#src/utils/remember-route";
 
 /**
  * 跳转到登录页面
- *
- * @returns 无返回值
  */
 export function goLogin() {
 	// 重置登录状态

@@ -1,7 +1,7 @@
 import type { UserInfoType } from "#src/api/user/types";
-import { fetchUserInfo } from "#src/api/user";
-
 import { create } from "zustand";
+
+import { fetchUserInfo } from "#src/api/user";
 
 const initialState = {
 	id: "",
@@ -17,13 +17,13 @@ const initialState = {
 type UserState = UserInfoType;
 
 interface UserAction {
-	getUserInfo: () => Promise<UserInfoType>;
-	setAvatar: (avatar: string) => void;
-	setUserInfo: (userInfo: Partial<UserInfoType>) => void;
-	reset: () => void;
+	getUserInfo: () => Promise<UserInfoType>
+	setAvatar: (avatar: string) => void
+	setUserInfo: (userInfo: Partial<UserInfoType>) => void
+	reset: () => void
 }
 
-export const useUserStore = create<UserState & UserAction>()((set) => ({
+export const useUserStore = create<UserState & UserAction>()(set => ({
 	...initialState,
 
 	getUserInfo: async () => {

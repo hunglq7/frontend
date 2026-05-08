@@ -16,7 +16,6 @@ import { FileSystemIconLoader } from "unplugin-icons/loaders";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 import { checker } from "vite-plugin-checker";
-import { vitePluginFakeServer } from "vite-plugin-fake-server";
 import svgrPlugin from "vite-plugin-svgr";
 
 import {
@@ -143,7 +142,7 @@ export default defineConfig({
 			"/danhmuc": {
 				target: "http://192.168.0.110:8000",
 				changeOrigin: true,
-				rewrite: (path) => path.replace(DANHMUC_REWRITE_REGEXP, ""),
+				rewrite: path => path.replace(DANHMUC_REWRITE_REGEXP, ""),
 			},
 			"/danh-muc-may-cao": {
 				target: "http://192.168.0.110:8000",

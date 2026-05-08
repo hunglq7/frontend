@@ -1,16 +1,16 @@
 import type { MenuProps } from "antd";
 import type { MenuItemType } from "./types";
 
-import { useDeviceType } from "#src/hooks/use-device-type";
-import { usePreferences } from "#src/hooks/use-preferences";
-import { removeTrailingSlash } from "#src/router/utils/remove-trailing-slash";
-
-import { useAccessStore } from "#src/store/access";
-import { cn } from "#src/utils/cn";
-
 import { Menu } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useMatches } from "react-router";
+
+import { useDeviceType } from "#src/hooks/use-device-type";
+import { usePreferences } from "#src/hooks/use-preferences";
+
+import { removeTrailingSlash } from "#src/router/utils/remove-trailing-slash";
+import { useAccessStore } from "#src/store/access";
+import { cn } from "#src/utils/cn";
 
 import { useStyles } from "./style";
 import { getParentKeys } from "./utils";
@@ -146,6 +146,7 @@ export default function LayoutMenu({
 			}
 			// 非手风琴模式，展开所有激活的菜单
 			else {
+				// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 				setOpenKeys((prevOpenKeys) => {
 					if (prevOpenKeys.length === 0) {
 						return getSelectedKeys;
@@ -155,6 +156,7 @@ export default function LayoutMenu({
 				return; // Skip setting directly
 			}
 		}
+		// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 		setOpenKeys(newOpenKeys);
 	}, [matches, sidebarCollapsed, getSelectedKeys]);
 

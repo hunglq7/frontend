@@ -4,14 +4,14 @@ import type {
 	UserRegisterPayload,
 } from "#src/api/user/types";
 
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { fetchLogin, fetchLogout, fetchRegister } from "#src/api/user";
 import { useAccessStore } from "#src/store/access";
 import { useTabsStore } from "#src/store/tabs";
+
 import { useUserStore } from "#src/store/user";
 import { getAppNamespace } from "#src/utils/get-app-namespace";
-
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 const initialState = {
 	token: "",
@@ -21,10 +21,10 @@ const initialState = {
 type AuthState = AuthType;
 
 interface AuthAction {
-	login: (loginPayload: LoginInfo) => Promise<void>;
-	register: (registerPayload: UserRegisterPayload) => Promise<void>;
-	logout: () => Promise<void>;
-	reset: () => void;
+	login: (loginPayload: LoginInfo) => Promise<void>
+	register: (registerPayload: UserRegisterPayload) => Promise<void>
+	logout: () => Promise<void>
+	reset: () => void
 }
 
 export const useAuthStore = create<AuthState & AuthAction>()(
@@ -55,7 +55,8 @@ export const useAuthStore = create<AuthState & AuthAction>()(
 
 				try {
 					await fetchLogout(get().refreshToken);
-				} catch (error) {
+				}
+				catch (error) {
 					console.warn("logout failed", error);
 				}
 

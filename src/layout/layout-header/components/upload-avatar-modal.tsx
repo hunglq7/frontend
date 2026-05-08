@@ -1,9 +1,9 @@
-import { fetchUpdateUser, fetchUploadAvatar } from "#src/api/user";
-import { useUserStore } from "#src/store/user";
 import { CameraOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import { Avatar, Button, message, Modal, Upload } from "antd";
 import { useState } from "react";
+import { fetchUpdateUser, fetchUploadAvatar } from "#src/api/user";
+import { useUserStore } from "#src/store/user";
 
 interface UploadAvatarModalProps {
 	open: boolean

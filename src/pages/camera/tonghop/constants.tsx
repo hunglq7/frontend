@@ -1,6 +1,6 @@
-import type { TonghopCameraItemType } from "#src/api/camera/tonghop/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
+import type { TonghopCameraItemType } from "#src/api/camera/tonghop/types";
 
 export function getConstantColumns(
 	t: TFunction<"translation", undefined>,

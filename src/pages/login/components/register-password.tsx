@@ -1,7 +1,3 @@
-import { BasicButton } from "#src/components/basic-button";
-import { PASSWORD_RULES, USERNAME_RULES } from "#src/constants/rules";
-import { useAuthStore } from "#src/store/auth";
-
 import {
 	Button,
 	Checkbox,
@@ -12,7 +8,11 @@ import {
 } from "antd";
 import { use, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
+
 import { Link, useNavigate } from "react-router";
+import { BasicButton } from "#src/components/basic-button";
+import { PASSWORD_RULES, USERNAME_RULES } from "#src/constants/rules";
+import { useAuthStore } from "#src/store/auth";
 
 import { FormModeContext } from "../form-mode-context";
 
@@ -43,7 +43,7 @@ export function RegisterPassword() {
 				password: values.password,
 			});
 			window.$message?.success(t("authority.registerSuccess") || "Đăng ký thành công");
-			navigate(import.meta.env.VITE_BASE_HOME_PATH);
+			navigate("/");
 		}
 		catch (error) {
 			console.error("Register failed:", error);

@@ -1,8 +1,3 @@
-import { BasicContent } from "#src/components/basic-content";
-import { FormAvatarItem } from "#src/components/basic-form";
-import { useUserStore } from "#src/store/user";
-import { fetchUpdateUser } from "#src/api/user";
-
 import {
 	ProForm,
 	ProFormDigit,
@@ -11,6 +6,11 @@ import {
 } from "@ant-design/pro-components";
 import { Form, Input } from "antd";
 import { useEffect } from "react";
+import { fetchUpdateUser } from "#src/api/user";
+
+import { BasicContent } from "#src/components/basic-content";
+import { FormAvatarItem } from "#src/components/basic-form";
+import { useUserStore } from "#src/store/user";
 
 const URL_TRAILING_SLASH_REGEX = /\/$/;
 
@@ -42,15 +42,17 @@ export default function Profile() {
 			const result = await fetchUpdateUser(Number(id), updatePayload);
 			setUserInfo(result);
 			window.$message?.success("Cập nhật thông tin thành công!");
-		} catch (error) {
+		}
+		catch (error) {
 			console.error("Update error:", error);
 			window.$message?.error("Cập nhật thông tin thất bại!");
 		}
 	};
 
 	const getAvatarSrc = (avatar: string) => {
-		if (!avatar) return "https://avatar.vercel.sh/blur.svg?text=2";
-		return avatar.startsWith("http") ? avatar : `${import.meta.env.VITE_API_BASE_URL.replace(URL_TRAILING_SLASH_REGEX, '')}${avatar}`;
+		if (!avatar)
+			return "https://avatar.vercel.sh/blur.svg?text=2";
+		return avatar.startsWith("http") ? avatar : `${import.meta.env.VITE_API_BASE_URL.replace(URL_TRAILING_SLASH_REGEX, "")}${avatar}`;
 	};
 
 	return (

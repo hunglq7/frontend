@@ -1,6 +1,6 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import ContainerLayout from "#src/layout/container-layout";
 import { lazy } from "react";
+import ContainerLayout from "#src/layout/container-layout";
 
 const DanhMucDonVi = lazy(() => import("#src/pages/danhmuc/donvi"));
 const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));

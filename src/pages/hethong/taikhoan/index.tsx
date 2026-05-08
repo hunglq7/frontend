@@ -1,10 +1,10 @@
 import type { UserItemType, UserListResponse, UserSavePayload, UserUpdatePayload } from "#src/api/user/types";
-import { fetchCreateUser, fetchDeleteUser, fetchDeleteUsers, fetchUpdateUser, fetchUploadAvatar, fetchUserList } from "#src/api/user";
-import { BasicContent } from "#src/components/basic-content";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar, Button, Form, Input, message, Modal, Popconfirm, Select, Space, Table, Tag, Typography, Upload } from "antd";
 import { useMemo, useState } from "react";
+import { fetchCreateUser, fetchDeleteUser, fetchDeleteUsers, fetchUpdateUser, fetchUploadAvatar, fetchUserList } from "#src/api/user";
+import { BasicContent } from "#src/components/basic-content";
 
 const roleOptions = [
 	{ label: "admin", value: "admin" },

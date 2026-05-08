@@ -42,7 +42,7 @@ export function fetchUpdateDanhMucCameraItem(
 }
 
 export interface ScanCameraResult {
-	is_online: boolean;
+	is_online: boolean
 }
 
 export function fetchScanDanhMucCameraItem(id: number) {

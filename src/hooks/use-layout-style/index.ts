@@ -1,6 +1,8 @@
-import type { VisibleDomRect } from "#src/utils/dom";
 import type { CSSProperties } from "react";
+import type { VisibleDomRect } from "#src/utils/dom";
 
+import { useDebounceFn } from "ahooks";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCssVar } from "#src/hooks/use-css-var";
 import {
 	CSS_VARIABLE_LAYOUT_CONTENT_HEIGHT,
@@ -8,18 +10,18 @@ import {
 	CSS_VARIABLE_LAYOUT_FOOTER_HEIGHT,
 	CSS_VARIABLE_LAYOUT_HEADER_HEIGHT,
 } from "#src/layout/constants";
-import { getElementVisibleRect } from "#src/utils/dom";
-import { useDebounceFn } from "ahooks";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { getElementVisibleRect } from "#src/utils/dom";
 
 /**
  * @zh 获取布局内容区域的样式
  * @en Get the style of the layout content area
  */
 export function useLayoutContentStyle() {
-	const contentElement = useRef<HTMLDivElement>(null);
-	const [visibleDomRect, setVisibleDomRect] = useState<VisibleDomRect | null>(null);
+	const contentElementRef = useRef<HTMLDivElement>(null);
+	const [visibleDomRect, setVisibleDomRect] = useState<VisibleDomRect | null>(
+		null,
+	);
 	const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
 	const contentHeightControls = useCssVar(CSS_VARIABLE_LAYOUT_CONTENT_HEIGHT);
@@ -39,7 +41,7 @@ export function useLayoutContentStyle() {
 
 	const debouncedCalcHeight = useDebounceFn(
 		(_entries: ResizeObserverEntry[]) => {
-			const rect = getElementVisibleRect(contentElement.current);
+			const rect = getElementVisibleRect(contentElementRef.current);
 			setVisibleDomRect(rect);
 			if (rect) {
 				contentHeightControls.set(`${rect.height}px`);
@@ -50,19 +52,21 @@ export function useLayoutContentStyle() {
 	);
 
 	useEffect(() => {
-		if (contentElement.current && !resizeObserverRef.current) {
-			const resizeObserver = new ResizeObserver(debouncedCalcHeight.run);
-			resizeObserverRef.current = resizeObserver;
-			resizeObserver.observe(contentElement.current);
+		const element = contentElementRef.current;
+		if (!element) {
+			return undefined;
 		}
 
+		const resizeObserver = new ResizeObserver(debouncedCalcHeight.run);
+		resizeObserverRef.current = resizeObserver;
+		resizeObserver.observe(element);
+
 		return () => {
-			resizeObserverRef.current?.disconnect();
-			resizeObserverRef.current = null;
+			resizeObserver.disconnect();
 		};
 	}, [debouncedCalcHeight]);
 
-	return { contentElement, overlayStyle, visibleDomRect };
+	return { contentElement: contentElementRef, overlayStyle, visibleDomRect };
 }
 
 export function useLayoutHeaderStyle() {

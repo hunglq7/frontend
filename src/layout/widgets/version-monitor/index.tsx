@@ -19,12 +19,12 @@ export function AppVersionMonitor({
 }: AppVersionMonitorProps) {
 	let isCheckingUpdates = false;
 	const { t } = useTranslation();
-	const currentVersionTag = useRef("");
-	const lastVersionTag = useRef("");
-	const timer = useRef<ReturnType<typeof setInterval>>(undefined);
+	const currentVersionTagRef = useRef("");
+	const lastVersionTagRef = useRef("");
+	const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
 	function handleNotice(versionTag: string) {
-		currentVersionTag.current = versionTag;
+		currentVersionTagRef.current = versionTag;
 		window.$notification?.open({
 			message: t("widgets.versionMonitorTitle"),
 			description: t("widgets.versionMonitorContent"),
@@ -50,7 +50,7 @@ export function AppVersionMonitor({
 							{
 								type: "primary",
 								onClick() {
-									lastVersionTag.current = currentVersionTag.current;
+									lastVersionTagRef.current = currentVersionTagRef.current;
 									location.reload();
 								},
 								key: "ok",
@@ -90,8 +90,8 @@ export function AppVersionMonitor({
 			return;
 		}
 
-		if (lastVersionTag.current !== versionTag) {
-			clearInterval(timer.current);
+		if (lastVersionTagRef.current !== versionTag) {
+			clearInterval(timerRef.current);
 			handleNotice(versionTag);
 		}
 	}
@@ -117,23 +117,23 @@ export function AppVersionMonitor({
 		}
 
 		// 首次运行时，获取当前版本号（防止 Nginx 缓存了 index.html）
-		if (!lastVersionTag.current) {
+		if (!lastVersionTagRef.current) {
 			const currentVersionTag = await getVersionTag(true);
 			if (!currentVersionTag) {
 				return;
 			}
-			lastVersionTag.current = currentVersionTag;
+			lastVersionTagRef.current = currentVersionTag;
 		}
 
-		timer.current = setInterval(
+		timerRef.current = setInterval(
 			checkForUpdates,
 			checkUpdatesInterval * 60 * 1000,
 		);
 	}
 
 	function stop() {
-		clearInterval(timer.current);
-		timer.current = undefined;
+		clearInterval(timerRef.current);
+		timerRef.current = undefined;
 	}
 
 	useEffect(() => {

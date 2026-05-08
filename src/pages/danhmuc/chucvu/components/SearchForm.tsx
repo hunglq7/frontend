@@ -1,11 +1,11 @@
-import { Button, Card, Col, Input, Row } from "antd";
 import { ClearOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Row } from "antd";
 import { useTranslation } from "react-i18next";
 
 interface SearchFormProps {
-	searchTenChucVu: string;
-	setSearchTenChucVu: (value: string) => void;
-	onClearFilters: () => void;
+	searchTenChucVu: string
+	setSearchTenChucVu: (value: string) => void
+	onClearFilters: () => void
 }
 
 export function SearchForm({
@@ -25,7 +25,7 @@ export function SearchForm({
 					<Input
 						placeholder={t("danhmuc.tenChucVuPlaceholder") || "Nhập tên chức vụ"}
 						value={searchTenChucVu}
-						onChange={(e) => setSearchTenChucVu(e.target.value)}
+						onChange={e => setSearchTenChucVu(e.target.value)}
 						allowClear
 					/>
 				</Col>

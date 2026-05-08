@@ -1,5 +1,9 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types";
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Popconfirm, Row } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
 	fetchDanhMucCameraList,
 	fetchDeleteDanhMucCameraItem,
@@ -8,10 +12,6 @@ import {
 import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Popconfirm, Row } from "antd";
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { Detail } from "./component/detail";
 import { getConstantColumns } from "./constants";
@@ -60,12 +60,9 @@ export default function DanhMucCamera() {
 
 	const filterCameras = (cameras: DanhMucCameraItemType[]): DanhMucCameraItemType[] => {
 		return cameras.filter((camera) => {
-			const matchTenThietBi = searchTenThietBi === ""
-				|| (camera.ten_thiet_bi?.toLowerCase().includes(searchTenThietBi.toLowerCase()) ?? false);
-			const matchHangSanXuat = searchHangSanXuat === ""
-				|| (camera.hang_san_xuat?.toLowerCase().includes(searchHangSanXuat.toLowerCase()) ?? false);
-			const matchNuocSanXuat = searchNuocSanXuat === ""
-				|| (camera.nuoc_san_xuat?.toLowerCase().includes(searchNuocSanXuat.toLowerCase()) ?? false);
+			const matchTenThietBi = searchTenThietBi === "" || (camera.ten_thiet_bi?.toLowerCase().includes(searchTenThietBi.toLowerCase()) ?? false);
+			const matchHangSanXuat = searchHangSanXuat === "" || (camera.hang_san_xuat?.toLowerCase().includes(searchHangSanXuat.toLowerCase()) ?? false);
+			const matchNuocSanXuat = searchNuocSanXuat === "" || (camera.nuoc_san_xuat?.toLowerCase().includes(searchNuocSanXuat.toLowerCase()) ?? false);
 
 			return matchTenThietBi && matchHangSanXuat && matchNuocSanXuat;
 		});

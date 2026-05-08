@@ -1,5 +1,10 @@
-import type { TonghopCameraItemType } from "#src/api/camera/tonghop/types";
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { TonghopCameraItemType } from "#src/api/camera/tonghop/types";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Popconfirm } from "antd";
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import * as XLSX from "xlsx";
 import {
 	fetchAddTonghopCameraItem,
 	fetchDeleteTonghopCameraItem,
@@ -9,11 +14,6 @@ import {
 import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Popconfirm } from "antd";
-import { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import * as XLSX from "xlsx";
 import { Detail } from "./component/detail";
 import { getConstantColumns } from "./constants";
 

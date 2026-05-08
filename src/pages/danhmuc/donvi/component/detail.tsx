@@ -1,10 +1,10 @@
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
-import { BasicButton } from "#src/components/basic-button";
-import { TEN_DON_VI_RULES } from "#src/constants/rules";
-
 import { Form, Input, Modal } from "antd";
 import { useEffect } from "react";
+
 import { useTranslation } from "react-i18next";
+import { BasicButton } from "#src/components/basic-button";
+import { TEN_DON_VI_RULES } from "#src/constants/rules";
 
 interface DetailProps {
 	open: boolean

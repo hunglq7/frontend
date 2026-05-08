@@ -1,12 +1,12 @@
+import type { MenuProps } from "antd";
+
 import type {
 	MIXED_NAVIGATION,
 	SIDE_NAVIGATION,
 	TOP_NAVIGATION,
 	TWO_COLUMN_NAVIGATION,
 } from "#src/layout/widgets/preferences/blocks/layout/constants";
-
 import type { LanguageType } from "#src/locales";
-import type { MenuProps } from "antd";
 
 /**
  * @zh 登录页面布局
@@ -25,6 +25,7 @@ export type TabsStyleType = "brisk" | "card" | "chrome" | "plain";
  */
 export type ThemeType = "dark" | "light" | "auto";
 
+/* eslint-disable style/member-delimiter-style */
 /**
  * @zh 动画类型
  * @en Animation type
@@ -56,6 +57,7 @@ interface AnimationState {
 	transitionName: string;
 }
 
+/* eslint-disable style/operator-linebreak, style/indent-binary-ops */
 export type NavigationType =
 	| typeof SIDE_NAVIGATION
 	| typeof TOP_NAVIGATION
@@ -76,7 +78,7 @@ export type BuiltinThemeType =
 	| "magenta"
 	| "gray"
 	| "custom";
-
+/* eslint-enable style/operator-linebreak, style/indent-binary-ops */
 interface LayoutState {
 	navigationStyle: NavigationType;
 }

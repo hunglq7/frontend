@@ -1,23 +1,22 @@
 import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
-import { Modal, Progress, Row, Col, Card, Statistic, Spin, Empty, Button } from "antd";
 import { StopOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Empty, Modal, Progress, Row, Spin, Statistic } from "antd";
 import { useTranslation } from "react-i18next";
 
 interface ScanModalProps {
-	visible: boolean;
-	scanning: boolean;
-	progress: number;
-	onlineCount: number;
-	offlineCount: number;
-	currentCamera: DanhmucCameraItemType | null;
-	totalCameras: number;
-	onCancel: () => void;
+	visible: boolean
+	scanning: boolean
+	progress: number
+	onlineCount: number
+	offlineCount: number
+	currentCamera: DanhmucCameraItemType | null
+	totalCameras: number
+	onCancel: () => void
 }
 
 export const ScanModal: React.FC<ScanModalProps> = ({
 	visible,
 	scanning,
-	_progress,
 	onlineCount,
 	offlineCount,
 	currentCamera,
@@ -64,7 +63,11 @@ export const ScanModal: React.FC<ScanModalProps> = ({
 						</div>
 
 						<div style={{ fontSize: 12, color: "#666" }}>
-							{processedCount}/{totalCameras} {t("camera.camerasScanned") || "cameras scanned"}
+							{processedCount}
+							/
+							{totalCameras}
+							{" "}
+							{t("camera.camerasScanned") || "cameras scanned"}
 						</div>
 					</Card>
 
@@ -105,39 +108,41 @@ export const ScanModal: React.FC<ScanModalProps> = ({
 						title={t("camera.currentScanning") || "Currently Scanning"}
 						style={{ backgroundColor: "#fafafa" }}
 					>
-						{currentCamera ? (
-							<div>
-								<div style={{ marginBottom: 12 }}>
-									<span style={{ fontWeight: 500 }}>
-										{t("camera.tenThietBi") || "Device Name"}
-										:
-									</span>
-									{" "}
-									<span>{currentCamera.name}</span>
-								</div>
-								<div style={{ marginBottom: 12 }}>
-									<span style={{ fontWeight: 500 }}>
-										{t("camera.ipAddress") || "IP Address"}
-										:
-									</span>
-									{" "}
-									<span>{currentCamera.ip_address}</span>
-								</div>
+						{currentCamera
+							? (
 								<div>
-									<span style={{ fontWeight: 500 }}>
-										{t("camera.location") || "Location"}
-										:
-									</span>
-									{" "}
-									<span>{currentCamera.location || "N/A"}</span>
+									<div style={{ marginBottom: 12 }}>
+										<span style={{ fontWeight: 500 }}>
+											{t("camera.tenThietBi") || "Device Name"}
+											:
+										</span>
+										{" "}
+										<span>{currentCamera.name}</span>
+									</div>
+									<div style={{ marginBottom: 12 }}>
+										<span style={{ fontWeight: 500 }}>
+											{t("camera.ipAddress") || "IP Address"}
+											:
+										</span>
+										{" "}
+										<span>{currentCamera.ip_address}</span>
+									</div>
+									<div>
+										<span style={{ fontWeight: 500 }}>
+											{t("camera.location") || "Location"}
+											:
+										</span>
+										{" "}
+										<span>{currentCamera.location || "N/A"}</span>
+									</div>
 								</div>
-							</div>
-						) : (
-							<Empty
-								description={t("camera.noCamera") || "No camera"}
-								style={{ margin: "20px 0" }}
-							/>
-						)}
+							)
+							: (
+								<Empty
+									description={t("camera.noCamera") || "No camera"}
+									style={{ margin: "20px 0" }}
+								/>
+							)}
 					</Card>
 				</div>
 			</Spin>

@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
 
 import type { MenuItemType } from "./types";
-import { isString } from "#src/utils/is";
 import { cloneElement, isValidElement } from "react";
+import { isString } from "#src/utils/is";
 
 /**
  * 将菜单树中的所有 label 转换为国际化文本
@@ -10,11 +10,17 @@ import { cloneElement, isValidElement } from "react";
  * @param t Translation 函数
  * @returns 转换后的菜单数组
  */
-export function translateMenus(menus: MenuItemType[], t: (key: string) => string): MenuItemType[] {
+export function translateMenus(
+	menus: MenuItemType[],
+	t: (key: string) => string,
+): MenuItemType[] {
 	return menus.map((menu) => {
 		let translatedLabel: React.ReactNode = menu.label;
 		if (isValidElement(menu.label)) {
-			const translatedChildren = t((menu.label as ReactElement<{ children: string }>).props.children);
+			const translatedChildren = t(
+				(menu.label as ReactElement<{ children: string }>).props.children,
+			);
+			// eslint-disable-next-line react/no-clone-element
 			translatedLabel = cloneElement(menu.label, {}, translatedChildren ?? "");
 		}
 		if (isString(menu.label)) {
@@ -63,7 +69,10 @@ export function findMenuByPath(
  * @param path 菜单路径，可选
  * @returns 包含查找到的菜单、根菜单和根菜单路径的对象
  */
-export function findRootMenuByPath(menus: MenuItemType[], path?: string): {
+export function findRootMenuByPath(
+	menus: MenuItemType[],
+	path?: string,
+): {
 	findMenu: MenuItemType | null
 	rootMenu: MenuItemType | null
 	rootMenuPath: string | null
@@ -133,7 +142,9 @@ export function findRootMenuByPath(menus: MenuItemType[], path?: string): {
  * @param splitSideNavItems 菜单列表
  * @returns 找到的最深层级的第一个菜单项
  */
-export function findDeepestFirstItem(splitSideNavItems: MenuItemType[]): MenuItemType | null {
+export function findDeepestFirstItem(
+	splitSideNavItems: MenuItemType[],
+): MenuItemType | null {
 	// 如果列表为空，返回 null
 	if (!splitSideNavItems || splitSideNavItems.length === 0) {
 		return null;
@@ -171,7 +182,7 @@ export function getLevelKeys(menuItems1: MenuItemType[]) {
 	};
 	func(menuItems1);
 	return key;
-};
+}
 
 /**
  * 获取菜单项的父级键
@@ -179,7 +190,9 @@ export function getLevelKeys(menuItems1: MenuItemType[]) {
  * @param menuItems 菜单项数组
  * @returns 返回记录每个菜单项键对应的父级键数组的对象
  */
-export function getParentKeys(menuItems: MenuItemType[]): Record<string, string[]> {
+export function getParentKeys(
+	menuItems: MenuItemType[],
+): Record<string, string[]> {
 	const parentKeyMap: Record<string, string[]> = {};
 
 	function traverse(items: MenuItemType[], parentKeys: string[] = []) {

@@ -1,13 +1,13 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
+import { createElement, lazy } from "react";
 import {
 	ProfileCardIcon,
 	RiAccountCircleLine,
-	RiUserSettingsLine,
 } from "#src/icons";
 import ContainerLayout from "#src/layout/container-layout";
 import { $t } from "#src/locales";
 import { personalCenter } from "#src/router/extra-info";
-import { createElement, lazy } from "react";
+
 const MyProfile = lazy(() => import("#src/pages/personal-center/my-profile"));
 
 const routes: AppRouteRecordRaw[] = [

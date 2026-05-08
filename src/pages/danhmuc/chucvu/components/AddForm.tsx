@@ -1,12 +1,12 @@
 import { Card, Col, Input, Row } from "antd";
-import { BasicButton } from "#src/components/basic-button";
 import { useTranslation } from "react-i18next";
+import { BasicButton } from "#src/components/basic-button";
 
 interface AddFormProps {
-	newValue: string;
-	setNewValue: (value: string) => void;
-	onSave: () => void;
-	onCancel: () => void;
+	newValue: string
+	setNewValue: (value: string) => void
+	onSave: () => void
+	onCancel: () => void
 }
 
 export function AddForm({ newValue, setNewValue, onSave, onCancel }: AddFormProps) {
@@ -19,7 +19,7 @@ export function AddForm({ newValue, setNewValue, onSave, onCancel }: AddFormProp
 					<Input
 						placeholder={t("danhmuc.tenChucVuPlaceholder") || "Nhập tên chức vụ"}
 						value={newValue}
-						onChange={(e) => setNewValue(e.target.value)}
+						onChange={e => setNewValue(e.target.value)}
 						autoFocus
 						onPressEnter={onSave}
 					/>
@@ -38,4 +38,3 @@ export function AddForm({ newValue, setNewValue, onSave, onCancel }: AddFormProp
 		</Card>
 	);
 }
-    

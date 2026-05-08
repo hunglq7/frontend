@@ -1,5 +1,5 @@
-import { access, home } from "#/src/router/extra-info";
 import { defineFakeRoute } from "vite-plugin-fake-server/client";
+import { access, home } from "#/src/router/extra-info";
 import { ADMIN_TOKEN } from "./constants";
 import { resultSuccess } from "./utils";
 
@@ -60,29 +60,29 @@ export default defineFakeRoute([
 							title: "common.menu.buttonControl",
 							permissions: isAdmin
 								? [
-										"permission:button:get",
-										"permission:button:update",
-										"permission:button:delete",
-										"permission:button:add",
-									]
+									"permission:button:get",
+									"permission:button:update",
+									"permission:button:delete",
+									"permission:button:add",
+								]
 								: ["permission:button:get"],
 						},
 					},
 					isAdmin
 						? {
-								path: "/access/admin-visible",
-								handle: {
-									icon: "EyeOutlined",
-									title: "common.menu.adminVisible",
-								},
-							}
-						: {
-								path: "/access/common-visible",
-								handle: {
-									icon: "EyeOutlined",
-									title: "common.menu.commonVisible",
-								},
+							path: "/access/admin-visible",
+							handle: {
+								icon: "EyeOutlined",
+								title: "common.menu.adminVisible",
 							},
+						}
+						: {
+							path: "/access/common-visible",
+							handle: {
+								icon: "EyeOutlined",
+								title: "common.menu.commonVisible",
+							},
+						},
 				],
 			};
 			return resultSuccess([homeRouter]);

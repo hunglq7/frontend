@@ -92,9 +92,11 @@ export function FormTreeItem({ treeData, value, onChange }: FormTreeItemProps) {
 
 	useEffect(() => {
 		if (checkedOptions.includes("expandAll")) {
+			// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 			setExpandedKeys(flattenTreeData.map(item => item.id));
 		}
 		else {
+			// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 			setExpandedKeys([]);
 		}
 		if (checkedOptions.includes("checkAll")) {

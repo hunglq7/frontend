@@ -1,10 +1,10 @@
 import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
-import { BasicButton } from "#src/components/basic-button";
-import { FORM_REQUIRED } from "#src/constants/rules";
-
 import { Form, Input, Modal } from "antd";
 import { useEffect } from "react";
+
 import { useTranslation } from "react-i18next";
+import { BasicButton } from "#src/components/basic-button";
+import { FORM_REQUIRED } from "#src/constants/rules";
 
 interface DetailProps {
 	open: boolean

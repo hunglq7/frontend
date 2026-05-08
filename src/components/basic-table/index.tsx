@@ -2,16 +2,16 @@ import type { ParamsType, ProTableProps } from "@ant-design/pro-components";
 
 import type { TablePaginationConfig } from "antd";
 
-import { footerHeight as layoutFooterHeight } from "#src/layout/constants";
-import { usePreferencesStore } from "#src/store/preferences";
-import { cn } from "#src/utils/cn";
-import { isObject, isUndefined } from "#src/utils/is";
-
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { useSize } from "ahooks";
 import { useEffect, useMemo, useRef, useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { footerHeight as layoutFooterHeight } from "#src/layout/constants";
+import { usePreferencesStore } from "#src/store/preferences";
+import { cn } from "#src/utils/cn";
+import { isObject, isUndefined } from "#src/utils/is";
 
 import { BASIC_TABLE_ROOT_CLASS_NAME } from "./constants";
 import { useStyles } from "./styles";
@@ -143,6 +143,7 @@ export function BasicTable<
 			 * @en scroll.y sets the max-height, so we need to set the height manually
 			 */
 			tableBody.setAttribute("style", `overflow-y: auto;min-height: ${bodyHeight}px;max-height: ${bodyHeight}px;`);
+			// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 			setScrollY(bodyHeight);
 		}
 	}, [size, adaptive, paginationHeight, footerHeight, props.scroll?.y]);

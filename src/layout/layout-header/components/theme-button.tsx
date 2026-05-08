@@ -1,10 +1,10 @@
 import type { ButtonProps } from "antd";
 
+import { useEffect } from "react";
+import { flushSync } from "react-dom";
 import { BasicButton } from "#src/components/basic-button";
 import { usePreferences } from "#src/hooks/use-preferences";
 import { RiMoonIcon, RiSunIcon } from "#src/icons";
-import { useEffect } from "react";
-import { flushSync } from "react-dom";
 
 const isBrowser = typeof window !== "undefined";
 function injectViewTransitionStyles() {

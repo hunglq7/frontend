@@ -1,19 +1,20 @@
 import type { ProColumns, ProCoreActionType } from "@ant-design/pro-components";
-import { Input, Popconfirm } from "antd";
+import type { TFunction } from "i18next";
+import type { DanhMucChucVuItemType } from "#src/api/danhmuc/chucvu/types.js";
 import { SaveOutlined } from "@ant-design/icons";
+import { Input, Popconfirm } from "antd";
+
 import { BasicButton } from "#src/components/basic-button";
 
-import type { DanhMucChucVuItemType } from "#src/api/danhmuc/chucvu/types.js";
-
 interface TableColumnsProps {
-	editingId: number | null;
-	editingValue: string;
-	setEditingValue: (value: string) => void;
-	setEditingId: (id: number | null) => void;
-	handleSaveEdit: () => void;
-	handleStartEdit: (record: DanhMucChucVuItemType) => void;
-	handleDeleteRow: (id: number, action?: ProCoreActionType<object>) => void;
-	t: (key: string, defaultValue?: string) => string;
+	editingId: number | null
+	editingValue: string
+	setEditingValue: (value: string) => void
+	setEditingId: (id: number | null) => void
+	handleSaveEdit: () => void
+	handleStartEdit: (record: DanhMucChucVuItemType) => void
+	handleDeleteRow: (id: number, action?: ProCoreActionType<object>) => void
+	t: TFunction
 }
 
 export function getTableColumns({
@@ -26,7 +27,6 @@ export function getTableColumns({
 	handleDeleteRow,
 	t,
 }: TableColumnsProps): ProColumns<DanhMucChucVuItemType>[] {
-
 	return [
 		{
 			title: "ID",
@@ -46,7 +46,7 @@ export function getTableColumns({
 					return (
 						<Input
 							value={editingValue}
-							onChange={(e) => setEditingValue(e.target.value)}
+							onChange={e => setEditingValue(e.target.value)}
 							autoFocus
 						/>
 					);
