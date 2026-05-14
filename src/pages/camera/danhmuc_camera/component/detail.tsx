@@ -1,10 +1,10 @@
 import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types";
+import { fetchAddDanhMucCameraItem, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc_camera/index";
+import { BasicButton } from "#src/components/basic-button";
 import { useMutation } from "@tanstack/react-query";
 import { Drawer, Form, Input } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchAddDanhMucCameraItem, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc_camera/index";
-import { BasicButton } from "#src/components/basic-button";
 
 interface DetailProps {
 	title: React.ReactNode
@@ -63,8 +63,8 @@ export function Detail({ title, open, onCloseChange, detailData, refreshTable }:
 				form.resetFields();
 				onCloseChange();
 			}}
-			width={600}
-			destroyOnClose
+			size={600}
+			destroyOnHidden
 		>
 			<Form
 				form={form}

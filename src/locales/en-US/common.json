@@ -51,7 +51,7 @@
 	"add": "Add",
 	"addSuccess": "Added successfully",
 	"backToHome": "Back to Home",
-	"bulkDelete": "Bulk Delete",
+	"bulkDelete": "Xóa dòng chọn",
 	"export": "Xuất Excel",
 	"exportSuccess": "Export successful",
 	"exportFailed": "Export failed",
@@ -101,6 +101,8 @@
 	"clear": "Clear",
 	"items": "items",
 	"exportExcel": "Export Excel",
-	"tonghopcamera": "Update camera"
+	"tonghopcamera": "Update camera",
+	"createdAt": "Ngày tạo",
+	"updatedAt": "Ngày cập nhật"
 
 }

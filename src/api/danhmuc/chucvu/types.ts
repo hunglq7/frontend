@@ -1,4 +1,4 @@
 export interface DanhMucChucVuItemType {
-	id?: number
+	id: number
 	ten_chuc_vu: string
 }

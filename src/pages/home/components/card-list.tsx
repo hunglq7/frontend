@@ -42,6 +42,11 @@ export default function CardList() {
 			data: 13600,
 			icon: <ShoppingCartOutlined />,
 		},
+		{
+			title: t("home.camera"),
+			data: 13600,
+			icon: <ShoppingCartOutlined />,
+		},
 
 	];
 
@@ -51,8 +56,8 @@ export default function CardList() {
 				CARD_LIST.map((cardItem) => {
 					return (
 						<Col key={cardItem.title} {...wrapperCol}>
-							<Card className="">
-								<div className="flex justify-between items-center">
+							<Card className="bg-blend-color-burn">
+								<div className="flex justify-between items-center ">
 									<div className="flex flex-col">
 										<h3 className="text-xl">{cardItem.title}</h3>
 										<CountUp end={cardItem.data} separator="," />

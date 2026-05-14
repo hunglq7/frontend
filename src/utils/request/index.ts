@@ -1,9 +1,9 @@
 import type { Options } from "ky";
 
-import ky from "ky";
 import { loginPath } from "#src/router/extra-info";
 import { useAuthStore } from "#src/store/auth";
 import { usePreferencesStore } from "#src/store/preferences";
+import ky from "ky";
 
 import { AUTH_HEADER, LANG_HEADER, REFRESH_TOKEN_PATH } from "./constants";
 import { handleErrorResponse } from "./error-response";
@@ -38,6 +38,7 @@ const defaultConfig: Options = {
 				);
 				if (!isWhiteRequest) {
 					const { token } = useAuthStore.getState();
+					// console.log("Request to:", request.url, "Token exists:", !!token);
 					if (token) {
 						request.headers.set(AUTH_HEADER, `Bearer ${token}`);
 					}
@@ -64,6 +65,16 @@ const defaultConfig: Options = {
 					const ignoreLoading = options.ignoreLoading;
 					if (!ignoreLoading) {
 						globalProgress.done();
+					}
+					// console.log("Response status:", response.status, "URL:", request.url);
+					if (!response.ok) {
+						console.error(
+							"Request failed:",
+							response.status,
+							response.statusText,
+						);
+						const errorText = await response.text();
+						console.error("Error response:", errorText);
 					}
 					// request error
 					if (!response.ok) {

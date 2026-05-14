@@ -1,16 +1,25 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import { lazy } from "react";
 import ContainerLayout from "#src/layout/container-layout";
+import {
+	ApartmentOutlined,
+	ClusterOutlined,
+	EnvironmentOutlined,
+	FolderOutlined,
+	IdcardOutlined,
+} from "@ant-design/icons";
+
+import { createElement, lazy } from "react";
 
 const DanhMucDonVi = lazy(() => import("#src/pages/danhmuc/donvi"));
 const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));
 const DanhMucChucVu = lazy(() => import("#src/pages/danhmuc/chucvu"));
+const ThietBiPage = lazy(() => import("#src/pages/danhmuc/thietbi"));
 const routes: AppRouteRecordRaw[] = [
 	{
 		path: "/danhmuc",
 		Component: ContainerLayout,
 		handle: {
-			icon: "SettingOutlined",
+			icon: createElement(FolderOutlined),
 			title: "common.menu.danhmuc",
 			order: 3,
 			ignoreAccess: true,
@@ -20,7 +29,7 @@ const routes: AppRouteRecordRaw[] = [
 				path: "/danhmuc/donvi",
 				Component: DanhMucDonVi,
 				handle: {
-					icon: "TableOutlined",
+					icon: createElement(ApartmentOutlined),
 					title: "danhmuc.donViManagement",
 					ignoreAccess: true,
 					permissions: [
@@ -34,7 +43,7 @@ const routes: AppRouteRecordRaw[] = [
 				path: "/danhmuc/vitri",
 				Component: ViTriLapDat,
 				handle: {
-					icon: "TableOutlined",
+					icon: createElement(EnvironmentOutlined),
 					title: "danhmuc.viTriLapDatManagement",
 					ignoreAccess: true,
 				},
@@ -43,8 +52,17 @@ const routes: AppRouteRecordRaw[] = [
 				path: "/danhmuc/chucvu",
 				Component: DanhMucChucVu,
 				handle: {
-					icon: "TableOutlined",
+					icon: createElement(IdcardOutlined),
 					title: "danhmuc.chucVuManagement",
+					ignoreAccess: true,
+				},
+			},
+			{
+				path: "/danhmuc/thietbi",
+				Component: ThietBiPage,
+				handle: {
+					icon: createElement(ClusterOutlined),
+					title: "danhmuc.thietbi",
 					ignoreAccess: true,
 				},
 			},

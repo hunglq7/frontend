@@ -29,6 +29,19 @@
 	"menu": {
 		"camera": "摄像头",
 		"danhmuc": "目录",
-		"tonghop": "汇总"
+		"tonghop": "汇总",
+		"categories": "分类",
+		"brands": "品牌",
+		"models": "型号",
+		"areas": "区域",
+		"warehouses": "仓库",
+		"suppliers": "供应商",
+		"deviceStatus": "设备状态",
+		"devices": "设备",
+		"deviceAssignments": "设备分配",
+		"stockTransactions": "库存交易",
+		"stockTransactionItems": "库存交易项",
+		"warranties": "保修",
+		"maintenanceLogs": "维护记录"
 	}
 }

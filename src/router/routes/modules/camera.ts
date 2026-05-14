@@ -1,6 +1,7 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import { lazy } from "react";
 import ContainerLayout from "#src/layout/container-layout";
+import { CameraOutlined, ProfileOutlined } from "@ant-design/icons";
+import { createElement, lazy } from "react";
 
 const DanhMucCamera = lazy(() => import("#src/pages/camera/danhmuc"));
 const DanhMucCameraCatalog = lazy(
@@ -13,7 +14,7 @@ const routes: AppRouteRecordRaw[] = [
 		path: "/camera",
 		Component: ContainerLayout,
 		handle: {
-			icon: "SettingOutlined",
+			icon: createElement(CameraOutlined),
 			title: "camera.menu.camera",
 			order: 3,
 			roles: ["user", "admin"],
@@ -23,7 +24,7 @@ const routes: AppRouteRecordRaw[] = [
 				path: "/camera/danhmuc",
 				Component: DanhMucCamera,
 				handle: {
-					icon: "TableOutlined",
+					icon: createElement(ProfileOutlined),
 					title: "camera.menu.danhmuc",
 					roles: ["user", "admin"],
 					permissions: [

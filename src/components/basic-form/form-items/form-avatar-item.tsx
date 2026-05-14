@@ -15,6 +15,7 @@ export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 	return (
 		<>
 			<div className="flex items-center gap-5">
+
 				<Avatar size={100} src={value} />
 				<ImgCrop
 					rotationSlider
@@ -32,9 +33,6 @@ export function FormAvatarItem({ value, onChange }: FormAvatarItemProps) {
 							authorization: `Bearer ${token}`,
 						}}
 						onChange={(info) => {
-							// if (info.file.status !== 'uploading') {
-							// 	console.log(info.file, info.fileList);
-							// }
 							if (info.file.status === "done") {
 								window.$message?.success(`${info.file.name} file uploaded successfully`);
 								onChange?.(info.file.response?.result);

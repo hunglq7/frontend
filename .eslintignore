@@ -1,0 +1,8 @@
+.env
+.env.*
+*.svg
+*.code-snippets
+.gitignore
+.npmrc
+.editorconfig
+LICENSE

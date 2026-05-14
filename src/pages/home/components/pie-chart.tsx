@@ -1,11 +1,11 @@
-import type { EChartsOption } from "echarts";
 import type { PieDataType } from "#src/api/home";
+import type { EChartsOption } from "echarts";
+import { fetchPie } from "#src/api/home";
 import { Card, Segmented } from "antd";
 import ReactECharts from "echarts-for-react";
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchPie } from "#src/api/home";
 
 export default function PieChart() {
 	const { t } = useTranslation();
@@ -15,11 +15,13 @@ export default function PieChart() {
 	);
 
 	const DATA_KEY = {
-		electronics: t("home.electronics"),
-		home_goods: t("home.homeGoods"),
-		apparel_accessories: t("home.apparelAccessories"),
-		food_beverages: t("home.foodBeverages"),
-		beauty_skincare: t("home.beautySkincare"),
+		"electronics": t("home.electronics"),
+		"home_goods": t("home.homeGoods"),
+		"apparel_accessories": t("home.apparelAccessories"),
+		"food_beverages": t("home.foodBeverages"),
+		"beauty_skincare": t("home.beautySkincare"),
+		"Camera": t("home.camera"),
+		"Đơn vị": t("home.unit"),
 	};
 
 	const option: EChartsOption = {

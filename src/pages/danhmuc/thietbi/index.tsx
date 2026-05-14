@@ -1,41 +1,42 @@
-import type { DanhMucChucVuItemType as ChucvuItem } from "#src/api/danhmuc/chucvu/types.js";
+import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
 import type { ActionType } from "@ant-design/pro-components";
 import {
-	fetchAddDanhMucChucVuItem,
-	fetchDanhMucChucVuList,
-	fetchDeleteDanhMucChucVuItem,
-	fetchDeleteMultipleDanhMucChucVuItems,
-	fetchUpdateDanhMucChucVuItem,
-} from "#src/api/danhmuc/chucvu";
+	fetchAddThietBiItem,
+	fetchDeleteMultipleThietBiItems,
+	fetchDeleteThietBiItem,
+	fetchThietBiList,
+	fetchUpdateThietBiItem,
+} from "#src/api/danhmuc/thietbi";
 import { BasicContent } from "#src/components/basic-content";
 import { message } from "antd";
 import { useRef, useState } from "react";
-import ChucvuModal from "./components/ChucvuModal";
-import ChucvuTable from "./components/ChucvuTable";
-import ChucvuToolBar from "./components/ChucvuToolBar";
 
-function ChucVuPage() {
+import ThietbiModal from "./components/ThietbiModal";
+import ThietbiTable from "./components/ThietbiTable";
+import ThietbiToolBar from "./components/ThietbiToolBar";
+
+function ThietBiPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [editingRecord, setEditingRecord]
-		= useState<ChucvuItem | null>(null);
+		= useState<ThietBiItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys]
 		= useState<React.Key[]>([]);
 	const [tableData, setTableData] = useState<
-		ChucvuItem[]
+		ThietBiItemType[]
 	>([]);
 	const [filteredData, setFilteredData] = useState<
-		ChucvuItem[]
+		ThietBiItemType[]
 	>([]);
 
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateDanhMucChucVuItem(editingRecord.id, values);
+				await fetchUpdateThietBiItem(editingRecord.id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddDanhMucChucVuItem(values);
+				await fetchAddThietBiItem(values);
 				message.success("Thêm thành công");
 			}
 
@@ -52,18 +53,18 @@ function ChucVuPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeleteDanhMucChucVuItem(id);
+			await fetchDeleteThietBiItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
 		catch (error) {
-			message.error(`Xóa thất bại: ${error}`);
+			message.error(`Xóa thất bại ${error}`);
 		}
 	};
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultipleDanhMucChucVuItems(
+			await fetchDeleteMultipleThietBiItems(
 				selectedRowKeys as number[],
 			);
 			message.success("Xóa nhiều thành công");
@@ -71,26 +72,26 @@ function ChucVuPage() {
 			actionRef.current?.reload();
 		}
 		catch (error) {
-			message.error(`Xóa thất bại: ${error}`);
+			message.error(`Xóa thất bại ${error}`);
 		}
 	};
 
 	return (
 		<>
 			<BasicContent>
-				<ChucvuTable
+				<ThietbiTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					request={async (params: any) => {
 						try {
-							const result = await fetchDanhMucChucVuList();
+							const result = await fetchThietBiList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ten_chuc_vu) {
+							if (params.ten_thiet_bi) {
 								filtered = result.filter(item =>
-									item.ten_chuc_vu.toLowerCase().includes(params.ten_chuc_vu.toLowerCase()),
+									item.ten_thiet_bi.toLowerCase().includes(params.ten_thiet_bi.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
@@ -124,7 +125,7 @@ function ChucVuPage() {
 						},
 					}}
 					toolbar={(
-						<ChucvuToolBar
+						<ThietbiToolBar
 							selectedRowKeys={
 								selectedRowKeys
 							}
@@ -140,7 +141,7 @@ function ChucVuPage() {
 					)}
 				/>
 
-				<ChucvuModal
+				<ThietbiModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
@@ -151,4 +152,4 @@ function ChucVuPage() {
 	);
 }
 
-export default ChucVuPage;
+export default ThietBiPage;
