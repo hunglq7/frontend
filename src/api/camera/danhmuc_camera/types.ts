@@ -1,5 +1,5 @@
 export interface DanhMucCameraItemType {
-	id?: number
+	id: number
 	ten_thiet_bi: string
 	thong_so_ky_thuat: string
 	hang_san_xuat: string

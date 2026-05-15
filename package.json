@@ -28,6 +28,7 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"prepare": "simple-git-hooks",
+		"postinstall": "node fix-xlsx-tsconfig.js",
 		"pnpm:install": "pnpm install",
 		"npm-check": "taze major -lrw",
 		"check:circular-deps": "ds src --output circular-deps.json",

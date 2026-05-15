@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"ignoreDeprecations": "5.0",
 		"target": "ESNext",
 		"jsx": "react-jsx",
 		"module": "ESNext",
@@ -31,5 +32,11 @@
 		"tests",
 		"vite.config.ts",
 		"commitlint.config.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"build"
 	]
+
 }

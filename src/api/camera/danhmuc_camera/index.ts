@@ -1,7 +1,6 @@
 import type {
 	DanhMucCameraCreateType,
 	DanhMucCameraItemType,
-	DanhMucCameraUpdateType,
 } from "./types";
 import { request } from "#src/utils/request";
 
@@ -13,14 +12,7 @@ export function fetchDanhMucCameraList() {
 		.get<DanhMucCameraItemType[]>("api/danh-muc-camera", {
 			ignoreLoading: true,
 		})
-		.json()
-		.then((data) => {
-			return data;
-		})
-		.catch((error) => {
-			console.error("fetchDanhMucCameraList error:", error);
-			throw error;
-		});
+		.json();
 }
 
 /* Thêm mới danh mục camera */
@@ -32,10 +24,12 @@ export function fetchAddDanhMucCameraItem(data: DanhMucCameraCreateType) {
 }
 
 /* Cập nhật danh mục camera */
-export function fetchUpdateDanhMucCameraItem(data: DanhMucCameraUpdateType) {
-	const { id, ...updateData } = data;
+export function fetchUpdateDanhMucCameraItem(
+	id: number,
+	data: Omit<DanhMucCameraItemType, "id">,
+) {
 	return request.put(`api/danh-muc-camera/${id}`, {
-		json: updateData,
+		json: data,
 		ignoreLoading: true,
 	});
 }
@@ -49,7 +43,7 @@ export function fetchDeleteDanhMucCameraItem(id: number) {
 
 /* Xóa nhiều danh mục camera */
 export function fetchDeleteMultipleDanhMucCamera(ids: number[]) {
-	return request.delete("danh-muc-camera", {
+	return request.delete("api/danh-muc-camera", {
 		json: { ids },
 		ignoreLoading: true,
 	});

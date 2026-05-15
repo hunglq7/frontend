@@ -1,6 +1,6 @@
+import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import { Tag } from "antd";
 
 export function getConstantColumns(
@@ -46,7 +46,7 @@ export function getConstantColumns(
 			width: 80,
 			render: (text, record) => {
 				return (
-					<Tag color={record.is_online ? "success" : "default"}>
+					<Tag color={record.is_online ? "success" : "red"}>
 						{record.is_online ? t("camera.enabled") : t("camera.deactivated")}
 					</Tag>
 				);

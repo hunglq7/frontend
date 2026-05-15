@@ -54,6 +54,10 @@ export function fetchScanDanhMucCameraItem(id: number) {
 		.json();
 }
 
+export interface CheckStatusResult {
+	message?: string
+}
+
 /* Xóa một danh mục camera */
 export function fetchDeleteDanhMucCameraItem(id: number) {
 	return request.delete(`cameras/${id}`, { ignoreLoading: true });
@@ -88,7 +92,7 @@ export function fetchCheckStatusDanhMucCamera(file: File) {
 			timeout: 20000,
 			retry: 0,
 		})
-		.json();
+		.json<CheckStatusResult>();
 }
 
 export function fetchDownloadDanhmucCameraTemplate() {

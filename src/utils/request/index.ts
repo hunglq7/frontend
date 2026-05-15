@@ -73,7 +73,7 @@ const defaultConfig: Options = {
 							response.status,
 							response.statusText,
 						);
-						const errorText = await response.text();
+						const errorText = await response.clone().text();
 						console.error("Error response:", errorText);
 					}
 					// request error
