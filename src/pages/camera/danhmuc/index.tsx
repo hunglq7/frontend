@@ -1,23 +1,22 @@
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
 import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, ScanOutlined, UploadOutlined } from "@ant-design/icons";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as XLSX from "xlsx";
 import {
+	fetchCheckStatusDanhMucCamera,
 	fetchDanhmucCamerasList,
 	fetchDeleteDanhMucCameraItem,
 	fetchDownloadDanhmucCameraTemplate,
 	fetchImportDanhMucCamera,
-	fetchScanDanhMucCameraItem,
 } from "#src/api/camera/danhmuc/index";
 import { BasicButton } from "#src/components/basic-button";
 
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
 import { Detail } from "./component/detail";
-import { ScanModal } from "./component/ScanModal";
 import { getConstantColumns } from "./constants";
 
 export default function DanhMucCamera() {
@@ -26,19 +25,12 @@ export default function DanhMucCamera() {
 	const [title, setTitle] = useState("");
 	const [detailData, setDetailData] = useState<Partial<DanhmucCameraItemType>>({});
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-	const [importing, setImporting] = useState(false);
 	const [searchName, setSearchName] = useState("");
 	const [searchIp, setSearchIp] = useState("");
 	const [searchLocation, setSearchLocation] = useState("");
 	const [searchStatus, setSearchStatus] = useState<boolean | null>(null);
-	const [scanning, setScanning] = useState(false);
-	const [scanProgress, setScanProgress] = useState(0);
-	const [scanAbortController, setScanAbortController] = useState<AbortController | null>(null);
-	const [currentScanningCamera, setCurrentScanningCamera] = useState<DanhmucCameraItemType | null>(null);
-	const [scanModalVisible, setScanModalVisible] = useState(false);
-	const [onlineCamerasCount, setOnlineCamerasCount] = useState(0);
-	const [offlineCamerasCount, setOfflineCamerasCount] = useState(0);
-	const [totalScannedCameras, setTotalScannedCameras] = useState(0);
+	const [checkingStatus, setCheckingStatus] = useState(false);
+	const [importing, setImporting] = useState(false);
 	const actionRef = useRef<ActionType>(null);
 
 	const handleImportExcel = async (file: File) => {
@@ -79,110 +71,28 @@ export default function DanhMucCamera() {
 		return false;
 	};
 
+	const handleCheckStatusFile = (file: File) => {
+		setCheckingStatus(true);
+		fetchCheckStatusDanhMucCamera(file)
+			.then((result) => {
+				window.$message?.success(result?.message || (t("camera.checkStatusSuccess") || "Status check completed"));
+				actionRef.current?.reload?.();
+			})
+			.catch((error) => {
+				console.error("Check status failed", error);
+				window.$message?.error(t("camera.checkStatusFailed") || "Failed to check status");
+			})
+			.finally(() => {
+				setCheckingStatus(false);
+			});
+		return false;
+	};
+
 	const handleDeleteRow = async (id: number, action?: ProCoreActionType<object>) => {
 		await fetchDeleteDanhMucCameraItem(id);
 		setSelectedRowKeys([]);
 		await action?.reload?.();
 		window.$message?.success(t("common.deleteSuccess"));
-	};
-
-	const handleCancelScan = () => {
-		if (scanAbortController) {
-			scanAbortController.abort();
-			setScanning(false);
-			setScanModalVisible(false);
-			window.$message?.warning(t("camera.scanCancelled") || "Scan cancelled");
-		}
-	};
-
-	const handleScanAllCameras = async () => {
-		try {
-			const cameras = await fetchDanhmucCamerasList();
-			if (cameras.length === 0) {
-				window.$message?.info(t("camera.noCameras") || "No cameras found");
-				return;
-			}
-
-			const abortController = new AbortController();
-			setScanAbortController(abortController);
-			setScanning(true);
-			setScanModalVisible(true);
-			setScanProgress(0);
-			// setScanResults(null);
-			setOnlineCamerasCount(0);
-			setOfflineCamerasCount(0);
-			setTotalScannedCameras(cameras.length);
-			setCurrentScanningCamera(null);
-
-			let activatedCount = 0;
-			let deactivatedCount = 0;
-			let processedCount = 0;
-
-			const cameraQueue = [...cameras];
-			const maxConcurrent = Math.min(6, cameras.length);
-
-			const worker = async () => {
-				while (cameraQueue.length > 0 && !abortController.signal.aborted) {
-					const camera = cameraQueue.shift();
-					if (!camera) {
-						break;
-					}
-
-					setCurrentScanningCamera(camera);
-
-					try {
-						const result = await fetchScanDanhMucCameraItem(camera.id!);
-						if (result.is_online) {
-							activatedCount++;
-							setOnlineCamerasCount(prev => prev + 1);
-						}
-						else {
-							deactivatedCount++;
-							setOfflineCamerasCount(prev => prev + 1);
-						}
-						console.warn(`Successfully scanned camera ${camera.id}: ${camera.name} - ${result.is_online ? "Online" : "Offline"}`);
-					}
-					catch (error) {
-						if ((error as Error).name === "AbortError") {
-							return;
-						}
-						deactivatedCount++;
-						setOfflineCamerasCount(prev => prev + 1);
-						console.error(`Failed to scan camera ${camera.id}:`, error);
-					}
-					finally {
-						processedCount++;
-						setScanProgress(Math.round((processedCount / cameras.length) * 100));
-					}
-				}
-			};
-
-			const workers = Array.from({ length: maxConcurrent }).fill(null).map(() => worker());
-			await Promise.all(workers);
-
-			if (!abortController.signal.aborted) {
-				// setScanResults({ activated: activatedCount, deactivated: deactivatedCount });
-				setScanning(false);
-
-				window.$message?.success(
-					`Quét hoàn thành: ${activatedCount} camera kích hoạt, ${deactivatedCount} camera ngừng kích hoạt`,
-				);
-			}
-		}
-		catch (error) {
-			if ((error as Error).name === "AbortError") {
-				console.error("Scan was cancelled");
-			}
-			else {
-				console.error("Scan all cameras failed", error);
-				setScanning(false);
-				setScanModalVisible(false);
-				window.$message?.error(t("camera.scanAllFailed") || "Failed to scan cameras");
-			}
-		}
-		finally {
-			setScanAbortController(null);
-		}
 	};
 
 	const handleDeleteMultiple = async () => {
@@ -353,6 +263,7 @@ export default function DanhMucCamera() {
 							{t("camera.status")}
 						</label>
 						<Select
+							style={{ width: "50%" }}
 							placeholder={t("common.all")}
 							value={searchStatus}
 							onChange={value => setSearchStatus(value)}
@@ -419,16 +330,17 @@ export default function DanhMucCamera() {
 						>
 							{t("common.add")}
 						</BasicButton>,
-						<BasicButton
-							key="scanAll"
-							type="default"
-							icon={<ScanOutlined />}
-							onClick={handleScanAllCameras}
-							disabled={scanning}
-							style={{ marginLeft: 8 }}
+						<Upload
+							key="checkStatus"
+							accept=".xlsx,.xls,.csv"
+							showUploadList={false}
+							beforeUpload={handleCheckStatusFile}
+							disabled={checkingStatus}
 						>
-							{scanning ? "Đang quét..." : (t("camera.scanAll") || "Check Status")}
-						</BasicButton>,
+							<Button type="default" icon={<UploadOutlined />} loading={checkingStatus} style={{ marginLeft: 8 }}>
+								{checkingStatus ? (t("camera.checkingStatus") || "Checking...") : (t("camera.checkStatus") || "Check Status")}
+							</Button>
+						</Upload>,
 						<Button key="template" onClick={handleDownloadTemplate}>
 							{t("common.downloadTemplate") || "Download Template"}
 						</Button>,
@@ -489,16 +401,6 @@ export default function DanhMucCamera() {
 				refreshTable={() => actionRef.current?.reload?.()}
 			/>
 
-			<ScanModal
-				visible={scanModalVisible}
-				scanning={scanning}
-				progress={scanProgress}
-				onlineCount={onlineCamerasCount}
-				offlineCount={offlineCamerasCount}
-				currentCamera={currentScanningCamera}
-				totalCameras={totalScannedCameras}
-				onCancel={handleCancelScan}
-			/>
 		</BasicContent>
 	);
 }

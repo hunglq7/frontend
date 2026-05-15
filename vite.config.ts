@@ -132,32 +132,32 @@ export default defineConfig({
 		// https://vitejs.dev/config/server-options#server-proxy
 		proxy: {
 			"/auth": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 			"/cameras": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 			"/danhmuc": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 				rewrite: path => path.replace(DANHMUC_REWRITE_REGEXP, ""),
 			},
 			"/danh-muc-may-cao": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 			"/danh-muc-may-xuc": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 			"/tong-hop-camera": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 			"/upload": {
-				target: "http://192.168.0.110:8000",
+				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
 		},
