@@ -1,6 +1,6 @@
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
-import { BasicButton } from "#src/components/basic-button";
 import { DownloadOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import * as XLSX from "xlsx";
 
 interface Props {
@@ -30,12 +30,12 @@ export default function ExportExcelButton({
 	};
 
 	return (
-		<BasicButton
-			size="small"
+		<Button
+			color="default"
 			icon={<DownloadOutlined />}
 			onClick={handleExport}
 		>
 			Xuất Excel
-		</BasicButton>
+		</Button>
 	);
 }

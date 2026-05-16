@@ -1,6 +1,8 @@
-import type { ActionType } from "@ant-design/pro-components";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
+import type { ActionType } from "@ant-design/pro-components";
+import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
+import { Button } from "antd";
 import { ThietBiColumns } from "../components/ThietbiColumns";
 
 interface Props {
@@ -35,6 +37,28 @@ function ThietbiTable({
 			rowSelection={rowSelection}
 			search={{
 				labelWidth: 120,
+				optionRender: (_, props) => [
+					<Button
+						key="search"
+						type="primary"
+						size="middle"
+						icon={<SearchOutlined />}
+						onClick={() => props.form?.submit()}
+					>
+						Tìm
+					</Button>,
+					<Button
+						key="reset"
+						size="middle"
+						icon={<ReloadOutlined />}
+						onClick={() => {
+							props.form?.resetFields();
+							props.form?.submit();
+						}}
+					>
+						Đặt lại
+					</Button>,
+				],
 			}}
 			pagination={{
 				pageSize: 10,

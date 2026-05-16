@@ -46,25 +46,23 @@ export default function DonViTable() {
 					<Button
 						key="search"
 						type="primary"
-						size="small"
 						icon={<SearchOutlined />}
 						onClick={() => {
 							const values = props.form?.getFieldsValue();
 							setSearchText(values?.ten_don_vi || "");
 						}}
 					>
-						Tìm kiếm
+						Tìm
 					</Button>,
 					<Button
 						key="reset"
-						size="small"
 						icon={<ClearOutlined />}
 						onClick={() => {
 							props.form?.resetFields();
 							setSearchText("");
 						}}
 					>
-						Xóa bộ lọc
+						Đặt lại
 					</Button>,
 				],
 			}}

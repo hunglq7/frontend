@@ -1,8 +1,7 @@
-import type { ProColumns } from "@ant-design/pro-components";
 import type { DanhMucDonViItemType as DonViItem } from "#src/api/danhmuc/donvi/types.js";
-import { DeleteOutlined } from "@ant-design/icons";
-import { Popconfirm } from "antd";
+import type { ProColumns } from "@ant-design/pro-components";
 import { BasicButton } from "#src/components/basic-button";
+import { Popconfirm } from "antd";
 
 interface Props {
 	handleDelete: (id: number) => void
@@ -57,7 +56,7 @@ export function createColumns({
 					title="Bạn có chắc muốn xóa?"
 					onConfirm={() => handleDelete(record.id)}
 				>
-					<BasicButton size="small" variant="text" color="red" icon={<DeleteOutlined />}>
+					<BasicButton size="small" variant="text" color="red">
 						Xóa
 					</BasicButton>
 				</Popconfirm>,
