@@ -31,6 +31,9 @@ function ChucvuModal({
 				destroyOnHidden: true,
 			}}
 			onFinish={onSubmit}
+			layout="horizontal"
+			labelCol={{ span: 6 }}
+			wrapperCol={{ span: 18 }}
 		>
 			<ProFormText
 				name="ten_chuc_vu"

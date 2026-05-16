@@ -1,5 +1,4 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import ContainerLayout from "#src/layout/container-layout";
 import {
 	ApartmentOutlined,
 	ClusterOutlined,
@@ -7,13 +6,15 @@ import {
 	FolderOutlined,
 	IdcardOutlined,
 } from "@ant-design/icons";
-
 import { createElement, lazy } from "react";
+
+import ContainerLayout from "#src/layout/container-layout";
 
 const DanhMucDonVi = lazy(() => import("#src/pages/danhmuc/donvi"));
 const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));
 const DanhMucChucVu = lazy(() => import("#src/pages/danhmuc/chucvu"));
 const ThietBiPage = lazy(() => import("#src/pages/danhmuc/thietbi"));
+const KhuVucPage = lazy(() => import("#src/pages/danhmuc/khuvuc"));
 const routes: AppRouteRecordRaw[] = [
 	{
 		path: "/danhmuc",
@@ -63,6 +64,15 @@ const routes: AppRouteRecordRaw[] = [
 				handle: {
 					icon: createElement(ClusterOutlined),
 					title: "danhmuc.thietbi",
+					ignoreAccess: true,
+				},
+			},
+			{
+				path: "/danhmuc/khuvuc",
+				Component: KhuVucPage,
+				handle: {
+					icon: createElement(EnvironmentOutlined),
+					title: "danhmuc.khuVucManagement",
 					ignoreAccess: true,
 				},
 			},

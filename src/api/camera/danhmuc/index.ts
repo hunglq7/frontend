@@ -34,8 +34,10 @@ export function fetchUpdateDanhMucCameraItem(
 	id: number,
 	data: Omit<DanhmucCameraItemType, "id">,
 ) {
+	// Exclude last_check as it's system-managed and should only be updated during scan operations
+	const { last_check, ...updateData } = data;
 	return request.put(`cameras/${id}`, {
-		json: data,
+		json: updateData,
 		ignoreLoading: true,
 	});
 }

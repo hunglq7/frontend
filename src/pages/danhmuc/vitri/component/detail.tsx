@@ -42,6 +42,7 @@ export function Detail({ open, setOpen, title, detailData, onFinish }: DetailPro
 			onCancel={handleCancel}
 			footer={null}
 			width={600}
+
 		>
 			<Form
 				form={form}

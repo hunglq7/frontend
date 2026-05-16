@@ -1,11 +1,11 @@
 import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { TreeDataNodeWithId } from "#src/components/basic-form";
-import { fetchAddDanhMucCameraItem, fetchDanhmucCamerasList, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc/index";
-import { BasicButton } from "#src/components/basic-button";
 import { useMutation } from "@tanstack/react-query";
 import { Drawer, Form, Input, Radio } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { fetchAddDanhMucCameraItem, fetchDanhmucCamerasList, fetchUpdateDanhMucCameraItem } from "#src/api/camera/danhmuc/index";
+import { BasicButton } from "#src/components/basic-button";
 
 interface DetailProps {
 	treeData: TreeDataNodeWithId[]
@@ -45,8 +45,13 @@ export function Detail({ title, open, onCloseChange, detailData, treeData: _tree
 
 	const onFinish = async (values: DanhmucCameraItemType) => {
 		if (detailData.id) {
-			const updateData = { ...values, id: detailData.id };
-			await updateDanhMucCameraItemMutation.mutateAsync(updateData);
+			// Only send editable fields, excluding last_check which is system-managed
+			const { last_check, ...updateData } = values;
+			await updateDanhMucCameraItemMutation.mutateAsync({
+				...updateData,
+				id: detailData.id!,
+				last_check: detailData.last_check || "", // Keep original value but don't allow editing
+			} as DanhmucCameraItemType);
 			window.$message?.success(t("common.updateSuccess"));
 		}
 		else {
@@ -130,7 +135,7 @@ export function Detail({ title, open, onCloseChange, detailData, treeData: _tree
 					label={t("camera.last_check")}
 					name="last_check"
 				>
-					<Input />
+					<Input disabled placeholder={detailData.last_check || t("camera.neverScanned") || "Never scanned"} />
 				</Form.Item>
 
 				<div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>

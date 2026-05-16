@@ -1,4 +1,4 @@
-import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
+import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
 import {
 	ModalForm,
 	ProFormText,
@@ -8,10 +8,10 @@ interface Props {
 	open: boolean
 	onOpenChange: (open: boolean) => void
 	onSubmit: (values: any) => Promise<boolean>
-	initialValues?: ThietBiItemType | null
+	initialValues?: KhuVucItemType | null
 }
 
-function ThietBiModal({
+function KhuVucModal({
 	open,
 	onOpenChange,
 	onSubmit,
@@ -21,8 +21,8 @@ function ThietBiModal({
 		<ModalForm
 			title={
 				initialValues
-					? "Cập nhật thiết bị"
-					: "Thêm thiết bị"
+					? "Cập nhật khu vực"
+					: "Thêm khu vực"
 			}
 			open={open}
 			onOpenChange={onOpenChange}
@@ -36,13 +36,13 @@ function ThietBiModal({
 			wrapperCol={{ span: 18 }}
 		>
 			<ProFormText
-				name="ten_thiet_bi"
-				label="Tên thiết bị"
-				placeholder="Nhập tên thiết bị"
+				name="ten_khu_vuc"
+				label="Tên khu vực"
+				placeholder="Nhập tên khu vực"
 				rules={[
 					{
 						required: true,
-						message: "Vui lòng nhập tên thiết bị",
+						message: "Vui lòng nhập tên khu vực",
 					},
 				]}
 			/>
@@ -50,4 +50,4 @@ function ThietBiModal({
 	);
 }
 
-export default ThietBiModal;
+export default KhuVucModal;
