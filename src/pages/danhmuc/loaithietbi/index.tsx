@@ -1,44 +1,44 @@
 import type { ActionType } from "@ant-design/pro-components";
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
+import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
 import { message } from "antd";
 import { useRef, useState } from "react";
 import {
-	fetchAddKhuVucItem,
-	fetchDeleteKhuVucItem,
-	fetchDeleteMultipleKhuVucItems,
-	fetchKhuVucList,
-	fetchUpdateKhuVucItem,
-} from "#src/api/danhmuc/khuvuc";
+	fetchAddLoaiThietBiItem,
+	fetchDeleteLoaiThietBiItem,
+	fetchDeleteMultipleLoaiThietBiItems,
+	fetchLoaiThietBiList,
+	fetchUpdateLoaiThietBiItem,
+} from "#src/api/danhmuc/loaithietbi";
 import { BasicContent } from "#src/components/basic-content";
+import LoaiThietbiModal from "./components/LoaiThietBiModal";
+import LoaiThietbiTable from "./components/LoaiThietBiTable";
+import LoaiThietbiToolBar from "./components/LoaiThietBiToolBar";
 
-import KhuVucModal from "./components/KhuVucModal";
-import KhuVucTable from "./components/KhuVucTable";
-import KhuVucToolBar from "./components/KhuVucToolBar";
-
-function KhuVucPage() {
+function LoaiThietBiPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [editingRecord, setEditingRecord]
-		= useState<KhuVucItemType | null>(null);
+		= useState<LoaiThietBiItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys]
 		= useState<React.Key[]>([]);
 	const [tableData, setTableData] = useState<
-		KhuVucItemType[]
+		LoaiThietBiItemType[]
 	>([]);
 	const [filteredData, setFilteredData] = useState<
-		KhuVucItemType[]
+		LoaiThietBiItemType[]
 	>([]);
 
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateKhuVucItem(editingRecord.id, values);
+				await fetchUpdateLoaiThietBiItem(editingRecord.id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddKhuVucItem(values);
+				await fetchAddLoaiThietBiItem(values);
 				message.success("Thêm thành công");
 			}
+
 			setOpenModal(false);
 			setEditingRecord(null);
 			actionRef.current?.reload();
@@ -52,7 +52,7 @@ function KhuVucPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeleteKhuVucItem(id);
+			await fetchDeleteLoaiThietBiItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
@@ -63,7 +63,7 @@ function KhuVucPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultipleKhuVucItems(
+			await fetchDeleteMultipleLoaiThietBiItems(
 				selectedRowKeys as number[],
 			);
 			message.success("Xóa nhiều thành công");
@@ -78,19 +78,19 @@ function KhuVucPage() {
 	return (
 		<>
 			<BasicContent>
-				<KhuVucTable
+				<LoaiThietbiTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					request={async (params: any) => {
 						try {
-							const result = await fetchKhuVucList();
+							const result = await fetchLoaiThietBiList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ten_khu_vuc) {
+							if (params.ten_loai) {
 								filtered = result.filter(item =>
-									item.ten_khu_vuc.toLowerCase().includes(params.ten_khu_vuc.toLowerCase()),
+									item.ten_loai.toLowerCase().includes(params.ten_loai.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
@@ -123,7 +123,7 @@ function KhuVucPage() {
 						},
 					}}
 					toolbar={(
-						<KhuVucToolBar
+						<LoaiThietbiToolBar
 							selectedRowKeys={
 								selectedRowKeys
 							}
@@ -139,7 +139,7 @@ function KhuVucPage() {
 					)}
 				/>
 
-				<KhuVucModal
+				<LoaiThietbiModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
@@ -150,4 +150,4 @@ function KhuVucPage() {
 	);
 }
 
-export default KhuVucPage;
+export default LoaiThietBiPage;

@@ -15,6 +15,8 @@ const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));
 const DanhMucChucVu = lazy(() => import("#src/pages/danhmuc/chucvu"));
 const ThietBiPage = lazy(() => import("#src/pages/danhmuc/thietbi"));
 const KhuVucPage = lazy(() => import("#src/pages/danhmuc/khuvuc"));
+const LoaiThietBiPage = lazy(() => import("#src/pages/danhmuc/loaithietbi"));
+
 const routes: AppRouteRecordRaw[] = [
 	{
 		path: "/danhmuc",
@@ -73,6 +75,15 @@ const routes: AppRouteRecordRaw[] = [
 				handle: {
 					icon: createElement(EnvironmentOutlined),
 					title: "danhmuc.khuVucManagement",
+					ignoreAccess: true,
+				},
+			},
+			{
+				path: "/danhmuc/loaithietbi",
+				Component: LoaiThietBiPage,
+				handle: {
+					icon: createElement(ClusterOutlined),
+					title: "danhmuc.loaiThietBiManagement",
 					ignoreAccess: true,
 				},
 			},

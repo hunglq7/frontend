@@ -1,44 +1,64 @@
 import type { ActionType } from "@ant-design/pro-components";
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
+import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
+import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/index";
 import { message } from "antd";
-import { useRef, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
+import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
 import {
-	fetchAddKhuVucItem,
-	fetchDeleteKhuVucItem,
-	fetchDeleteMultipleKhuVucItems,
-	fetchKhuVucList,
-	fetchUpdateKhuVucItem,
-} from "#src/api/danhmuc/khuvuc";
+	fetchAddPhieuNhapItem,
+	fetchDeleteMultiplePhieuNhapItems,
+	fetchDeletePhieuNhapItem,
+	fetchPhieuNhapList,
+	fetchUpdatePhieuNhapItem,
+} from "#src/api/nhapxuat/phieunhap/index";
 import { BasicContent } from "#src/components/basic-content";
 
-import KhuVucModal from "./components/KhuVucModal";
-import KhuVucTable from "./components/KhuVucTable";
-import KhuVucToolBar from "./components/KhuVucToolBar";
+import PhieuNhapModal from "./components/PhieuNhapModal";
+import PhieuNhapTable from "./components/PhieuNhapTable";
+import PhieuNhapToolBar from "./components/PhieuNhapToolBar";
 
-function KhuVucPage() {
+function PhieuNhapPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [editingRecord, setEditingRecord]
-		= useState<KhuVucItemType | null>(null);
+		= useState<PhieuNhapItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys]
 		= useState<React.Key[]>([]);
 	const [tableData, setTableData] = useState<
-		KhuVucItemType[]
+		PhieuNhapItemType[]
 	>([]);
 	const [filteredData, setFilteredData] = useState<
-		KhuVucItemType[]
+		PhieuNhapItemType[]
 	>([]);
+	const [donViList, setDonViList] = useState<DanhMucDonViItemType[]>([]);
+
+	// Fetch danh sách đơn vị khi component được mount
+	useEffect(() => {
+		const fetchDonVi = async () => {
+			try {
+				const result = await fetchDanhMucDonViList();
+				setDonViList(result);
+			}
+			catch (error) {
+				message.error(`Lỗi khi tải danh sách đơn vị: ${error}`);
+			}
+		};
+
+		fetchDonVi();
+	}, []);
 
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateKhuVucItem(editingRecord.id, values);
+				await fetchUpdatePhieuNhapItem(editingRecord.id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddKhuVucItem(values);
+				await fetchAddPhieuNhapItem(values);
 				message.success("Thêm thành công");
 			}
+
 			setOpenModal(false);
 			setEditingRecord(null);
 			actionRef.current?.reload();
@@ -52,7 +72,7 @@ function KhuVucPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeleteKhuVucItem(id);
+			await fetchDeletePhieuNhapItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
@@ -63,7 +83,7 @@ function KhuVucPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultipleKhuVucItems(
+			await fetchDeleteMultiplePhieuNhapItems(
 				selectedRowKeys as number[],
 			);
 			message.success("Xóa nhiều thành công");
@@ -78,22 +98,23 @@ function KhuVucPage() {
 	return (
 		<>
 			<BasicContent>
-				<KhuVucTable
+				<PhieuNhapTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					request={async (params: any) => {
 						try {
-							const result = await fetchKhuVucList();
+							const result = await fetchPhieuNhapList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ten_khu_vuc) {
+							if (params.ma_phieu_nhap) {
 								filtered = result.filter(item =>
-									item.ten_khu_vuc.toLowerCase().includes(params.ten_khu_vuc.toLowerCase()),
+									item.ma_phieu_nhap.toLowerCase().includes(params.ma_phieu_nhap.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
+
 							return {
 								data: filtered,
 								success: true,
@@ -123,7 +144,7 @@ function KhuVucPage() {
 						},
 					}}
 					toolbar={(
-						<KhuVucToolBar
+						<PhieuNhapToolBar
 							selectedRowKeys={
 								selectedRowKeys
 							}
@@ -139,15 +160,16 @@ function KhuVucPage() {
 					)}
 				/>
 
-				<KhuVucModal
+				<PhieuNhapModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
 					initialValues={editingRecord}
+					donViList={donViList}
 				/>
 			</BasicContent>
 		</>
 	);
 }
 
-export default KhuVucPage;
+export default PhieuNhapPage;
