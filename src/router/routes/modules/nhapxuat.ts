@@ -1,10 +1,10 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
+import ContainerLayout from "#src/layout/container-layout";
 import {
-	CameraOutlined,
+	InboxOutlined,
 	ProfileOutlined,
 } from "@ant-design/icons";
 import { createElement, lazy } from "react";
-import ContainerLayout from "#src/layout/container-layout";
 
 const PhieuNhap = lazy(() => import("#src/pages/nhapxuat/phieunhap"));
 
@@ -13,7 +13,7 @@ const routes: AppRouteRecordRaw[] = [
 		path: "/nhapxuat",
 		Component: ContainerLayout,
 		handle: {
-			icon: createElement(CameraOutlined),
+			icon: createElement(InboxOutlined),
 			title: "nhapxuat.menu.nhapxuat",
 			order: 3,
 			roles: ["user", "admin"],

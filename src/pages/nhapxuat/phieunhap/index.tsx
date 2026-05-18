@@ -1,9 +1,6 @@
-import type { ActionType } from "@ant-design/pro-components";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
 import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/index";
-import { message } from "antd";
-
-import { useEffect, useRef, useState } from "react";
+import type { ActionType } from "@ant-design/pro-components";
 import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
 import {
 	fetchAddPhieuNhapItem,
@@ -13,6 +10,9 @@ import {
 	fetchUpdatePhieuNhapItem,
 } from "#src/api/nhapxuat/phieunhap/index";
 import { BasicContent } from "#src/components/basic-content";
+import { message } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useRef, useState } from "react";
 
 import PhieuNhapModal from "./components/PhieuNhapModal";
 import PhieuNhapTable from "./components/PhieuNhapTable";
@@ -21,16 +21,12 @@ import PhieuNhapToolBar from "./components/PhieuNhapToolBar";
 function PhieuNhapPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
-	const [editingRecord, setEditingRecord]
-		= useState<PhieuNhapItemType | null>(null);
-	const [selectedRowKeys, setSelectedRowKeys]
-		= useState<React.Key[]>([]);
-	const [tableData, setTableData] = useState<
-		PhieuNhapItemType[]
-	>([]);
-	const [filteredData, setFilteredData] = useState<
-		PhieuNhapItemType[]
-	>([]);
+	const [editingRecord, setEditingRecord] = useState<PhieuNhapItemType | null>(
+		null,
+	);
+	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+	const [tableData, setTableData] = useState<PhieuNhapItemType[]>([]);
+	const [filteredData, setFilteredData] = useState<PhieuNhapItemType[]>([]);
 	const [donViList, setDonViList] = useState<DanhMucDonViItemType[]>([]);
 
 	// Fetch danh sách đơn vị khi component được mount
@@ -83,9 +79,7 @@ function PhieuNhapPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultiplePhieuNhapItems(
-				selectedRowKeys as number[],
-			);
+			await fetchDeleteMultiplePhieuNhapItems(selectedRowKeys as number[]);
 			message.success("Xóa nhiều thành công");
 			setSelectedRowKeys([]);
 			actionRef.current?.reload();
@@ -102,6 +96,7 @@ function PhieuNhapPage() {
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
+					donViList={donViList}
 					request={async (params: any) => {
 						try {
 							const result = await fetchPhieuNhapList();
@@ -110,11 +105,35 @@ function PhieuNhapPage() {
 							let filtered = result;
 							if (params.ma_phieu_nhap) {
 								filtered = result.filter(item =>
-									item.ma_phieu_nhap.toLowerCase().includes(params.ma_phieu_nhap.toLowerCase()),
+									item.ma_phieu_nhap
+										.toLowerCase()
+										.includes(params.ma_phieu_nhap.toLowerCase()),
+								);
+							}
+							if (params.ngay_nhap) {
+								const searchDate = dayjs(params.ngay_nhap, "DD/MM/YYYY").format(
+									"YYYY-MM-DD",
+								);
+
+								filtered = filtered.filter((item) => {
+									const itemDate = dayjs(item.ngay_nhap).format("YYYY-MM-DD");
+									return itemDate === searchDate;
+								});
+							}
+							if (params.don_vi_id) {
+								filtered = filtered.filter(
+									item => Number(item.don_vi_id) === Number(params.don_vi_id),
+
+								);
+							}
+							if (params.nguoi_nhap) {
+								filtered = result.filter(item =>
+									item.nguoi_nhap
+										.toLowerCase()
+										.includes(params.nguoi_nhap.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
-
 							return {
 								data: filtered,
 								success: true,
@@ -137,24 +156,18 @@ function PhieuNhapPage() {
 					onDelete={handleDelete}
 					rowSelection={{
 						selectedRowKeys,
-						onChange: (
-							keys: React.Key[],
-						) => {
+						onChange: (keys: React.Key[]) => {
 							setSelectedRowKeys(keys);
 						},
 					}}
 					toolbar={(
 						<PhieuNhapToolBar
-							selectedRowKeys={
-								selectedRowKeys
-							}
+							selectedRowKeys={selectedRowKeys}
 							onAdd={() => {
 								setEditingRecord(null);
 								setOpenModal(true);
 							}}
-							onDeleteMany={
-								handleDeleteMany
-							}
+							onDeleteMany={handleDeleteMany}
 							data={filteredData}
 						/>
 					)}

@@ -1,5 +1,6 @@
-import type { ActionType } from "@ant-design/pro-components";
+import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
 import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/types.js";
+import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
@@ -14,6 +15,7 @@ interface Props {
 	onDelete: (id: number) => void | Promise<void>
 	rowSelection: any
 	toolbar: React.ReactNode
+	donViList: DanhMucDonViItemType[]
 }
 function PhieuNhapTable({
 	actionRef,
@@ -22,10 +24,12 @@ function PhieuNhapTable({
 	onDelete,
 	rowSelection,
 	toolbar,
+	donViList,
 }: Props) {
 	const columns = PhieuNhapColumns({
 		onEdit,
 		onDelete,
+		donViList,
 	});
 
 	return (
