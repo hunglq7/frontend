@@ -1,6 +1,9 @@
+import type { ActionType } from "@ant-design/pro-components";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
 import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/index";
-import type { ActionType } from "@ant-design/pro-components";
+import { message } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useRef, useState } from "react";
 import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
 import {
 	fetchAddPhieuNhapItem,
@@ -10,9 +13,6 @@ import {
 	fetchUpdatePhieuNhapItem,
 } from "#src/api/nhapxuat/phieunhap/index";
 import { BasicContent } from "#src/components/basic-content";
-import { message } from "antd";
-import dayjs from "dayjs";
-import { useEffect, useRef, useState } from "react";
 
 import PhieuNhapModal from "./components/PhieuNhapModal";
 import PhieuNhapTable from "./components/PhieuNhapTable";
@@ -45,13 +45,19 @@ function PhieuNhapPage() {
 	}, []);
 
 	const handleSubmit = async (values: any) => {
+		const payload = {
+			...values,
+			ngay_nhap: values.ngay_nhap
+				? dayjs(values.ngay_nhap).format("YYYY-MM-DD")
+				: undefined,
+		};
 		try {
 			if (editingRecord) {
-				await fetchUpdatePhieuNhapItem(editingRecord.id, values);
+				await fetchUpdatePhieuNhapItem(editingRecord.id, payload);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddPhieuNhapItem(values);
+				await fetchAddPhieuNhapItem(payload);
 				message.success("Thêm thành công");
 			}
 
