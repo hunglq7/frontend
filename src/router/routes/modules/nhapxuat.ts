@@ -5,6 +5,9 @@ import ContainerLayout from "#src/layout/container-layout";
 
 const PhieuNhap = lazy(() => import("#src/pages/nhapxuat/phieunhap"));
 const PhieuXuat = lazy(() => import("#src/pages/nhapxuat/phieuxuat"));
+const ChiTietPhieuNhap = lazy(
+	() => import("#src/pages/nhapxuat/chitietphieunhap"),
+);
 const routes: AppRouteRecordRaw[] = [
 	{
 		path: "/nhapxuat",
@@ -36,6 +39,20 @@ const routes: AppRouteRecordRaw[] = [
 				handle: {
 					icon: createElement(ProfileOutlined),
 					title: "nhapxuat.menu.phieuxuat",
+					roles: ["user", "admin"],
+					permissions: [
+						"permission:button:add",
+						"permission:button:update",
+						"permission:button:delete",
+					],
+				},
+			},
+			{
+				path: "/nhapxuat/chitietphieunhap",
+				Component: ChiTietPhieuNhap,
+				handle: {
+					icon: createElement(ProfileOutlined),
+					title: "nhapxuat.menu.chitietphieunhap",
 					roles: ["user", "admin"],
 					permissions: [
 						"permission:button:add",

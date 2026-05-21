@@ -146,6 +146,11 @@ function PhieuXuatPage() {
 
 								);
 							}
+							if (params.vi_tri_id) {
+								filtered = filtered.filter(
+									item => Number(item.vi_tri_id) === Number(params.vi_tri_id),
+								);
+							}
 							if (params.nguoi_xuat) {
 								filtered = result.filter(item =>
 									item.nguoi_xuat
