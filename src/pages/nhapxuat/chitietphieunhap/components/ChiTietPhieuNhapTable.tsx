@@ -1,7 +1,7 @@
 import type { ActionType } from "@ant-design/pro-components";
 import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types.js";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
-import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types.js";
+import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
 import type { ChiTietPhieuNhapItemType } from "#src/api/nhapxuat/chitietphieunhap/types.js";
 import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/types.js";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
@@ -20,8 +20,8 @@ interface Props {
 	toolbar: React.ReactNode
 	phieuNhapList: PhieuNhapItemType[]
 	loaiThietBiList: LoaiThietBiItemType[]
-	viTriLapDatList: ViTriLapDatItemType[]
 	donViTinhList: DonViTinhItemType[]
+	thietBiList: ThietBiItemType[]
 }
 function ChiTietPhieuNhapTable({
 	actionRef,
@@ -32,16 +32,16 @@ function ChiTietPhieuNhapTable({
 	toolbar,
 	phieuNhapList,
 	loaiThietBiList,
-	viTriLapDatList,
 	donViTinhList,
+	thietBiList,
 }: Props) {
 	const columns = ChiTietPhieuNhapColumns({
 		onEdit,
 		onDelete,
 		phieuNhapList,
 		loaiThietBiList,
-		viTriLapDatList,
 		donViTinhList,
+		thietBiList,
 	});
 
 	return (
