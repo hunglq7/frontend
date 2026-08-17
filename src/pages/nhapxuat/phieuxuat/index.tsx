@@ -1,33 +1,36 @@
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
-import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/index";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types.js";
+import type { PhieuXuatItemType } from "#src/api/nhapxuat/phieuxuat/types.js";
 import type { ActionType } from "@ant-design/pro-components";
 import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
+import { fetchViTriLapDatList } from "#src/api/danhmuc/vitri/index.js";
 import {
-	fetchAddPhieuNhapItem,
-	fetchDeleteMultiplePhieuNhapItems,
-	fetchDeletePhieuNhapItem,
-	fetchPhieuNhapList,
-	fetchUpdatePhieuNhapItem,
-} from "#src/api/nhapxuat/phieunhap/index";
+	fetchAddPhieuXuatItem,
+	fetchDeleteMultiplePhieuXuatItems,
+	fetchDeletePhieuXuatItem,
+	fetchPhieuXuatList,
+	fetchUpdatePhieuXuatItem,
+} from "#src/api/nhapxuat/phieuxuat/index";
 import { BasicContent } from "#src/components/basic-content";
 import { message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 
-import PhieuNhapModal from "./components/PhieuNhapModal";
-import PhieuNhapTable from "./components/PhieuNhapTable";
-import PhieuNhapToolBar from "./components/PhieuNhapToolBar";
+import PhieuXuatModal from "./components/PhieuXuatModal";
+import PhieuXuatTable from "./components/PhieuXuatTable";
+import PhieuXuatToolBar from "./components/PhieuXuatToolBar";
 
-function PhieuNhapPage() {
+function PhieuXuatPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
-	const [editingRecord, setEditingRecord] = useState<PhieuNhapItemType | null>(
+	const [editingRecord, setEditingRecord] = useState<PhieuXuatItemType | null>(
 		null,
 	);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-	const [tableData, setTableData] = useState<PhieuNhapItemType[]>([]);
-	const [filteredData, setFilteredData] = useState<PhieuNhapItemType[]>([]);
+	const [tableData, setTableData] = useState<PhieuXuatItemType[]>([]);
+	const [filteredData, setFilteredData] = useState<PhieuXuatItemType[]>([]);
 	const [donViList, setDonViList] = useState<DanhMucDonViItemType[]>([]);
+	const [viTriList, setViTriList] = useState<ViTriLapDatItemType[]>([]);
 
 	// Fetch danh sách đơn vị khi component được mount
 	useEffect(() => {
@@ -40,24 +43,34 @@ function PhieuNhapPage() {
 				message.error(`Lỗi khi tải danh sách đơn vị: ${error}`);
 			}
 		};
+		const fetchViTri = async () => {
+			try {
+				const result = await fetchViTriLapDatList();
+				setViTriList(result);
+			}
+			catch (error) {
+				message.error(`Lỗi khi tải danh sách vị trí: ${error}`);
+			}
+		};
 
 		fetchDonVi();
+		fetchViTri();
 	}, []);
 
 	const handleSubmit = async (values: any) => {
 		const payload = {
 			...values,
-			ngay_nhap: values.ngay_nhap
-				? dayjs(values.ngay_nhap).format("YYYY-MM-DD")
+			ngay_xuat: values.ngay_xuat
+				? dayjs(values.ngay_xuat).format("YYYY-MM-DD")
 				: undefined,
 		};
 		try {
 			if (editingRecord) {
-				await fetchUpdatePhieuNhapItem(editingRecord.id, payload);
+				await fetchUpdatePhieuXuatItem(editingRecord.id, payload);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddPhieuNhapItem(payload);
+				await fetchAddPhieuXuatItem(payload);
 				message.success("Thêm thành công");
 			}
 
@@ -74,7 +87,7 @@ function PhieuNhapPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeletePhieuNhapItem(id);
+			await fetchDeletePhieuXuatItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
@@ -85,7 +98,7 @@ function PhieuNhapPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultiplePhieuNhapItems(selectedRowKeys as number[]);
+			await fetchDeleteMultiplePhieuXuatItems(selectedRowKeys as number[]);
 			message.success("Xóa nhiều thành công");
 			setSelectedRowKeys([]);
 			actionRef.current?.reload();
@@ -98,31 +111,32 @@ function PhieuNhapPage() {
 	return (
 		<>
 			<BasicContent>
-				<PhieuNhapTable
+				<PhieuXuatTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					donViList={donViList}
+					viTriList={viTriList}
 					request={async (params: any) => {
 						try {
-							const result = await fetchPhieuNhapList();
+							const result = await fetchPhieuXuatList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ma_phieu_nhap) {
+							if (params.ma_phieu_xuat) {
 								filtered = result.filter(item =>
-									item.ma_phieu_nhap
+									item.ma_phieu_xuat
 										.toLowerCase()
-										.includes(params.ma_phieu_nhap.toLowerCase()),
+										.includes(params.ma_phieu_xuat.toLowerCase()),
 								);
 							}
-							if (params.ngay_nhap) {
-								const searchDate = dayjs(params.ngay_nhap, "DD/MM/YYYY").format(
+							if (params.ngay_xuat) {
+								const searchDate = dayjs(params.ngay_xuat, "DD/MM/YYYY").format(
 									"YYYY-MM-DD",
 								);
 
 								filtered = filtered.filter((item) => {
-									const itemDate = dayjs(item.ngay_nhap).format("YYYY-MM-DD");
+									const itemDate = dayjs(item.ngay_xuat).format("YYYY-MM-DD");
 									return itemDate === searchDate;
 								});
 							}
@@ -132,11 +146,16 @@ function PhieuNhapPage() {
 
 								);
 							}
-							if (params.nguoi_nhap) {
+							if (params.vi_tri_id) {
+								filtered = filtered.filter(
+									item => Number(item.vi_tri_id) === Number(params.vi_tri_id),
+								);
+							}
+							if (params.nguoi_xuat) {
 								filtered = result.filter(item =>
-									item.nguoi_nhap
+									item.nguoi_xuat
 										.toLowerCase()
-										.includes(params.nguoi_nhap.toLowerCase()),
+										.includes(params.nguoi_xuat.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
@@ -167,7 +186,7 @@ function PhieuNhapPage() {
 						},
 					}}
 					toolbar={(
-						<PhieuNhapToolBar
+						<PhieuXuatToolBar
 							selectedRowKeys={selectedRowKeys}
 							onAdd={() => {
 								setEditingRecord(null);
@@ -179,16 +198,17 @@ function PhieuNhapPage() {
 					)}
 				/>
 
-				<PhieuNhapModal
+				<PhieuXuatModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
 					initialValues={editingRecord}
 					donViList={donViList}
+					viTriList={viTriList}
 				/>
 			</BasicContent>
 		</>
 	);
 }
 
-export default PhieuNhapPage;
+export default PhieuXuatPage;
