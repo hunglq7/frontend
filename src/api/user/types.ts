@@ -48,6 +48,7 @@ export interface UserSavePayload {
 	username: string
 	email: string
 	phone?: string
+	phoneNumber?: string
 	avatar?: string
 	password: string
 	roles: string[]
@@ -57,6 +58,7 @@ export interface UserUpdatePayload {
 	username?: string
 	email?: string
 	phone?: string
+	phoneNumber?: string
 	avatar?: string
 	description?: string
 	password?: string

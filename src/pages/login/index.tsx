@@ -1,5 +1,13 @@
 import type { FormComponentMapType } from "./form-mode-context";
 
+// import hero from "#src/assets/svg/hero.svg?url";
+import Banner from "#src/assets/svg/banner.svg?react";
+import logo from "#src/assets/svg/logo.svg?url";
+import { useLayoutMenu } from "#src/hooks/use-layout-menu";
+import { usePreferences } from "#src/hooks/use-preferences";
+import LayoutFooter from "#src/layout/layout-footer";
+import { LanguageButton } from "#src/layout/layout-header/components/language-button";
+import { ThemeButton } from "#src/layout/layout-header/components/theme-button";
 import {
 	Col,
 	Grid,
@@ -10,15 +18,6 @@ import { clsx } from "clsx";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-// import hero from "#src/assets/svg/hero.svg?url";
-import Banner from "#src/assets/svg/banner.svg?react";
-import logo from "#src/assets/svg/logo.svg?url";
-
-import { useLayoutMenu } from "#src/hooks/use-layout-menu";
-import { usePreferences } from "#src/hooks/use-preferences";
-import LayoutFooter from "#src/layout/layout-footer";
-import { LanguageButton } from "#src/layout/layout-header/components/language-button";
-import { ThemeButton } from "#src/layout/layout-header/components/theme-button";
 
 import { FORM_COMPONENT_MAP } from "./constants";
 import { FormModeContext } from "./form-mode-context";
@@ -68,6 +67,11 @@ export default function Login() {
 						lg={15}
 						style={{
 							backgroundImage: `radial-gradient(${token.colorBgContainer}, ${isDark ? token.colorBgBlur : token.colorPrimaryBg})`,
+							// backgroundImage: `url(${bgleft})`,
+							// backgroundSize: "cover",
+							// backgroundPosition: "center",
+							// backgroundRepeat: "no-repeat",
+							// filter: isDark ? "brightness(0.9)" : "brightness(1)",
 						}}
 						className={clsx({ hidden: isAlignCenter })}
 					>

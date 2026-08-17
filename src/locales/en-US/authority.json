@@ -1,6 +1,6 @@
 {
-	"welcomeBack": "Welcome Back",
-	"loginDescription": "Login to your account",
+	"welcomeBack": "Chào mừng bạn chở lại",
+	"loginDescription": "Đăng nhập vào tài khoản của bạn",
 	"pageTitle": "Phần mềm quản lý thiết bị",
 	"pageDescription": "Quản lý camera, hệ thống thông tin liên lạc",
 	"layout": {
@@ -25,7 +25,7 @@
 	"forgotPasswordSubtitle": "Enter your email and we'll send you instructions to reset your password",
 	"email": "Email",
 	"sendResetLink": "Send Reset Link",
-	"logout": "Logout",
+	"logout": "Đăng xuất",
 	"register": "Register",
 	"alreadyHaveAnAccount": "Already have an account?",
 	"goToLogin": "Go to Login",

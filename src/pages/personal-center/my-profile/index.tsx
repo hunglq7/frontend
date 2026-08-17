@@ -13,39 +13,22 @@ import { Form, Input } from "antd";
 import { useEffect, useMemo, useRef } from "react";
 
 const URL_TRAILING_SLASH_REGEX = /\/$/;
-
+const LEADING_SLASH_REGEX = /^\/+/;
 export default function Profile() {
 	const { avatar, username, email, phoneNumber, description, id, getUserInfo, setUserInfo } = useUserStore();
+	const [form] = Form.useForm();
 	const formRef = useRef<any>(null);
 
-	const getAvatarSrc = (avatar: string) => {
-		if (!avatar)
+	const getAvatarSrc = (avatarPath?: string) => {
+		if (!avatarPath)
 			return "https://avatar.vercel.sh/blur.svg?text=2";
-		if (avatar.startsWith("http"))
-			return avatar;
-		const baseUrl = import.meta.env.VITE_API_BASE_URL.replace(URL_TRAILING_SLASH_REGEX, "");
-		return `${baseUrl}${avatar}`;
+		if (avatarPath.startsWith("http"))
+			return avatarPath;
+		const baseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(URL_TRAILING_SLASH_REGEX, "");
+		const normalizedPath = avatarPath.replace(LEADING_SLASH_REGEX, "");
+		return `${baseUrl}/${normalizedPath}`;
 	};
 
-	useEffect(() => {
-		// Lấy thông tin user mới nhất từ server khi component mount
-		if (id) {
-			getUserInfo().then(() => {
-				// Update form fields after fetching user info
-				if (formRef.current) {
-					formRef.current.setFieldsValue({
-						avatar: getAvatarSrc(avatar),
-						username: username || "",
-						email: email || "",
-						phoneNumber: phoneNumber || "",
-						description: description || "",
-					});
-				}
-			});
-		}
-	}, [id]);
-
-	// Tạo form values từ user store, tự động cập nhật khi user info thay đổi
 	const formInitialValues = useMemo(() => ({
 		avatar: getAvatarSrc(avatar),
 		username: username || "",
@@ -54,6 +37,23 @@ export default function Profile() {
 		description: description || "",
 	}), [avatar, username, email, phoneNumber, description]);
 
+	const avatarFieldValue = form.getFieldValue("avatar") ?? formInitialValues.avatar;
+
+	useEffect(() => {
+		if (id) {
+			getUserInfo().then((res: any) => {
+				const userData = res || useUserStore.getState();
+				form.setFieldsValue({
+					avatar: getAvatarSrc(userData.avatar),
+					username: userData.username || "",
+					email: userData.email || "",
+					phoneNumber: userData.phoneNumber || "",
+					description: userData.description || "",
+				});
+			});
+		}
+	}, [id, form, getUserInfo]);
+
 	const handleFinish = async (values: any) => {
 		try {
 			if (!id) {
@@ -61,10 +61,9 @@ export default function Profile() {
 				return;
 			}
 
-			// Xử lý avatar: nếu là URL đầy đủ, chỉ lấy path
 			let avatarPath = values.avatar;
 			if (avatarPath && avatarPath.startsWith("http")) {
-				const baseUrl = import.meta.env.VITE_API_BASE_URL.replace(URL_TRAILING_SLASH_REGEX, "");
+				const baseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(URL_TRAILING_SLASH_REGEX, "");
 				if (avatarPath.startsWith(baseUrl)) {
 					avatarPath = avatarPath.replace(baseUrl, "");
 				}
@@ -92,6 +91,7 @@ export default function Profile() {
 		<BasicContent className="max-w-md ml-10">
 			<h3>Thông tin tài khoản</h3>
 			<ProForm
+				form={form}
 				formRef={formRef}
 				layout="vertical"
 				onFinish={handleFinish}
@@ -108,7 +108,10 @@ export default function Profile() {
 						},
 					]}
 				>
-					<FormAvatarItem />
+					<FormAvatarItem
+						value={avatarFieldValue}
+						onChange={nextValue => form.setFieldValue("avatar", nextValue)}
+					/>
 				</Form.Item>
 				<ProFormText
 					name="username"

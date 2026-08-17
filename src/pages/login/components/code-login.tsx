@@ -1,6 +1,8 @@
+import { BasicButton } from "#src/components/basic-button";
+import { MOBILE_PHONE_RULES } from "#src/constants/rules";
+
 import { LeftOutlined } from "@ant-design/icons";
 import { ProFormCaptcha } from "@ant-design/pro-components";
-
 import {
 	Button,
 	Form,
@@ -10,8 +12,6 @@ import {
 } from "antd";
 import { use, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BasicButton } from "#src/components/basic-button";
-import { MOBILE_PHONE_RULES } from "#src/constants/rules";
 
 import { FormModeContext } from "../form-mode-context";
 

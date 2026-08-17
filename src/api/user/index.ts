@@ -111,22 +111,33 @@ export function fetchUserList(skip = 0, limit = 100) {
 		.json<UserListResponse>();
 }
 
+function normalizeUserPayload<T extends { phone?: string, phoneNumber?: string }>(data: T) {
+	const phoneValue = data.phone ?? data.phoneNumber ?? "";
+	return {
+		...data,
+		phone: phoneValue || undefined,
+		phoneNumber: phoneValue || undefined,
+	};
+}
+
 export function fetchCreateUser(data: UserSavePayload) {
-	return request.post("api/users", { json: data }).json<UserItemType>();
+	const payload = normalizeUserPayload(data);
+	return request.post("api/users", { json: payload }).json<UserItemType>();
 }
 
 export async function fetchUpdateUser(
 	id: number,
 	data: UserUpdatePayload,
 ): Promise<UserInfoType> {
+	const payload = normalizeUserPayload(data);
 	const response = await request
-		.put(`api/users/${id}`, { json: data })
+		.put(`api/users/${id}`, { json: payload })
 		.json<UserItemType>();
 	return {
 		id: String(response.id),
 		username: response.username || "",
 		email: response.email || "",
-		phoneNumber: (response as any).phone || "",
+		phoneNumber: (response as any).phone || (response as any).phoneNumber || "",
 		description: response.description || "",
 		avatar: response.avatar || "",
 		roles: Array.isArray(response.roles) ? response.roles.map(String) : [],
