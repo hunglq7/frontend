@@ -1,16 +1,16 @@
 import type { MenuProps } from "antd";
 import type { MenuItemType } from "./types";
 
+import { useDeviceType } from "#src/hooks/use-device-type";
+import { usePreferences } from "#src/hooks/use-preferences";
+import { removeTrailingSlash } from "#src/router/utils/remove-trailing-slash";
+
+import { useAccessStore } from "#src/store/access";
+import { cn } from "#src/utils/cn";
+
 import { Menu } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useMatches } from "react-router";
-
-import { useDeviceType } from "#src/hooks/use-device-type";
-import { usePreferences } from "#src/hooks/use-preferences";
-
-import { removeTrailingSlash } from "#src/router/utils/remove-trailing-slash";
-import { useAccessStore } from "#src/store/access";
-import { cn } from "#src/utils/cn";
 
 import { useStyles } from "./style";
 import { getParentKeys } from "./utils";

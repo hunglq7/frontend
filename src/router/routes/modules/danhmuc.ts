@@ -1,4 +1,5 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
+import ContainerLayout from "#src/layout/container-layout";
 import {
 	ApartmentOutlined,
 	ClusterOutlined,
@@ -6,9 +7,8 @@ import {
 	FolderOutlined,
 	IdcardOutlined,
 } from "@ant-design/icons";
-import { createElement, lazy } from "react";
 
-import ContainerLayout from "#src/layout/container-layout";
+import { createElement, lazy } from "react";
 
 const DanhMucDonVi = lazy(() => import("#src/pages/danhmuc/donvi"));
 const ViTriLapDat = lazy(() => import("#src/pages/danhmuc/vitri"));

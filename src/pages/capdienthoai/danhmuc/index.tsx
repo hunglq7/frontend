@@ -1,42 +1,42 @@
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
+import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/index.js";
 import type { ActionType } from "@ant-design/pro-components";
 import {
-	fetchAddKhuVucItem,
-	fetchDeleteKhuVucItem,
-	fetchDeleteMultipleKhuVucItems,
-	fetchKhuVucList,
-	fetchUpdateKhuVucItem,
-} from "#src/api/danhmuc/khuvuc";
+	fetchCreateDanhmuccapdienthoai,
+	fetchDanhmuccapdienthoaiList,
+	fetchDeleteDanhmuccapdienthoai,
+	fetchDeleteMutipleDanhmuccapdienthoai,
+	fetchUpdateDanhmuccapdienthoai,
+} from "#src/api/capthongtin/danhmuc";
 import { BasicContent } from "#src/components/basic-content";
 import { message } from "antd";
 import { useRef, useState } from "react";
 
-import KhuVucModal from "./components/KhuVucModal";
-import KhuVucTable from "./components/KhuVucTable";
-import KhuVucToolBar from "./components/KhuVucToolBar";
+import CapdienthoaiToolBar from "./components//CapdienthoaiToolBar";
+import CapdienthoaiModal from "./components/CapdienthoaiModal";
+import CapdienthoaiTable from "./components/CapdienthoaiTable";
 
-function KhuVucPage() {
+function CapdienthoaiPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [editingRecord, setEditingRecord]
-		= useState<KhuVucItemType | null>(null);
+		= useState<DanhMucCapDienThoaiItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys]
 		= useState<React.Key[]>([]);
 	const [tableData, setTableData] = useState<
-		KhuVucItemType[]
+		DanhMucCapDienThoaiItemType[]
 	>([]);
 	const [filteredData, setFilteredData] = useState<
-		KhuVucItemType[]
+		DanhMucCapDienThoaiItemType[]
 	>([]);
 
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateKhuVucItem(editingRecord.id, values);
+				await fetchUpdateDanhmuccapdienthoai(editingRecord.id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddKhuVucItem(values);
+				await fetchCreateDanhmuccapdienthoai(values);
 				message.success("Thêm thành công");
 			}
 			setOpenModal(false);
@@ -52,7 +52,7 @@ function KhuVucPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeleteKhuVucItem(id);
+			await fetchDeleteDanhmuccapdienthoai(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
@@ -63,9 +63,10 @@ function KhuVucPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultipleKhuVucItems(
+			await fetchDeleteMutipleDanhmuccapdienthoai(
 				selectedRowKeys as number[],
 			);
+
 			message.success("Xóa nhiều thành công");
 			setSelectedRowKeys([]);
 			actionRef.current?.reload();
@@ -78,19 +79,19 @@ function KhuVucPage() {
 	return (
 		<>
 			<BasicContent>
-				<KhuVucTable
+				<CapdienthoaiTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					request={async (params: any) => {
 						try {
-							const result = await fetchKhuVucList();
+							const result = await fetchDanhmuccapdienthoaiList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ten_khu_vuc) {
+							if (params.tenCap) {
 								filtered = result.filter(item =>
-									item.ten_khu_vuc.toLowerCase().includes(params.ten_khu_vuc.toLowerCase()),
+									item.tenCap.toLowerCase().includes(params.tenCap.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
@@ -123,7 +124,7 @@ function KhuVucPage() {
 						},
 					}}
 					toolbar={(
-						<KhuVucToolBar
+						<CapdienthoaiToolBar
 							selectedRowKeys={
 								selectedRowKeys
 							}
@@ -139,7 +140,7 @@ function KhuVucPage() {
 					)}
 				/>
 
-				<KhuVucModal
+				<CapdienthoaiModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
@@ -150,4 +151,4 @@ function KhuVucPage() {
 	);
 }
 
-export default KhuVucPage;
+export default CapdienthoaiPage;

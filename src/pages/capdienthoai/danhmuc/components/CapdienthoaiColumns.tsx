@@ -1,16 +1,16 @@
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
+import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/types.js";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Button, Popconfirm } from "antd";
 
 interface Props {
-	onEdit: (record: KhuVucItemType) => void
+	onEdit: (record: DanhMucCapDienThoaiItemType) => void
 	onDelete: (id: number) => void
 }
 
-export function KhuVucColumns({
+export function CapdienthoaiColumns({
 	onEdit,
 	onDelete,
-}: Props): ProColumns<KhuVucItemType>[] {
+}: Props): ProColumns<DanhMucCapDienThoaiItemType>[] {
 	return [
 		{
 			title: "STT",
@@ -21,8 +21,8 @@ export function KhuVucColumns({
 		},
 
 		{
-			title: "Tên khu vực",
-			dataIndex: "ten_khu_vuc",
+			title: "Tên thiết bị",
+			dataIndex: "tenCap",
 			search: true,
 		},
 

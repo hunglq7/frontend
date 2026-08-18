@@ -29,7 +29,8 @@
 		"phongban": "Phongban Management",
 		"personalCenter": "Thông tin cá nhân",
 		"profile": "Cập nhật thông tin",
-		"settings": "Settings"
+		"settings": "Settings",
+		"capdienthoai": "Cáp điện thoại"
 	},
 	"appLoading": "Loading Resources...",
 	"back": "Back",
@@ -104,5 +105,4 @@
 	"tonghopcamera": "Update camera",
 	"createdAt": "Ngày tạo",
 	"updatedAt": "Ngày cập nhật"
-
 }

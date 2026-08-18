@@ -1,21 +1,21 @@
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types.js";
+import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/index.js";
 import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
-import { KhuVucColumns } from "../components/KhuVucColumns";
+import { CapdienthoaiColumns } from "../components/CapdienthoaiColumns";
 
 interface Props {
 	actionRef: React.RefObject<ActionType | null>
-	dataSource: KhuVucItemType[]
+	dataSource: DanhMucCapDienThoaiItemType[]
 	loading: boolean
 	request: any
-	onEdit: (record: KhuVucItemType) => void
+	onEdit: (record: DanhMucCapDienThoaiItemType) => void
 	onDelete: (id: number) => void | Promise<void>
 	rowSelection: any
 	toolbar: React.ReactNode
 }
-function KhuVucTable({
+function CapdienthoaiTable({
 	actionRef,
 	request,
 	onEdit,
@@ -23,13 +23,13 @@ function KhuVucTable({
 	rowSelection,
 	toolbar,
 }: Props) {
-	const columns = KhuVucColumns({
+	const columns = CapdienthoaiColumns({
 		onEdit,
 		onDelete,
 	});
 
 	return (
-		<ProTable<KhuVucItemType>
+		<ProTable<DanhMucCapDienThoaiItemType>
 			rowKey="id"
 			actionRef={actionRef}
 			columns={columns}
@@ -68,4 +68,4 @@ function KhuVucTable({
 	);
 }
 
-export default KhuVucTable;
+export default CapdienthoaiTable;
