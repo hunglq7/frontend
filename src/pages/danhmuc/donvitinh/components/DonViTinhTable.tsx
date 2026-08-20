@@ -1,21 +1,21 @@
-import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
+import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types.js";
 import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
-import { LoaiThietBiColumns } from "../components/LoaiThietBiColumns";
+import { DonViTinhColumns } from "../components/DonViTinhColumns";
 
 interface Props {
 	actionRef: React.RefObject<ActionType | null>
-	dataSource: LoaiThietBiItemType[]
+	dataSource: DonViTinhItemType[]
 	loading: boolean
 	request: any
-	onEdit: (record: LoaiThietBiItemType) => void
+	onEdit: (record: DonViTinhItemType) => void
 	onDelete: (id: number) => void | Promise<void>
 	rowSelection: any
 	toolbar: React.ReactNode
 }
-function LoaiThietBiTable({
+function DonViTinhTable({
 	actionRef,
 	request,
 	onEdit,
@@ -23,13 +23,13 @@ function LoaiThietBiTable({
 	rowSelection,
 	toolbar,
 }: Props) {
-	const columns = LoaiThietBiColumns({
+	const columns = DonViTinhColumns({
 		onEdit,
 		onDelete,
 	});
 
 	return (
-		<ProTable<LoaiThietBiItemType>
+		<ProTable<DonViTinhItemType>
 			rowKey="id"
 			actionRef={actionRef}
 			columns={columns}
@@ -68,4 +68,4 @@ function LoaiThietBiTable({
 	);
 }
 
-export default LoaiThietBiTable;
+export default DonViTinhTable;

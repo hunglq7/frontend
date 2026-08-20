@@ -1,41 +1,41 @@
-import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
+import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types.js";
 import type { ActionType } from "@ant-design/pro-components";
 import {
-	fetchAddLoaiThietBiItem,
-	fetchDeleteLoaiThietBiItem,
-	fetchDeleteMultipleLoaiThietBiItems,
-	fetchLoaiThietBiList,
-	fetchUpdateLoaiThietBiItem,
-} from "#src/api/danhmuc/loaithietbi";
+	fetchAddDonViTinhItem,
+	fetchDeleteDonViTinhItem,
+	fetchDeleteMultipleDonViTinhItems,
+	fetchDonViTinhList,
+	fetchUpdateDonViTinhItem,
+} from "#src/api/danhmuc/donvitinh";
 import { BasicContent } from "#src/components/basic-content";
 import { message } from "antd";
 import { useRef, useState } from "react";
-import LoaiThietbiModal from "./components/LoaiThietBiModal";
-import LoaiThietbiTable from "./components/LoaiThietBiTable";
-import LoaiThietbiToolBar from "./components/LoaiThietBiToolBar";
+import DonViTinhModal from "./components/DonViTinhModal";
+import DonViTinhTable from "./components/DonViTinhTable";
+import DonViTinhToolBar from "./components/DonViTinhToolBar";
 
-function LoaiThietBiPage() {
+function DonViTinhPage() {
 	const actionRef = useRef<ActionType>(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [editingRecord, setEditingRecord]
-		= useState<LoaiThietBiItemType | null>(null);
+		= useState<DonViTinhItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys]
 		= useState<React.Key[]>([]);
 	const [tableData, setTableData] = useState<
-		LoaiThietBiItemType[]
+		DonViTinhItemType[]
 	>([]);
 	const [filteredData, setFilteredData] = useState<
-		LoaiThietBiItemType[]
+		DonViTinhItemType[]
 	>([]);
 
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateLoaiThietBiItem(editingRecord.id, values);
+				await fetchUpdateDonViTinhItem(editingRecord.id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
-				await fetchAddLoaiThietBiItem(values);
+				await fetchAddDonViTinhItem(values);
 				message.success("Thêm thành công");
 			}
 
@@ -52,7 +52,7 @@ function LoaiThietBiPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			await fetchDeleteLoaiThietBiItem(id);
+			await fetchDeleteDonViTinhItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
 		}
@@ -63,7 +63,7 @@ function LoaiThietBiPage() {
 
 	const handleDeleteMany = async () => {
 		try {
-			await fetchDeleteMultipleLoaiThietBiItems(
+			await fetchDeleteMultipleDonViTinhItems(
 				selectedRowKeys as number[],
 			);
 			message.success("Xóa nhiều thành công");
@@ -78,19 +78,19 @@ function LoaiThietBiPage() {
 	return (
 		<>
 			<BasicContent>
-				<LoaiThietbiTable
+				<DonViTinhTable
 					actionRef={actionRef}
 					dataSource={tableData}
 					loading={false}
 					request={async (params: any) => {
 						try {
-							const result = await fetchLoaiThietBiList();
+							const result = await fetchDonViTinhList();
 							setTableData(result);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
-							if (params.ten_loai) {
+							if (params.ten_don_vi_tinh) {
 								filtered = result.filter(item =>
-									item.ten_loai.toLowerCase().includes(params.ten_loai.toLowerCase()),
+									item.ten_don_vi_tinh.toLowerCase().includes(params.ten_don_vi_tinh.toLowerCase()),
 								);
 							}
 							setFilteredData(filtered);
@@ -123,7 +123,7 @@ function LoaiThietBiPage() {
 						},
 					}}
 					toolbar={(
-						<LoaiThietbiToolBar
+						<DonViTinhToolBar
 							selectedRowKeys={
 								selectedRowKeys
 							}
@@ -139,7 +139,7 @@ function LoaiThietBiPage() {
 					)}
 				/>
 
-				<LoaiThietbiModal
+				<DonViTinhModal
 					open={openModal}
 					onOpenChange={setOpenModal}
 					onSubmit={handleSubmit}
@@ -150,4 +150,4 @@ function LoaiThietBiPage() {
 	);
 }
 
-export default LoaiThietBiPage;
+export default DonViTinhPage;

@@ -1,16 +1,16 @@
-import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
+import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types.js";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Button, Popconfirm } from "antd";
 
 interface Props {
-	onEdit: (record: LoaiThietBiItemType) => void
+	onEdit: (record: DonViTinhItemType) => void
 	onDelete: (id: number) => void
 }
 
-export function LoaiThietBiColumns({
+export function DonViTinhColumns({
 	onEdit,
 	onDelete,
-}: Props): ProColumns<LoaiThietBiItemType>[] {
+}: Props): ProColumns<DonViTinhItemType>[] {
 	return [
 		{
 			title: "STT",
@@ -21,8 +21,8 @@ export function LoaiThietBiColumns({
 		},
 
 		{
-			title: "Tên loại thiết bị",
-			dataIndex: "ten_loai",
+			title: "Tên đơn vị tính",
+			dataIndex: "ten_don_vi_tinh",
 			search: true,
 		},
 
