@@ -3,13 +3,35 @@ import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js"
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
 import type { ChiTietPhieuNhapItemType } from "#src/api/nhapxuat/chitietphieunhap/types.js";
 import type { PhieuNhapItemType } from "#src/api/nhapxuat/phieunhap/types.js";
-
 import {
 	ModalForm,
 	ProFormMoney,
 	ProFormSelect,
 	ProFormText,
 } from "@ant-design/pro-components";
+
+interface SelectItem { id: number }
+
+function getOptions<T extends SelectItem>(
+	items: T[],
+	getLabel: (item: T) => string,
+) {
+	return items.map(item => ({
+		label: getLabel(item),
+		value: Number(item.id),
+	}));
+}
+
+function resolveId<T extends SelectItem>(
+	id: number | undefined,
+	label: string | undefined,
+	items: T[],
+	getLabel: (item: T) => string,
+) {
+	return id != null
+		? Number(id)
+		: items.find(item => getLabel(item) === label)?.id;
+}
 
 interface Props {
 	open: boolean
@@ -32,41 +54,28 @@ function ChiTietPhieuNhapModal({
 	thietBiList,
 	donViTinhList,
 }: Props) {
-	const findId = <T extends { id: number }>(
-		id: number | undefined,
-		label: string | undefined,
-		items: T[],
-		getLabel: (item: T) => string,
-	) => {
-		if (id != null) {
-			return Number(id);
-		}
-
-		return items.find(item => getLabel(item) === label)?.id;
-	};
-
 	const normalizedInitialValues = initialValues
 		? {
 			...initialValues,
-			phieu_nhap_id: findId(
+			phieu_nhap_id: resolveId(
 				initialValues.phieu_nhap_id,
 				initialValues.ma_phieu_nhap,
 				phieuNhapList,
 				phieuNhap => phieuNhap.ma_phieu_nhap,
 			),
-			thiet_bi_id: findId(
+			thiet_bi_id: resolveId(
 				initialValues.thiet_bi_id,
 				initialValues.ten_thiet_bi,
 				thietBiList,
 				thietBi => thietBi.ten_thiet_bi,
 			),
-			loai_thiet_bi_id: findId(
+			loai_thiet_bi_id: resolveId(
 				initialValues.loai_thiet_bi_id,
 				initialValues.ten_loai,
 				loaiThietBiList,
 				loaiThietBi => loaiThietBi.ten_loai,
 			),
-			don_vi_tinh_id: findId(
+			don_vi_tinh_id: resolveId(
 				initialValues.don_vi_tinh_id,
 				initialValues.ten_don_vi_tinh,
 				donViTinhList,
@@ -75,88 +84,60 @@ function ChiTietPhieuNhapModal({
 		}
 		: {};
 
+	const selectFields = [
+		{
+			name: "phieu_nhap_id",
+			label: "Phiếu nhập",
+			placeholder: "Chọn phiếu nhập",
+			message: "Vui lòng chọn phiếu nhập",
+			options: getOptions(phieuNhapList, item => item.ma_phieu_nhap),
+		},
+		{
+			name: "thiet_bi_id",
+			label: "Thiết bị",
+			placeholder: "Chọn thiết bị",
+			message: "Vui lòng chọn thiết bị",
+			options: getOptions(thietBiList, item => item.ten_thiet_bi),
+		},
+		{
+			name: "loai_thiet_bi_id",
+			label: "Loại thiết bị",
+			placeholder: "Chọn loại thiết bị",
+			message: "Vui lòng chọn loại thiết bị",
+			options: getOptions(loaiThietBiList, item => item.ten_loai),
+		},
+		{
+			name: "don_vi_tinh_id",
+			label: "Đơn vị tính",
+			placeholder: "Chọn đơn vị tính",
+			message: "Vui lòng chọn đơn vị tính",
+			options: getOptions(donViTinhList, item => item.ten_don_vi_tinh),
+		},
+	] as const;
+
 	return (
 		<ModalForm
 			key={initialValues?.id ?? "new"}
-			title={
-				initialValues
-					? "Cập nhật chi tiết phiếu nhập"
-					: "Thêm chi tiết phiếu nhập"
-			}
+			title={initialValues ? "Cập nhật chi tiết phiếu nhập" : "Thêm chi tiết phiếu nhập"}
 			open={open}
 			onOpenChange={onOpenChange}
 			initialValues={normalizedInitialValues}
-			modalProps={{
-				destroyOnHidden: true,
-			}}
+			modalProps={{ destroyOnHidden: true }}
 			onFinish={onSubmit}
 			layout="horizontal"
 			labelCol={{ span: 6 }}
 			wrapperCol={{ span: 18 }}
 		>
-			<ProFormSelect
-				name="phieu_nhap_id"
-				label="Phiếu nhập"
-				placeholder="Chọn phiếu nhập"
-				options={phieuNhapList.map(phieuNhap => ({
-					label: phieuNhap.ma_phieu_nhap,
-					value: Number(phieuNhap.id),
-				}))}
-				rules={[
-					{
-						required: true,
-						message: "Vui lòng chọn phiếu nhập",
-					},
-				]}
-			/>
-
-			<ProFormSelect
-				name="thiet_bi_id"
-				label="Thiết bị"
-				placeholder="Chọn thiết bị"
-				options={thietBiList.map(thietBi => ({
-					label: thietBi.ten_thiet_bi,
-					value: Number(thietBi.id),
-				}))}
-				rules={[
-					{
-						required: true,
-						message: "Vui lòng chọn thiết bị",
-					},
-				]}
-			/>
-
-			<ProFormSelect
-				name="loai_thiet_bi_id"
-				label="Loại thiết bị"
-				placeholder="Chọn loại thiết bị"
-				options={loaiThietBiList.map(loaiThietBi => ({
-					label: loaiThietBi.ten_loai,
-					value: Number(loaiThietBi.id),
-				}))}
-				rules={[
-					{
-						required: true,
-						message: "Vui lòng chọn loại thiết bị",
-					},
-				]}
-			/>
-
-			<ProFormSelect
-				name="don_vi_tinh_id"
-				label="Đơn vị tính"
-				placeholder="Chọn đơn vị tính"
-				options={donViTinhList.map(donViTinh => ({
-					label: donViTinh.ten_don_vi_tinh,
-					value: Number(donViTinh.id),
-				}))}
-				rules={[
-					{
-						required: true,
-						message: "Vui lòng chọn đơn vị tính",
-					},
-				]}
-			/>
+			{selectFields.map(field => (
+				<ProFormSelect
+					key={field.name}
+					name={field.name}
+					label={field.label}
+					placeholder={field.placeholder}
+					options={field.options}
+					rules={[{ required: true, message: field.message }]}
+				/>
+			))}
 			<ProFormText
 				name="so_luong"
 				label="Số lượng"
@@ -166,11 +147,7 @@ function ChiTietPhieuNhapModal({
 				name="don_gia"
 				label="Đơn giá"
 				placeholder="Nhập đơn giá"
-				fieldProps={{
-					style: {
-						width: "100%",
-					},
-				}}
+				fieldProps={{ style: { width: "100%" } }}
 			/>
 		</ModalForm>
 	);
