@@ -1,3 +1,7 @@
+import { BasicButton } from "#src/components/basic-button";
+import { PASSWORD_RULES, USERNAME_RULES } from "#src/constants/rules";
+import { useAuthStore } from "#src/store/auth";
+
 import {
 	Button,
 	Checkbox,
@@ -8,11 +12,7 @@ import {
 } from "antd";
 import { use, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-
 import { Link, useNavigate } from "react-router";
-import { BasicButton } from "#src/components/basic-button";
-import { PASSWORD_RULES, USERNAME_RULES } from "#src/constants/rules";
-import { useAuthStore } from "#src/store/auth";
 
 import { FormModeContext } from "../form-mode-context";
 
@@ -58,7 +58,7 @@ export function RegisterPassword() {
 		<>
 			<Space orientation="vertical">
 				<Title level={3}>
-					Hello, Welcome to
+					Xin chào, chào mừng đến với
 				</Title>
 				<Title className="mt-0" level={5}>
 					{import.meta.env.VITE_GLOB_APP_TITLE}

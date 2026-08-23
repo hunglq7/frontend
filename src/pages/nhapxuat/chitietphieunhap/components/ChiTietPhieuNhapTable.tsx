@@ -11,11 +11,10 @@ import { ChiTietPhieuNhapColumns } from "../components/ChiTietPhieuNhapColumn";
 
 interface Props {
 	actionRef: React.RefObject<ActionType | null>
-	dataSource: ChiTietPhieuNhapItemType[]
 	loading: boolean
 	request: any
 	onEdit: (record: ChiTietPhieuNhapItemType) => void
-	onDelete: (id: number) => void | Promise<void>
+	onDelete: (id: number | undefined) => void | Promise<void>
 	rowSelection: any
 	toolbar: React.ReactNode
 	phieuNhapList: PhieuNhapItemType[]

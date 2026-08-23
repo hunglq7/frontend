@@ -1,4 +1,5 @@
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types.js";
+import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types.js";
 import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types.js";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types.js";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types.js";
@@ -11,6 +12,7 @@ interface Props {
 	thietBiList: ThietBiItemType[]
 	loaiThietBiList: LoaiThietBiItemType[]
 	donViTinhList: DonViTinhItemType[]
+	danhMucDonViList: DanhMucDonViItemType[]
 }
 
 export function TonghopThietbiThongtinColumns({
@@ -19,6 +21,7 @@ export function TonghopThietbiThongtinColumns({
 	thietBiList,
 	loaiThietBiList,
 	donViTinhList,
+	danhMucDonViList,
 }: Props): ProColumns<TonghopThietbiThongtinItemType>[] {
 	return [
 		{
@@ -50,6 +53,29 @@ export function TonghopThietbiThongtinColumns({
 
 			render: (_, record) => {
 				return record.ten_thiet_bi;
+			},
+		},
+		{
+			title: "Đơn vị",
+			dataIndex: "don_vi_id",
+			valueType: "select",
+			fieldProps: {
+				showSearch: true,
+				optionFilterProp: "label",
+			},
+
+			valueEnum: danhMucDonViList.reduce(
+				(acc, item) => {
+					acc[item.id] = {
+						text: item.ten_don_vi,
+					};
+					return acc;
+				},
+				{} as Record<number, { text: string }>,
+			),
+
+			render: (_, record) => {
+				return record.ten_don_vi;
 			},
 		},
 		{

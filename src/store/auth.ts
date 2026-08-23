@@ -38,13 +38,6 @@ export const useAuthStore = create<AuthState & AuthAction>()(
 					token: response.access_token,
 					refreshToken: response.refresh_token,
 				});
-				// Fetch user info after successful login
-				try {
-					await useUserStore.getState().getUserInfo();
-				}
-				catch (error) {
-					console.warn("Failed to fetch user info after login:", error);
-				}
 			},
 
 			register: async (registerPayload) => {
@@ -53,13 +46,6 @@ export const useAuthStore = create<AuthState & AuthAction>()(
 					token: response.access_token,
 					refreshToken: response.refresh_token,
 				});
-				// Fetch user info after successful registration
-				try {
-					await useUserStore.getState().getUserInfo();
-				}
-				catch (error) {
-					console.warn("Failed to fetch user info after registration:", error);
-				}
 			},
 
 			logout: async () => {

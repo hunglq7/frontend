@@ -44,5 +44,8 @@
 	"khuVucManagement": "Khu vực",
 	"loaiThietBiManagement": "Loại thiết bị",
 	"donViTinhManagement": "Đơn vị tính",
-	"danhmuc": "Danh mục"
+	"danhmuc": "Danh mục",
+	"tonghop": {
+		"thietbiThongtin": "Cập nhật thông tin thiết bị"
+	}
 }

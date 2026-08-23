@@ -1,5 +1,7 @@
 export interface ChiTietPhieuNhapItemType {
-	id: number
+	id?: number
+	chi_tiet_phieu_nhap_id?: number
+	id_chi_tiet_phieu_nhap?: number
 	phieu_nhap_id?: number
 	ma_phieu_nhap?: string
 	thiet_bi_id?: number
