@@ -29,20 +29,24 @@ function ChiTietPhieuNhapPage() {
 		= useState<ChiTietPhieuNhapItemType | null>(null);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const [filteredData, setFilteredData] = useState<ChiTietPhieuNhapItemType[]>([]);
-	const [tableData, setTableData] = useState<ChiTietPhieuNhapItemType[]>([]);
 	const [phieuNhapList, setPhieuNhapList] = useState<PhieuNhapItemType[]>([]);
 	const [thietBiList, setThietBiList] = useState<ThietBiItemType[]>([]);
 	const [loaiThietBiList, setLoaiThietBiList] = useState<LoaiThietBiItemType[]>(
 		[],
 	);
 	const [donViTinhList, setDonViTinhList] = useState<DonViTinhItemType[]>([]);
+	const getDetailId = (record: ChiTietPhieuNhapItemType) =>
+		record.id ?? record.chi_tiet_phieu_nhap_id ?? record.id_chi_tiet_phieu_nhap;
+	const normalizeDetail = (record: ChiTietPhieuNhapItemType) => ({
+		...record,
+		id: getDetailId(record),
+	});
 	// Fetch danh sách đơn vị khi component được mount
 	useEffect(() => {
 		const fetchPhieuNhap = async () => {
 			try {
 				const result = await fetchPhieuNhapList();
 				setPhieuNhapList(result);
-				setTableData(result);
 			}
 			catch (error) {
 				message.error(`Lỗi khi tải danh sách phiếu nhập: ${error}`);
@@ -86,7 +90,11 @@ function ChiTietPhieuNhapPage() {
 	const handleSubmit = async (values: any) => {
 		try {
 			if (editingRecord) {
-				await fetchUpdateChiTietPhieuNhapItem(editingRecord.id, values);
+				const id = getDetailId(editingRecord);
+				if (id == null) {
+					throw new Error("Bản ghi chi tiết phiếu nhập không có ID");
+				}
+				await fetchUpdateChiTietPhieuNhapItem(id, values);
 				message.success("Cập nhật thành công");
 			}
 			else {
@@ -105,8 +113,11 @@ function ChiTietPhieuNhapPage() {
 		}
 	};
 
-	const handleDelete = async (id: number) => {
+	const handleDelete = async (id: number | undefined) => {
 		try {
+			if (id == null) {
+				throw new Error("Bản ghi chi tiết phiếu nhập không có ID");
+			}
 			await fetchDeleteChiTietPhieuNhapItem(id);
 			message.success("Xóa thành công");
 			actionRef.current?.reload();
@@ -135,7 +146,6 @@ function ChiTietPhieuNhapPage() {
 			<BasicContent>
 				<ChiTietPhieuNhapTable
 					actionRef={actionRef}
-					dataSource={tableData}
 					loading={false}
 					phieuNhapList={phieuNhapList}
 					thietBiList={thietBiList}
@@ -143,8 +153,9 @@ function ChiTietPhieuNhapPage() {
 					donViTinhList={donViTinhList}
 					request={async (params: any) => {
 						try {
-							const result = await fetchChiTietPhieuNhapList();
-							setTableData(result);
+							const result = (await fetchChiTietPhieuNhapList()).map(
+								normalizeDetail,
+							);
 							// Filter dữ liệu dựa trên tham số tìm kiếm
 							let filtered = result;
 							if (params.phieu_nhap_id) {

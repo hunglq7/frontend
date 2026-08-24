@@ -1,5 +1,6 @@
-import { LeftOutlined } from "@ant-design/icons";
+import { BasicButton } from "#src/components/basic-button";
 
+import { LeftOutlined } from "@ant-design/icons";
 import { useCountDown } from "ahooks";
 import {
 	Button,
@@ -10,7 +11,6 @@ import {
 } from "antd";
 import { use, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BasicButton } from "#src/components/basic-button";
 import { FormModeContext } from "../form-mode-context";
 
 const { Title } = Typography;

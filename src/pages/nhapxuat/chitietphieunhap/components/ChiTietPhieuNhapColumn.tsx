@@ -8,7 +8,7 @@ import { Button, Popconfirm } from "antd";
 
 interface Props {
 	onEdit: (record: ChiTietPhieuNhapItemType) => void
-	onDelete: (id: number) => void
+	onDelete: (id: number | undefined) => void
 	thietBiList: ThietBiItemType[]
 	loaiThietBiList: LoaiThietBiItemType[]
 	donViTinhList: DonViTinhItemType[]

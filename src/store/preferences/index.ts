@@ -1,11 +1,11 @@
 import type { LanguageType } from "#src/locales";
 import type { PreferencesState, ThemeType } from "./types";
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
 import { SIDE_NAVIGATION } from "#src/layout/widgets/preferences/blocks/layout/constants";
 import { getAppNamespace } from "#src/utils/get-app-namespace";
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 /**
  * 默认偏好设置
@@ -63,9 +63,9 @@ export const DEFAULT_PREFERENCES = {
 	/* ================== Footer ================== */
 	enableFooter: true,
 	fixedFooter: true,
-	companyName: "Condor Hero",
-	companyWebsite: "http://github.com/condorheroblog/",
-	copyrightDate: "2023",
+	companyName: "Than Mông Dương",
+	companyWebsite: "http://eportal.thanmongduong.vn/",
+	copyrightDate: "2026",
 	ICPNumber: "",
 	ICPLink: "",
 } satisfies PreferencesState;

@@ -1,7 +1,7 @@
 import type { FormComponentMapType } from "./form-mode-context";
 
+import logoCloud from "#src/assets/images/Cloud.jpg";
 // import hero from "#src/assets/svg/hero.svg?url";
-import Banner from "#src/assets/svg/banner.svg?react";
 import logo from "#src/assets/svg/logo.svg?url";
 import { useLayoutMenu } from "#src/hooks/use-layout-menu";
 import { usePreferences } from "#src/hooks/use-preferences";
@@ -66,6 +66,9 @@ export default function Login() {
 						sm={0}
 						lg={15}
 						style={{
+							// 			backgroundImage: `
+							// radial-gradient(circle at 30% 70%, rgba(173, 216, 230, 0.35), transparent 60%),
+							// radial-gradient(circle at 70% 30%, rgba(255, 182, 193, 0.4), transparent 60%)`,
 							backgroundImage: `radial-gradient(${token.colorBgContainer}, ${isDark ? token.colorBgBlur : token.colorPrimaryBg})`,
 							// backgroundImage: `url(${bgleft})`,
 							// backgroundSize: "cover",
@@ -76,11 +79,14 @@ export default function Login() {
 						className={clsx({ hidden: isAlignCenter })}
 					>
 						<div className="flex flex-col items-center justify-center h-full gap-3">
-							<Banner
+							{/* <Banner
 								className="h-64 motion-safe:animate-bounce-in-down-out-up"
-							/>
-							<div className="text-3xl font-bold text-blue-500">Công ty CP than Mông Dương</div>
-							<div className="bg-linear-to-r from-pink-500 to-violet-500 bg-clip-text text-4xl font-extrabold text-transparent">
+							/> */}
+							<img alt="App Logo" src={logoCloud} className="size-64  motion-safe:animate-bounce-in-down-out-up" />
+							<div className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-purple-500">
+								CÔNG TY CP THAN MÔNG DƯƠNG - VINACOMIN
+							</div>
+							<div className="bg-linear-to-r from-pink-500 to-purple-500 bg-clip-text text-3xl font-extrabold text-transparent">
 								{t("authority.pageTitle")}
 							</div>
 							<div className="text-colorTextTertiary mt-2">

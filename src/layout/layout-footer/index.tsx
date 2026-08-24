@@ -48,7 +48,7 @@ export default function LayoutFooter({ className }: LayoutFooterProps) {
 					)
 					: null
 			}
-			All right reserved
+			Lê Quang Hùng SĐT: 0982.922.767 - Email: hunglq7@gmail.com
 		</footer>
 	);
 }

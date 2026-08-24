@@ -1,9 +1,9 @@
-import type { KyResponse, Options } from "ky";
 import type { RefreshTokenResult } from "#src/api/user";
-import ky from "ky";
-
+import type { KyResponse, Options } from "ky";
 import { fetchRefreshToken } from "#src/api/user";
+
 import { useAuthStore } from "#src/store/auth";
+import ky from "ky";
 import { AUTH_HEADER } from "./constants";
 import { goLogin } from "./go-login";
 
