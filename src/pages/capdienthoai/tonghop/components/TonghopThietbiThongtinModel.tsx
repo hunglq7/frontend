@@ -2,13 +2,18 @@
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
 import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types";
+import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import {
 	ModalForm,
+	ProFormDatePicker,
 	ProFormSelect,
+	ProFormSwitch,
 	ProFormText,
 } from "@ant-design/pro-components";
+import dayjs from "dayjs";
 import { useMemo } from "react";
 
 interface Props {
@@ -20,6 +25,8 @@ interface Props {
 	loaiThietBiList: LoaiThietBiItemType[]
 	donViTinhList: DonViTinhItemType[]
 	danhMucDonViList: DanhMucDonViItemType[]
+	viTriList: ViTriLapDatItemType[]
+	KhuVucList: KhuVucItemType[]
 }
 
 function TonghopThietbiThongtinModal({
@@ -31,6 +38,8 @@ function TonghopThietbiThongtinModal({
 	thietBiList,
 	donViTinhList,
 	danhMucDonViList,
+	viTriList,
+	KhuVucList,
 }: Props) {
 	const toOptions = <T extends { id: number }>(
 		items: T[],
@@ -53,6 +62,9 @@ function TonghopThietbiThongtinModal({
 			return {};
 		return {
 			...initialValues,
+			ngay_lap: initialValues.ngay_lap
+				? dayjs(initialValues.ngay_lap)
+				: undefined,
 			thiet_bi_id: findId(
 				initialValues.thiet_bi_id,
 				initialValues.ten_thiet_bi,
@@ -77,8 +89,20 @@ function TonghopThietbiThongtinModal({
 				danhMucDonViList,
 				item => item.ten_don_vi,
 			),
+			vi_tri_id: findId(
+				initialValues.vi_tri_id,
+				initialValues.ten_vi_tri,
+				viTriList,
+				item => item.ten_vi_tri,
+			),
+			khu_vuc_id: findId(
+				initialValues.khu_vuc_id,
+				initialValues.ten_khu_vuc,
+				KhuVucList,
+				item => item.ten_khu_vuc,
+			),
 		};
-	}, [initialValues, thietBiList, loaiThietBiList, donViTinhList, danhMucDonViList]);
+	}, [initialValues, thietBiList, loaiThietBiList, donViTinhList, danhMucDonViList, viTriList]);
 
 	// Cấu hình danh sách các trường Select
 	const selectFields = [
@@ -91,6 +115,16 @@ function TonghopThietbiThongtinModal({
 			name: "don_vi_id",
 			label: "Đơn vị",
 			options: useMemo(() => toOptions(danhMucDonViList, item => item.ten_don_vi), [danhMucDonViList]),
+		},
+		{
+			name: "vi_tri_id",
+			label: "Vị trí",
+			options: useMemo(() => toOptions(viTriList, item => item.ten_vi_tri), [viTriList]),
+		},
+		{
+			name: "khu_vuc_id",
+			label: "Khu vực",
+			options: useMemo(() => toOptions(KhuVucList, item => item.ten_khu_vuc), [KhuVucList]),
 		},
 		{
 			name: "loai_thiet_bi_id",
@@ -140,6 +174,13 @@ function TonghopThietbiThongtinModal({
 				placeholder="Nhập số lượng"
 			/>
 
+			<ProFormDatePicker
+				name="ngay_lap"
+				label="Ngày lắp"
+				placeholder="Chọn ngày lắp"
+				fieldProps={{ format: "DD/MM/YYYY" }}
+			/>
+			<ProFormSwitch name="tinh_trang" label="Tình trạng" />
 		</ModalForm>
 	);
 }

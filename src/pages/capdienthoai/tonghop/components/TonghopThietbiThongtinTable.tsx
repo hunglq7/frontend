@@ -2,8 +2,10 @@
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
 import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types";
+import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
@@ -22,6 +24,8 @@ interface Props {
 	donViTinhList: DonViTinhItemType[]
 	thietBiList: ThietBiItemType[]
 	danhMucDonViList: DanhMucDonViItemType[]
+	viTriList: ViTriLapDatItemType[]
+	KhuVucList: KhuVucItemType[]
 }
 function TonghopThietbiThongtinTable({
 	actionRef,
@@ -34,6 +38,8 @@ function TonghopThietbiThongtinTable({
 	donViTinhList,
 	thietBiList,
 	danhMucDonViList,
+	viTriList,
+	KhuVucList,
 }: Props) {
 	const columns = TonghopThietbiThongtinColumns({
 		onEdit,
@@ -42,6 +48,8 @@ function TonghopThietbiThongtinTable({
 		donViTinhList,
 		thietBiList,
 		danhMucDonViList,
+		viTriList,
+		KhuVucList,
 	});
 
 	return (

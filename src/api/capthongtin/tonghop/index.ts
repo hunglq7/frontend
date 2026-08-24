@@ -1,3 +1,4 @@
+/* cspell:disable */
 import type { TonghopThietbiThongtinItemType } from "./types";
 import { request } from "#src/utils/request";
 
