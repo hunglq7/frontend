@@ -44,7 +44,7 @@ export default function Login() {
 					className="text-colorText flex flex-1 items-center"
 				>
 					<img alt="App Logo" src={logo} className="mr-2 w-11" />
-					<h1 className="m-0 text-xl font-medium">
+					<h1 className="m-0 text-xl font-medium text-transparent bg-clip-text bg-linear-to-r from-pink-500 to-purple-500">
 						{import.meta.env.VITE_GLOB_APP_TITLE}
 					</h1>
 				</div>

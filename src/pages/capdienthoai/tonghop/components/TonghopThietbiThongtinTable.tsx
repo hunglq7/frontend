@@ -14,7 +14,7 @@ import { TonghopThietbiThongtinColumns } from "../components/TonghopThietbiThong
 
 interface Props {
 	actionRef: React.RefObject<ActionType | null>
-	loading: boolean
+	loading?: boolean
 	request: any
 	onEdit: (record: TonghopThietbiThongtinItemType) => void
 	onDelete: (id: number | undefined) => void | Promise<void>
@@ -25,7 +25,7 @@ interface Props {
 	thietBiList: ThietBiItemType[]
 	danhMucDonViList: DanhMucDonViItemType[]
 	viTriList: ViTriLapDatItemType[]
-	KhuVucList: KhuVucItemType[]
+	khuVucList: KhuVucItemType[]
 }
 function TonghopThietbiThongtinTable({
 	actionRef,
@@ -39,7 +39,7 @@ function TonghopThietbiThongtinTable({
 	thietBiList,
 	danhMucDonViList,
 	viTriList,
-	KhuVucList,
+	khuVucList,
 }: Props) {
 	const columns = TonghopThietbiThongtinColumns({
 		onEdit,
@@ -49,7 +49,7 @@ function TonghopThietbiThongtinTable({
 		thietBiList,
 		danhMucDonViList,
 		viTriList,
-		KhuVucList,
+		khuVucList,
 	});
 
 	return (

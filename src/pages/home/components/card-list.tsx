@@ -56,7 +56,7 @@ export default function CardList() {
 				CARD_LIST.map((cardItem) => {
 					return (
 						<Col key={cardItem.title} {...wrapperCol}>
-							<Card className="bg-blend-color-burn">
+							<Card className="bg-blend-color-burn transition duration-300 hover:-translate-y-2 hover:shadow-xl ">
 								<div className="flex justify-between items-center ">
 									<div className="flex flex-col">
 										<h3 className="text-xl">{cardItem.title}</h3>
