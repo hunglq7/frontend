@@ -1,4 +1,5 @@
-import type { TonghopThietbiThongtinItemType } from "./types";
+/* cspell:disable */
+import type { TonghopThietbiThongtinItemType, TonghopThietbiThongtinPayload } from "./types";
 import { request } from "#src/utils/request";
 
 export * from "./types";
@@ -22,7 +23,7 @@ export function fetchTonghopThietbiThongtinById(id: number) {
 }
 
 export function fetchAddTonghopThietbiThongtin(
-	data: Omit<TonghopThietbiThongtinItemType, "id">,
+	data: TonghopThietbiThongtinPayload,
 ) {
 	return request.post(TONGHOP_THIETBI_THONGTIN_ENDPOINT, {
 		json: data,
@@ -32,7 +33,7 @@ export function fetchAddTonghopThietbiThongtin(
 
 export function fetchUpdateTonghopThietbiThongtin(
 	id: number,
-	data: Omit<TonghopThietbiThongtinItemType, "id">,
+	data: TonghopThietbiThongtinPayload,
 ) {
 	return request.put(`${TONGHOP_THIETBI_THONGTIN_ENDPOINT}/${id}`, {
 		json: data,

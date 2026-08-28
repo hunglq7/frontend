@@ -1,13 +1,5 @@
 import type { FormComponentMapType } from "./form-mode-context";
 
-import logoCloud from "#src/assets/images/Cloud.jpg";
-// import hero from "#src/assets/svg/hero.svg?url";
-import logo from "#src/assets/svg/logo.svg?url";
-import { useLayoutMenu } from "#src/hooks/use-layout-menu";
-import { usePreferences } from "#src/hooks/use-preferences";
-import LayoutFooter from "#src/layout/layout-footer";
-import { LanguageButton } from "#src/layout/layout-header/components/language-button";
-import { ThemeButton } from "#src/layout/layout-header/components/theme-button";
 import {
 	Col,
 	Grid,
@@ -18,6 +10,14 @@ import { clsx } from "clsx";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import logoCloud from "#src/assets/images/Cloud.jpg";
+// import hero from "#src/assets/svg/hero.svg?url";
+import logo from "#src/assets/svg/logo.svg?url";
+import { useLayoutMenu } from "#src/hooks/use-layout-menu";
+import { usePreferences } from "#src/hooks/use-preferences";
+import LayoutFooter from "#src/layout/layout-footer";
+import { LanguageButton } from "#src/layout/layout-header/components/language-button";
+import { ThemeButton } from "#src/layout/layout-header/components/theme-button";
 
 import { FORM_COMPONENT_MAP } from "./constants";
 import { FormModeContext } from "./form-mode-context";
@@ -44,7 +44,7 @@ export default function Login() {
 					className="text-colorText flex flex-1 items-center"
 				>
 					<img alt="App Logo" src={logo} className="mr-2 w-11" />
-					<h1 className="m-0 text-xl font-medium">
+					<h1 className="m-0 text-xl font-medium text-transparent bg-clip-text bg-linear-to-r from-pink-500 to-purple-500">
 						{import.meta.env.VITE_GLOB_APP_TITLE}
 					</h1>
 				</div>

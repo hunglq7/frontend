@@ -1,3 +1,4 @@
+/* cspell:disable */
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types.js";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Space } from "antd";
@@ -32,7 +33,7 @@ function TonghopThietbiThongtinToolBar({
 					onConfirm={onDeleteMany}
 				>
 					<Button danger icon={<DeleteOutlined />}>
-						Xóa nhiều
+						Xóa dòng chọn
 					</Button>
 				</Popconfirm>
 			)}

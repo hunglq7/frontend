@@ -1,14 +1,12 @@
 {
-	"newVisits": "New Visits",
+	"newVisits": "Tài khoản",
 	"messages": "Messages",
 	"purchases": "Purchases",
 	"shoppings": "Shoppings",
-
 	"sales": "Sales",
 	"thisWeek": "This Week",
 	"thisMonth": "This Month",
 	"thisYear": "This Year",
-
 	"monday": "Monday",
 	"tuesday": "Tuesday",
 	"wednesday": "Wednesday",
@@ -21,7 +19,6 @@
 	"emailMarketing": "Email Marketing",
 	"affiliateAdvertise": "Affiliate Advertise",
 	"videoAdvertise": "Video Advertise",
-
 	"salesCategoryProportion": "Sales Category Proportion",
 	"electronics": "Electronics",
 	"homeGoods": "Home Goods",

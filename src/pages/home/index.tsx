@@ -1,5 +1,4 @@
 import type { ColProps } from "antd";
-
 import { Col, Row } from "antd";
 import { BasicContent } from "#src/components/basic-content";
 
