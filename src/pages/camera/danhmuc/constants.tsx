@@ -1,6 +1,6 @@
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
+import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import { Tag } from "antd";
 
 export function getConstantColumns(
@@ -16,9 +16,9 @@ export function getConstantColumns(
 		},
 		{
 			disable: true,
-			title: t("camera.tenThietBi"),
-			dataIndex: "name",
-			key: "name",
+			title: t("camera.location"),
+			dataIndex: "location",
+			key: "location",
 			width: 200,
 			sorter: true,
 		},
@@ -32,9 +32,9 @@ export function getConstantColumns(
 		},
 		{
 			disable: true,
-			title: t("camera.location"),
-			dataIndex: "location",
-			key: "location",
+			title: t("camera.khuvuc"),
+			dataIndex: "name",
+			key: "name",
 			width: 200,
 			sorter: true,
 		},
