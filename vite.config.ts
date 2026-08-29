@@ -37,7 +37,7 @@ const DANHMUC_REWRITE_REGEXP = /^\/danhmuc/;
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: isDev ? "/" : "/",
+	base: isDev ? "/" : "/admin/",
 	plugins: [
 		// vitePluginFakeServer({
 		// 	basename: "/api",
