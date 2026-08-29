@@ -1,5 +1,10 @@
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import * as XLSX from "xlsx";
 import {
 	fetchCheckStatusDanhMucCamera,
 	fetchDanhmucCamerasList,
@@ -8,14 +13,9 @@ import {
 	fetchImportDanhMucCamera,
 } from "#src/api/camera/danhmuc/index";
 import { BasicButton } from "#src/components/basic-button";
+
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
-import { useEffect, useRef, useState } from "react";
-
-import { useTranslation } from "react-i18next";
-import * as XLSX from "xlsx";
 import { Detail } from "./component/detail";
 import { getConstantColumns } from "./constants";
 
@@ -190,7 +190,7 @@ export default function DanhMucCamera() {
 			title: t("common.action"),
 			valueType: "option",
 			key: "option",
-			width: 220,
+			width: 80,
 			fixed: "right",
 			render: (_, record, __, action) => [
 				<BasicButton
