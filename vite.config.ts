@@ -1,6 +1,5 @@
 /// <reference types="vitest/config" />
 
-import process from "node:process";
 import {
 	cleanupSVG,
 	isEmptyColor,
@@ -32,12 +31,11 @@ const __APP_INFO__ = {
 	lastBuildTime: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 };
 
-const isDev = process.env.NODE_ENV === "development";
 const DANHMUC_REWRITE_REGEXP = /^\/danhmuc/;
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: isDev ? "/" : "/admin/",
+	base: "/",
 	plugins: [
 		// vitePluginFakeServer({
 		// 	basename: "/api",
