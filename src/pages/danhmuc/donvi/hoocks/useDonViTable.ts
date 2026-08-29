@@ -1,4 +1,7 @@
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
+import { message } from "antd";
+import { useEffect, useState } from "react";
+
 import {
 	fetchAddDanhMucDonViItem,
 	fetchDanhMucDonViList,
@@ -6,9 +9,6 @@ import {
 	fetchDeleteMultipleDanhMucDonViItems,
 	fetchUpdateDanhMucDonViItem,
 } from "#src/api/danhmuc/donvi";
-import { message } from "antd";
-
-import { useEffect, useState } from "react";
 
 export default function useDonViTable() {
 	const [dataSource, setDataSource] = useState<DanhMucDonViItemType[]>([]);
@@ -42,6 +42,7 @@ export default function useDonViTable() {
 			await fetchData();
 		}
 		catch (error) {
+			console.error("Lỗi khi gọi hàm handleSave");
 			message.error(`Lưu thất bại ${error}`);
 		}
 	};
@@ -55,6 +56,7 @@ export default function useDonViTable() {
 			await fetchData();
 		}
 		catch (error) {
+			console.error("Lỗi khi gọi hàm handleDelete");
 			message.error(`Xóa thất bại ${error}`);
 		}
 	};
@@ -75,6 +77,7 @@ export default function useDonViTable() {
 			await fetchData();
 		}
 		catch (error) {
+			console.error("Lỗi khi gọi hàm handleDeleteMutiple");
 			message.error(`Xóa nhiều thất bại ${error}`);
 		}
 	};

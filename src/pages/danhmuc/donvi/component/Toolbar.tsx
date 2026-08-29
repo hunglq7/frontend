@@ -1,8 +1,8 @@
 import type { DanhMucDonViItemType as DonViItem } from "#src/api/danhmuc/donvi/types.js";
-import { BasicButton } from "#src/components/basic-button";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-
 import { Popconfirm, Space } from "antd";
+
+import { BasicButton } from "#src/components/basic-button";
 import ExportExcelButton from "./ExportExcelButton";
 
 interface Props {
@@ -37,7 +37,7 @@ export default function Toolbar({
 						disabled={!selectedCount}
 						icon={<DeleteOutlined />}
 					>
-						Xóa nhiều
+						Xóa dòng chọn
 					</BasicButton>
 				</Popconfirm>
 			)}

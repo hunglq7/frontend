@@ -1,7 +1,7 @@
-import type { DanhMucDonViItemType as DonViItem } from "#src/api/danhmuc/donvi/types.js";
 import type { ProColumns } from "@ant-design/pro-components";
-import { BasicButton } from "#src/components/basic-button";
+import type { DanhMucDonViItemType as DonViItem } from "#src/api/danhmuc/donvi/types.js";
 import { Popconfirm } from "antd";
+import { BasicButton } from "#src/components/basic-button";
 
 interface Props {
 	handleDelete: (id: number) => void
@@ -43,7 +43,6 @@ export function createColumns({
 					color="cyan"
 					variant="text"
 					size="small"
-
 					onClick={() => {
 						action?.startEditable?.(record.id);
 					}}
