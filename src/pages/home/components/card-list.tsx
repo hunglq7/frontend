@@ -59,7 +59,7 @@ export default function CardList() {
 							<Card className="bg-blend-color-burn transition duration-300 hover:-translate-y-2 hover:shadow-xl ">
 								<div className="flex justify-between items-center ">
 									<div className="flex flex-col">
-										<h3 className="text-xl font-medium text-red-500">{cardItem.title}</h3>
+										<h3 className="text-xl font-medium text-primary">{cardItem.title}</h3>
 										<CountUp end={cardItem.data} separator="," />
 									</div>
 									<Button
