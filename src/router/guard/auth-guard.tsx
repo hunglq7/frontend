@@ -1,6 +1,4 @@
 import type { UserInfoType } from "#src/api/user";
-import { useEffect } from "react";
-import { matchRoutes, Navigate, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useCurrentRoute } from "#src/hooks/use-current-route";
 import { hideLoading } from "#src/plugins/hide-loading";
 import { setupLoading } from "#src/plugins/loading";
@@ -12,9 +10,11 @@ import { generateRoutesByFrontend } from "#src/router/utils/generate-routes-from
 import { useAccessStore } from "#src/store/access";
 import { useAuthStore } from "#src/store/auth";
 import { usePreferencesStore } from "#src/store/preferences";
-
 import { useUserStore } from "#src/store/user";
 import { goLogin } from "#src/utils/request/go-login";
+
+import { useEffect } from "react";
+import { matchRoutes, Navigate, useLocation, useNavigate, useSearchParams } from "react-router";
 
 import { removeDuplicateRoutes } from "./utils";
 
@@ -123,6 +123,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
 				const uniqueRoutes = removeDuplicateRoutes(routes);
 				setAccessStore(uniqueRoutes);
+				// navigate(`${pathname}${search}`, { replace: true });
 
 				if (hasError) {
 					hideLoading();
@@ -151,7 +152,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 			}
 		}
 
-		if (!whiteRouteNames.includes(pathname) && isLogin && !isAuthorized) {
+		if (!whiteRouteNames.includes(pathname) && isLogin && (!isAuthorized || !isAccessChecked)) {
 			fetchUserInfoAndRoutes();
 		}
 	}, [pathname, isLogin, isAuthorized]);
@@ -286,7 +287,15 @@ export function AuthGuard({ children }: AuthGuardProps) {
 		 * @en pathname returns the path relative to import.meta.env.BASE_URL, so there is no need to specify the third parameter basename
 		 */
 	) ?? [];
-
+	// 1. Nếu không tìm thấy route nào phù hợp trong routeList -> Chuyển hướng sang 404
+	if (matches.length === 0) {
+		return (
+			<Navigate
+				to={exception404Path}
+				replace
+			/>
+		);
+	}
 	const hasChildren = matches.at(-1)?.route?.children?.filter(item => !item.index)?.length;
 	/**
 	 * @zh 如果当前路由有子路由，则跳转到 404 页面
