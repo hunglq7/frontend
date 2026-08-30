@@ -1,7 +1,7 @@
-import { useMatches } from "react-router";
 import { useUserStore } from "#src/store/user";
-
 import { isString } from "#src/utils/is";
+
+import { useMatches } from "react-router";
 import { accessControlCodes, AccessControlRoles } from "./constants";
 
 export * from "./constants";
@@ -35,11 +35,15 @@ export function useAccess() {
 			// 校验权限代码是否合法，不合法的权限代码会打印警告信息
 			for (const code of permission) {
 				if (!Object.values(accessControlCodes).includes(code)) {
-					console.warn(`[hasAccessByCodes]: '${code}' is not a valid permission code`);
+					console.warn(
+						`[hasAccessByCodes]: '${code}' is not a valid permission code`,
+					);
 				}
 			}
 		}
-		const isAuth = metaAuth.some(item => permission.includes(item.toLowerCase()));
+		const isAuth = metaAuth.some(item =>
+			permission.includes(item.toLowerCase()),
+		);
 		return isAuth;
 	};
 
