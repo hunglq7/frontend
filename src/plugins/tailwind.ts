@@ -1,6 +1,6 @@
-import plugin from "tailwindcss/plugin";
-
 import { getColorPalettes } from "#src/styles/theme/antd/css-variables";
+
+import plugin from "tailwindcss/plugin";
 
 /**
  * How to use custom plugin in tailwindcss

@@ -1,7 +1,7 @@
 import type { SelectProps } from "antd";
 
-import { Select } from "antd";
 import { usePreferencesStore } from "#src/store/preferences";
+import { Select } from "antd";
 
 export interface SelectItemProps {
 	children: React.ReactNode

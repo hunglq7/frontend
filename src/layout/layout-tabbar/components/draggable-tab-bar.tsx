@@ -1,6 +1,7 @@
+import type { TabItemProps } from "#src/store/tabs";
 import type { DragEndEvent } from "@dnd-kit/core";
 import type { MenuProps, TabsProps } from "antd";
-import type { TabItemProps } from "#src/store/tabs";
+import { useTabsStore } from "#src/store/tabs";
 import { closestCenter, DndContext, PointerSensor, useSensor } from "@dnd-kit/core";
 import {
 	horizontalListSortingStrategy,
@@ -8,10 +9,9 @@ import {
 	useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Dropdown } from "antd";
 
+import { Dropdown } from "antd";
 import { cloneElement } from "react";
-import { useTabsStore } from "#src/store/tabs";
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLElement> {
 	"data-node-key": string

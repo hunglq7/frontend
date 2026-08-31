@@ -1,4 +1,3 @@
-import type { ActionType } from "@ant-design/pro-components";
 /* cspell:disable */
 import type { TonghopThietbiThongtinItemType, TonghopThietbiThongtinPayload } from "#src/api/capthongtin/tonghop/types";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
@@ -7,10 +6,7 @@ import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
 import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
-import { message } from "antd";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useCallback, useEffect, useRef, useState } from "react";
+import type { ActionType } from "@ant-design/pro-components";
 import {
 	fetchAddTonghopThietbiThongtin,
 	fetchDeleteMultipleTonghopThietbiThongtinItems,
@@ -25,6 +21,10 @@ import { fetchLoaiThietBiList } from "#src/api/danhmuc/loaithietbi/index";
 import { fetchThietBiList } from "#src/api/danhmuc/thietbi/index";
 import { fetchViTriLapDatList } from "#src/api/danhmuc/vitri/index";
 import { BasicContent } from "#src/components/basic-content";
+import { message } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useCallback, useEffect, useRef, useState } from "react";
 import TonghopThietbiThongtinModel from "./components/TonghopThietbiThongtinModel";
 import TonghopThietbiThongtinTable from "./components/TonghopThietbiThongtinTable";
 import TonghopThietbiThongtinToolBar from "./components/TonghopThietbiThongtinToolBar";

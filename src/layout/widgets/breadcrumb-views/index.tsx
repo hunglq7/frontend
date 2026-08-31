@@ -1,12 +1,12 @@
 import type { BreadcrumbProps } from "antd";
 
-import { Breadcrumb } from "antd";
-
-import { useTranslation } from "react-i18next";
-import { useLocation, useMatches } from "react-router";
 import { useCurrentRoute } from "#src/hooks/use-current-route";
+
 import { useAccessStore } from "#src/store/access";
 import { isString } from "#src/utils/is";
+import { Breadcrumb } from "antd";
+import { useTranslation } from "react-i18next";
+import { useLocation, useMatches } from "react-router";
 
 const itemRender: BreadcrumbProps["itemRender"] = (route, params, routes) => {
 	const last = routes.indexOf(route) === routes.length - 1;

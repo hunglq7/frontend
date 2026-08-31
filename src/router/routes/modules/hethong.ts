@@ -1,8 +1,8 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
 
-import { lazy } from "react";
 import ContainerLayout from "#src/layout/container-layout";
 import { $t } from "#src/locales";
+import { lazy } from "react";
 
 const TaiKhoan = lazy(() => import("#src/pages/hethong/taikhoan"));
 

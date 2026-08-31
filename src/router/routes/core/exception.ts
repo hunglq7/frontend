@@ -1,15 +1,7 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
 
-import {
-	AppstoreOutlined,
-	IssuesCloseOutlined,
-	MinusSquareOutlined,
-	StopOutlined,
-} from "@ant-design/icons";
-import { createElement, lazy } from "react";
 import { ServerErrorIcon } from "#src/icons";
 import ContainerLayout from "#src/layout/container-layout";
-
 import { $t } from "#src/locales";
 import {
 	exception,
@@ -19,6 +11,14 @@ import {
 	exceptionPath,
 	exceptionUnknownComponentPath,
 } from "#src/router/extra-info";
+
+import {
+	AppstoreOutlined,
+	IssuesCloseOutlined,
+	MinusSquareOutlined,
+	StopOutlined,
+} from "@ant-design/icons";
+import { createElement, lazy } from "react";
 
 const Exception403 = lazy(() => import("#src/pages/exception/403"));
 const Exception404 = lazy(() => import("#src/pages/exception/404"));

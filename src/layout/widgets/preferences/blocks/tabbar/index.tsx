@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-
 import { usePreferencesStore } from "#src/store/preferences";
+
+import { useTranslation } from "react-i18next";
 
 import { SelectItem } from "../../select-item";
 import { SwitchItem } from "../../switch-item";

@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
 
 import type { MenuItemType } from "./types";
-import { cloneElement, isValidElement } from "react";
 import { isString } from "#src/utils/is";
+import { cloneElement, isValidElement } from "react";
 
 /**
  * 将菜单树中的所有 label 转换为国际化文本

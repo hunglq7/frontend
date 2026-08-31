@@ -1,5 +1,5 @@
-import { defineFakeRoute } from "vite-plugin-fake-server/client";
 import { access, home } from "#/src/router/extra-info";
+import { defineFakeRoute } from "vite-plugin-fake-server/client";
 import { ADMIN_TOKEN } from "./constants";
 import { resultSuccess } from "./utils";
 

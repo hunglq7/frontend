@@ -1,7 +1,19 @@
 import antfu from "@antfu/eslint-config";
 
 export default antfu({
-	ignores: [".env", ".env.*", "docs/**", "build/**", "**/*.md"],
+	ignores: [
+		".env",
+		".env.*",
+		"**/*.svg",
+		"**/*.code-snippets",
+		".gitignore",
+		".npmrc",
+		".editorconfig",
+		"LICENSE",
+		"docs/**",
+		"build/**",
+		"**/*.md",
+	],
 	react: true,
 	rules: {
 		"style/quotes": ["error", "double"],

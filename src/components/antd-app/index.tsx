@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
-import { theme as antdTheme, App } from "antd";
-
-import { useEffect } from "react";
 import { StaticAntd } from "#src/utils/static-antd";
+
+import { theme as antdTheme, App } from "antd";
+import { useEffect } from "react";
 
 import { setupAntdThemeTokensToHtml } from "./setup-antd-theme";
 

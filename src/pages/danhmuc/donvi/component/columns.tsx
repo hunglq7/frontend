@@ -1,7 +1,7 @@
-import type { ProColumns } from "@ant-design/pro-components";
 import type { DanhMucDonViItemType as DonViItem } from "#src/api/danhmuc/donvi/types.js";
-import { Popconfirm } from "antd";
+import type { ProColumns } from "@ant-design/pro-components";
 import { BasicButton } from "#src/components/basic-button";
+import { Popconfirm } from "antd";
 
 interface Props {
 	handleDelete: (id: number) => void

@@ -1,4 +1,3 @@
-import type { ProColumns } from "@ant-design/pro-components";
 /* cspell:disable */
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
 import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
@@ -7,6 +6,7 @@ import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types";
 import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types";
 import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
 import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
+import type { ProColumns } from "@ant-design/pro-components";
 import { Button, Popconfirm, Tag } from "antd";
 import dayjs from "dayjs";
 

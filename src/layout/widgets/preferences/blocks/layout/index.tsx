@@ -1,9 +1,5 @@
 import type { NavigationType } from "#src/store/preferences/types";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Tooltip } from "antd";
-import { useTranslation } from "react-i18next";
 import { MixedNavigationIcon, SideNavigationIcon, TopNavigationIcon, TwoColumnNavigationIcon } from "#src/icons";
-
 import {
 	MIXED_NAVIGATION,
 	SIDE_NAVIGATION,
@@ -12,6 +8,10 @@ import {
 } from "#src/layout/widgets/preferences/blocks/layout/constants";
 import { usePreferencesStore } from "#src/store/preferences";
 import { cn } from "#src/utils/cn";
+
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
+import { useTranslation } from "react-i18next";
 
 export function PreferencesLayout() {
 	const navigationStyle = usePreferencesStore(state => state.navigationStyle);

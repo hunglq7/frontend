@@ -1,10 +1,10 @@
 import type { MenuProps } from "antd";
 import type { MenuItemType } from "../layout-menu/types";
 
-import { theme as antdTheme, ConfigProvider, Typography } from "antd";
 import { Scrollbar } from "#src/components/scrollbar";
-
 import { usePreferences } from "#src/hooks/use-preferences";
+
+import { theme as antdTheme, ConfigProvider, Typography } from "antd";
 
 import { sidebarTitleHeight, siderTriggerHeight } from "../constants";
 import LayoutMenu from "../layout-menu";
