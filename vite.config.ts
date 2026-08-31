@@ -31,8 +31,6 @@ const __APP_INFO__ = {
 	lastBuildTime: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 };
 
-const DANHMUC_REWRITE_REGEXP = /^\/danhmuc/;
-
 // https://vitejs.dev/config/
 export default defineConfig({
 	base: "/",
@@ -137,11 +135,7 @@ export default defineConfig({
 				target: "http://localhost:4002",
 				changeOrigin: true,
 			},
-			"/danhmuc": {
-				target: "http://localhost:4002",
-				changeOrigin: true,
-				rewrite: path => path.replace(DANHMUC_REWRITE_REGEXP, ""),
-			},
+			// Frontend route: avoid proxying /danhmuc/* to backend, because it is a SPA route to reload.
 			"/danh-muc-may-cao": {
 				target: "http://localhost:4002",
 				changeOrigin: true,
