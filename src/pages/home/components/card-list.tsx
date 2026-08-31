@@ -5,7 +5,6 @@ import {
 	MessageOutlined,
 	MoneyCollectOutlined,
 	ShoppingCartOutlined,
-
 } from "@ant-design/icons";
 import { Button, Card, Col, Row } from "antd";
 import { useEffect } from "react";
@@ -67,7 +66,11 @@ export default function CardList() {
 									<h3 className="text-xl font-medium text-primary">
 										{cardItem.title}
 									</h3>
-									<CountUp className="text-red-500 font-bold" end={cardItem.data} separator="," />
+									<CountUp
+										className="text-red-500 font-medium"
+										end={cardItem.data}
+										separator=","
+									/>
 								</div>
 								<Button className="text-3xl" icon={cardItem.icon} type="text" />
 							</div>
