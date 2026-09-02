@@ -1,16 +1,16 @@
-import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/index.js";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc/types.js";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Space } from "antd";
-import CapdienthoaiExportExcel from "../utils/CapdienthoaiExportExcel";
+import DanhmucCameraExportExcel from "../utils/DanhmucCameraExportExcel";
 
 interface Props {
 	selectedRowKeys: React.Key[]
 	onAdd: () => void
 	onDeleteMany: () => void
-	data: DanhMucCapDienThoaiItemType[]
+	data: DanhMucCameraItemType[]
 }
 
-function CapdienthoaiToolBar({
+function DanhMucCameraToolBar({
 	selectedRowKeys,
 	onAdd,
 	onDeleteMany,
@@ -37,9 +37,9 @@ function CapdienthoaiToolBar({
 				</Popconfirm>
 			)}
 
-			<CapdienthoaiExportExcel data={data} />
+			<DanhmucCameraExportExcel data={data} />
 		</Space>
 	);
 }
 
-export default CapdienthoaiToolBar;
+export default DanhMucCameraToolBar;

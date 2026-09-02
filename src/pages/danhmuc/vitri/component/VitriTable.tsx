@@ -1,21 +1,21 @@
-import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/index.js";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
-import { CapdienthoaiColumns } from "../components/CapdienthoaiColumns";
+import { VitriColumns } from "../component/VitriColumns";
 
 interface Props {
 	actionRef: React.RefObject<ActionType | null>
-	dataSource: DanhMucCapDienThoaiItemType[]
+	dataSource: ViTriLapDatItemType[]
 	loading: boolean
 	request: any
-	onEdit: (record: DanhMucCapDienThoaiItemType) => void
+	onEdit: (record: ViTriLapDatItemType) => void
 	onDelete: (id: number) => void | Promise<void>
 	rowSelection: any
 	toolbar: React.ReactNode
 }
-function CapdienthoaiTable({
+function VitriTable({
 	actionRef,
 	request,
 	onEdit,
@@ -23,13 +23,13 @@ function CapdienthoaiTable({
 	rowSelection,
 	toolbar,
 }: Props) {
-	const columns = CapdienthoaiColumns({
+	const columns = VitriColumns({
 		onEdit,
 		onDelete,
 	});
 
 	return (
-		<ProTable<DanhMucCapDienThoaiItemType>
+		<ProTable<ViTriLapDatItemType>
 			rowKey="id"
 			actionRef={actionRef}
 			columns={columns}
@@ -68,4 +68,4 @@ function CapdienthoaiTable({
 	);
 }
 
-export default CapdienthoaiTable;
+export default VitriTable;

@@ -3,7 +3,7 @@ import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
 import { create } from "zustand";
 
 interface DonViState {
-	list: DanhMucDonViItemType[]
+	listDonvi: DanhMucDonViItemType[]
 	loading: boolean
 	error: string | null
 }
@@ -15,7 +15,7 @@ interface DonViAction {
 }
 
 const initialState: DonViState = {
-	list: [],
+	listDonvi: [],
 	loading: false,
 	error: null,
 };
@@ -28,19 +28,19 @@ export const useDonViStore = create<DonViState & DonViAction>()(set => ({
 
 		try {
 			const response = await fetchDanhMucDonViList();
-			set({ list: response, loading: false, error: null });
+			set({ listDonvi: response, loading: false, error: null });
 			return response;
 		}
 		catch (error) {
 			const message
 				= error instanceof Error ? error.message : "Lỗi khi lấy danh sách đơn vị";
-			set({ loading: false, error: message, list: [] });
+			set({ loading: false, error: message, listDonvi: [] });
 			return [];
 		}
 	},
 
-	setDonViList: (list: DanhMucDonViItemType[]) => {
-		set({ list });
+	setDonViList: (listDonvi: DanhMucDonViItemType[]) => {
+		set({ listDonvi });
 	},
 
 	reset: () => {

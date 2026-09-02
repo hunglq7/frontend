@@ -1,16 +1,16 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types.js";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Space } from "antd";
-import DanhmucCameraExportExcel from "../utils/DanhmucCameraExportExcel";
+import VitriExportExcel from "../component/VitriExportExcel";
 
 interface Props {
 	selectedRowKeys: React.Key[]
 	onAdd: () => void
 	onDeleteMany: () => void
-	data: DanhMucCameraItemType[]
+	data: ViTriLapDatItemType[]
 }
 
-function DanhMucCameraToolBar({
+function VitriToolBar({
 	selectedRowKeys,
 	onAdd,
 	onDeleteMany,
@@ -28,18 +28,18 @@ function DanhMucCameraToolBar({
 
 			{selectedRowKeys.length > 0 && (
 				<Popconfirm
-					title="Bạn có chắc muốn xóa?"
+					title={`Bạn có muốn xóa ${selectedRowKeys.length} bản ghi`}
 					onConfirm={onDeleteMany}
 				>
 					<Button danger icon={<DeleteOutlined />}>
-						Xóa nhiều
+						Xóa dòng chọn
 					</Button>
 				</Popconfirm>
 			)}
 
-			<DanhmucCameraExportExcel data={data} />
+			<VitriExportExcel data={data} />
 		</Space>
 	);
 }
 
-export default DanhMucCameraToolBar;
+export default VitriToolBar;

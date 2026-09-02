@@ -1,16 +1,16 @@
-import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/types.js";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Button, Popconfirm } from "antd";
 
 interface Props {
-	onEdit: (record: DanhMucCapDienThoaiItemType) => void
+	onEdit: (record: ViTriLapDatItemType) => void
 	onDelete: (id: number) => void
 }
 
-export function CapdienthoaiColumns({
+export function VitriColumns({
 	onEdit,
 	onDelete,
-}: Props): ProColumns<DanhMucCapDienThoaiItemType>[] {
+}: Props): ProColumns<ViTriLapDatItemType>[] {
 	return [
 		{
 			title: "STT",
@@ -21,9 +21,14 @@ export function CapdienthoaiColumns({
 		},
 
 		{
-			title: "Tên thiết bị",
-			dataIndex: "tenCap",
+			title: "Vị trí lắp đặt",
+			dataIndex: "ten_vi_tri",
 			search: true,
+		},
+		{
+			title: "Mô tả",
+			dataIndex: "mo_ta",
+			search: false,
 		},
 
 		{

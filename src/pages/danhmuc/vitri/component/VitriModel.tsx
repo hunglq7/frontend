@@ -1,4 +1,4 @@
-import type { DanhMucCapDienThoaiItemType } from "#src/api/capthongtin/danhmuc/index.js";
+import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
 import {
 	ModalForm,
 	ProFormText,
@@ -8,10 +8,10 @@ interface Props {
 	open: boolean
 	onOpenChange: (open: boolean) => void
 	onSubmit: (values: any) => Promise<boolean>
-	initialValues?: DanhMucCapDienThoaiItemType | null
+	initialValues?: ViTriLapDatItemType | null
 }
 
-function CapdienthoaiModal({
+function VitriModal({
 	open,
 	onOpenChange,
 	onSubmit,
@@ -21,8 +21,8 @@ function CapdienthoaiModal({
 		<ModalForm
 			title={
 				initialValues
-					? "Cập nhật cáp"
-					: "Thêm cáp"
+					? "Cập nhật vị trí lắp đặt"
+					: "Thêm vị trí lắp đặt"
 			}
 			open={open}
 			onOpenChange={onOpenChange}
@@ -36,18 +36,23 @@ function CapdienthoaiModal({
 			wrapperCol={{ span: 18 }}
 		>
 			<ProFormText
-				name="tenCap"
-				label="Tên cáp"
-				placeholder="Nhập tên cáp"
+				name="ten_vi_tri"
+				label="Vị trí lắp đặt"
+				placeholder="Nhập vị trí lắp đặt"
 				rules={[
 					{
 						required: true,
-						message: "Vui lòng nhập tên cáp",
+						message: "Vui lòng nhập vị trí",
 					},
 				]}
+			/>
+			<ProFormText
+				name="mo_ta"
+				label="mổ tả"
+				placeholder="Nhập mô tả"
 			/>
 		</ModalForm>
 	);
 }
 
-export default CapdienthoaiModal;
+export default VitriModal;

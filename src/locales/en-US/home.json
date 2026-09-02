@@ -4,9 +4,9 @@
 	"purchases": "Purchases",
 	"shoppings": "Shoppings",
 	"sales": "Sales",
-	"thisWeek": "This Week",
-	"thisMonth": "This Month",
-	"thisYear": "This Year",
+	"thisWeek": "Tuần này",
+	"thisMonth": "Tháng này",
+	"thisYear": "Năm này",
 	"monday": "Monday",
 	"tuesday": "Tuesday",
 	"wednesday": "Wednesday",
@@ -32,4 +32,5 @@
 	"camera": "Camera",
 	"unit": "Đơn vị",
 	"donvi": "Đơn vị"
+
 }

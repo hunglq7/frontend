@@ -28,11 +28,11 @@ function LoaiThietBiToolBar({
 
 			{selectedRowKeys.length > 0 && (
 				<Popconfirm
-					title="Bạn có chắc muốn xóa?"
+					title={`Bạn có muốn xóa ${selectedRowKeys.length} bản ghi`}
 					onConfirm={onDeleteMany}
 				>
 					<Button danger icon={<DeleteOutlined />}>
-						Xóa nhiều
+						Xóa dòng chọn
 					</Button>
 				</Popconfirm>
 			)}

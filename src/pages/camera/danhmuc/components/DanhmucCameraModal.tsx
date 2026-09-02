@@ -1,4 +1,4 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types.js";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc/types.js";
 import { ModalForm, ProFormText } from "@ant-design/pro-components";
 
 interface Props {

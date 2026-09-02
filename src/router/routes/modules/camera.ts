@@ -7,9 +7,9 @@ import {
 } from "@ant-design/icons";
 import { createElement, lazy } from "react";
 
-const DanhMucCamera = lazy(() => import("#src/pages/camera/danhmuc"));
-const DanhMucCameraCatalog = lazy(
-	() => import("#src/pages/camera/danhmuc_camera"),
+const DanhMucCameraPage = lazy(() => import("#src/pages/camera/danhmuc"));
+const DanhsachCameraPage = lazy(
+	() => import("#src/pages/camera/danhsach"),
 );
 const TongHopCamera = lazy(() => import("#src/pages/camera/tonghop"));
 
@@ -25,8 +25,8 @@ const routes: AppRouteRecordRaw[] = [
 		},
 		children: [
 			{
-				path: "/camera/danhmuc",
-				Component: DanhMucCamera,
+				path: "/camera/dansach",
+				Component: DanhsachCameraPage,
 				handle: {
 					icon: createElement(ProfileOutlined),
 					title: "camera.menu.danhmuc",
@@ -39,8 +39,8 @@ const routes: AppRouteRecordRaw[] = [
 				},
 			},
 			{
-				path: "/camera/danhmuc-camera",
-				Component: DanhMucCameraCatalog,
+				path: "/camera/danhmuc",
+				Component: DanhMucCameraPage,
 				handle: {
 					icon: createElement(AppstoreOutlined),
 					title: "camera.menu.danhmucCamera",

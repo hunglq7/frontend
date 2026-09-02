@@ -1,4 +1,4 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types.js";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc/types.js";
 import type { ActionType } from "@ant-design/pro-components";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";

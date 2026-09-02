@@ -3,9 +3,9 @@ import { BasicContent } from "#src/components/basic-content";
 import { Col, Row } from "antd";
 
 import BarChart from "./components/bar-chart";
+import CameraChart from "./components/camera-chart";
 import CardList from "./components/card-list";
 import LineChart from "./components/line-chart";
-
 import PieChart from "./components/pie-chart";
 
 const wrapperCol: ColProps = {
@@ -24,8 +24,16 @@ export default function Home() {
 					<CardList />
 				</Col>
 				<Col span={24}>
-					<LineChart />
+					<Row justify="space-between" gutter={[20, 20]}>
+						<Col {...wrapperCol}>
+							<CameraChart />
+						</Col>
+						<Col {...wrapperCol}>
+							<LineChart />
+						</Col>
+					</Row>
 				</Col>
+
 				<Col span={24}>
 					<Row justify="space-between" gutter={[20, 20]}>
 						<Col {...wrapperCol}>

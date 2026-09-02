@@ -7,7 +7,6 @@ import {
 
 import { createElement, lazy } from "react";
 
-const DanhmucCapdienthoai = lazy(() => import("#src/pages/capdienthoai/danhmuc"));
 const TonghopThietbiThongtinPage = lazy(() => import("#src/pages/capdienthoai/tonghop"));
 const routes: AppRouteRecordRaw[] = [
 	{
@@ -20,20 +19,7 @@ const routes: AppRouteRecordRaw[] = [
 			ignoreAccess: true,
 		},
 		children: [
-			{
-				path: "/capdienthoai/danhmuc/",
-				Component: DanhmucCapdienthoai,
-				handle: {
-					icon: createElement(ApartmentOutlined),
-					title: "danhmuc.danhmuc",
-					ignoreAccess: true,
-					permissions: [
-						"permission:button:add",
-						"permission:button:update",
-						"permission:button:delete",
-					],
-				},
-			},
+
 			{
 				path: "/capdienthoai/tonghop/",
 				Component: TonghopThietbiThongtinPage,

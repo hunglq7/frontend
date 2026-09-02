@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 interface Props {
 	data: ViTriLapDatItemType[]
 }
-export default function ExportExcelButton({
+export default function VitriExportExcelButton({
 	data,
 }: Props) {
 	const handleExport = () => {
@@ -28,7 +28,6 @@ export default function ExportExcelButton({
 
 	return (
 		<BasicButton
-			size="small"
 			onClick={handleExport}
 		>
 			Xuất Excel

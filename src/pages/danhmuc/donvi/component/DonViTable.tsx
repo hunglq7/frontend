@@ -26,6 +26,11 @@ export default function DonViTable() {
 	const [searchText, setSearchText] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 
+	const applySearchValue = (value?: Record<string, unknown>) => {
+		const nextSearchText = String(value?.ten_don_vi ?? "").trim();
+		setSearchText(nextSearchText);
+	};
+
 	// columns
 	const columns = createColumns({
 		handleDelete,
@@ -45,7 +50,9 @@ export default function DonViTable() {
 
 		const focusEditableRow = () => {
 			const rowSelector = `[data-row-key="${String(pendingNewRowKeyRef.current)}"]`;
-			const rowElement = document.querySelector(rowSelector) as HTMLElement | null;
+			const rowElement = document.querySelector(
+				rowSelector,
+			) as HTMLElement | null;
 			if (!rowElement) {
 				return;
 			}
@@ -55,7 +62,9 @@ export default function DonViTable() {
 				block: "nearest",
 			});
 
-			const input = rowElement.querySelector("input, textarea, .ant-select-selector") as HTMLElement | null;
+			const input = rowElement.querySelector(
+				"input, textarea, .ant-select-selector",
+			) as HTMLElement | null;
 			input?.focus();
 			pendingNewRowKeyRef.current = null;
 		};
@@ -68,6 +77,12 @@ export default function DonViTable() {
 			rowKey="id"
 			columns={columns}
 			dataSource={filteredData}
+			onSubmit={(value) => {
+				applySearchValue(value as Record<string, unknown> | undefined);
+			}}
+			onReset={() => {
+				setSearchText("");
+			}}
 			search={{
 				labelWidth: "auto",
 				optionRender: (_, props) => [
@@ -76,8 +91,7 @@ export default function DonViTable() {
 						type="primary"
 						icon={<SearchOutlined />}
 						onClick={() => {
-							const values = props.form?.getFieldsValue();
-							setSearchText(values?.ten_don_vi || "");
+							props.form?.submit();
 						}}
 					>
 						Tìm
@@ -94,7 +108,6 @@ export default function DonViTable() {
 					</Button>,
 				],
 			}}
-
 			pagination={{
 				current: currentPage,
 				pageSize: 10,
@@ -108,7 +121,6 @@ export default function DonViTable() {
 					setSelectedRows(rows);
 				},
 			}}
-
 			toolBarRender={() => [
 				<Toolbar
 					key="toolbar"
@@ -128,7 +140,6 @@ export default function DonViTable() {
 					onDeleteMultiple={handleDeleteMultiple}
 				/>,
 			]}
-
 			editable={{
 				type: "multiple",
 				editableKeys,

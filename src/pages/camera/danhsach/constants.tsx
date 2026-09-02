@@ -1,11 +1,11 @@
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
+import type { DanhsachCameraItemType } from "#src/api/camera/danhsach/types";
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
 import { Tag } from "antd";
 
 export function getConstantColumns(
 	t: TFunction<"translation", undefined>,
-): ProColumns<DanhmucCameraItemType>[] {
+): ProColumns<DanhsachCameraItemType>[] {
 	return [
 		{
 			disable: true,

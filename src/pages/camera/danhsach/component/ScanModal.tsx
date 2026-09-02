@@ -1,4 +1,4 @@
-import type { DanhmucCameraItemType } from "#src/api/camera/danhmuc/types";
+import type { DanhsachCameraItemType } from "#src/api/camera/danhsach/types";
 import { StopOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Empty, Modal, Progress, Row, Spin, Statistic } from "antd";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ interface ScanModalProps {
 	progress: number
 	onlineCount: number
 	offlineCount: number
-	currentCamera: DanhmucCameraItemType | null
+	currentCamera: DanhsachCameraItemType | null
 	totalCameras: number
 	onCancel: () => void
 }

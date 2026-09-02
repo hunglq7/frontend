@@ -1,5 +1,5 @@
 {
-	"tenThietBi": "Khu vực",
+	"khuvuc": "Khu vực",
 	"ipAddress": "Địa chỉ IP",
 	"location": "Vị trí lắp đặt",
 	"status": "Trạng thái",
@@ -28,6 +28,12 @@
 	"ipDuplicate": "Đia chỉ IP đã tồn tại",
 	"checkingStatus": "Kiểm tra trạng thái",
 	"checkStatus": "Kiểm tra",
+	"khuVuc": "Khu vực",
+	"cameraId": "Id",
+	"totalScans": "Tổng camera",
+	"lastUpdated": "Ngày cập nhật",
+	"summary": "Bảng tóm tắt",
+	"neverScanned": "Chưa từng được quét",
 	"menu": {
 		"camera": "Camera",
 		"danhmuc": "Danh sách camera",

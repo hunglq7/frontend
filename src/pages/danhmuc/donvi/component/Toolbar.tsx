@@ -29,7 +29,7 @@ export default function Toolbar({
 			</BasicButton>
 			{selectedCount > 0 && (
 				<Popconfirm
-					title={`Bạn có chắc muốn xóa ${selectedCount} dòng đã chọn?`}
+					title={`Bạn có muốn xóa ${selectedCount} bản ghi?`}
 					onConfirm={onDeleteMultiple}
 				>
 					<BasicButton

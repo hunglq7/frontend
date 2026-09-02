@@ -9,7 +9,6 @@ interface Props {
 }
 
 function TonghopThietbiThongtinExportExcel({ data }: Props) {
-	console.error("dữ liệu in", data);
 	const handleExport = () => {
 		const exportData = data.map((item, index) => ({
 			"STT": index + 1,

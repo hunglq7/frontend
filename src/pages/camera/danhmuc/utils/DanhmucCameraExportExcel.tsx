@@ -1,4 +1,4 @@
-import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc_camera/types.js";
+import type { DanhMucCameraItemType } from "#src/api/camera/danhmuc/types.js";
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import * as XLSX from "xlsx";

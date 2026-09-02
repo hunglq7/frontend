@@ -115,7 +115,7 @@ function TonghopThietbiThongtinModal({
 			onOpenChange={onOpenChange}
 			initialValues={normalizedInitialValues}
 			modalProps={{
-				destroyOnClose: true, // Sửa 'destroyOnHidden' thành chuẩn Antd v5 'destroyOnClose'
+				destroyOnHidden: true, // Sửa 'destroyOnHidden' thành chuẩn Antd v5 'destroyOnClose'
 			}}
 			onFinish={onSubmit}
 			layout="horizontal"
