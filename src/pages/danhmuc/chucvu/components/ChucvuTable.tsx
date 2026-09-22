@@ -1,5 +1,5 @@
-import type { DanhMucChucVuItemType as ChucvuItem } from "#src/api/danhmuc/chucvu/types.js";
 import type { ActionType } from "@ant-design/pro-components";
+import type { DanhMucChucVuItemType as ChucvuItem } from "#src/api/danhmuc/chucvu/types.js";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
@@ -11,11 +11,8 @@ interface Props {
 	loading: boolean
 	request: any
 	onEdit: (record: ChucvuItem) => void
-
 	onDelete: (id: number) => void | Promise<void>
-
 	rowSelection: any
-
 	toolbar: React.ReactNode
 }
 function ChucvuTable({
