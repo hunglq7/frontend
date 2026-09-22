@@ -58,7 +58,7 @@ export default function CardList() {
 			},
 			{
 				id: "purchases",
-				title: t("home.purchases"),
+				title: t("home.capdienthoai"),
 				data: 9280,
 				icon: <MoneyCollectOutlined />,
 			},
@@ -68,12 +68,7 @@ export default function CardList() {
 				data: 13600,
 				icon: <ShoppingCartOutlined />,
 			},
-			{
-				id: "shoppings_2",
-				title: t("home.camera"),
-				data: 13600,
-				icon: <ShoppingCartOutlined />,
-			},
+
 		];
 	}, [listDonvi?.length, totalCameras, t]);
 
