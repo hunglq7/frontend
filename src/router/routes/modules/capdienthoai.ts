@@ -1,11 +1,11 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import ContainerLayout from "#src/layout/container-layout";
 import {
 	ApartmentOutlined,
 	FolderOutlined,
 } from "@ant-design/icons";
-
 import { createElement, lazy } from "react";
+
+import ContainerLayout from "#src/layout/container-layout";
 
 const TonghopThietbiThongtinPage = lazy(() => import("#src/pages/capdienthoai/tonghop"));
 const routes: AppRouteRecordRaw[] = [
@@ -14,7 +14,7 @@ const routes: AppRouteRecordRaw[] = [
 		Component: ContainerLayout,
 		handle: {
 			icon: createElement(FolderOutlined),
-			title: "common.menu.capdienthoai",
+			title: "common.menu.capnhatthietbi",
 			order: 3,
 			ignoreAccess: true,
 		},
@@ -25,7 +25,7 @@ const routes: AppRouteRecordRaw[] = [
 				Component: TonghopThietbiThongtinPage,
 				handle: {
 					icon: createElement(ApartmentOutlined),
-					title: "danhmuc.tonghop.thietbiThongtin",
+					title: "danhmuc.tonghop.capnhatcamera",
 					ignoreAccess: true,
 					permissions: [
 						"permission:button:add",

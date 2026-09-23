@@ -46,6 +46,8 @@
 	"donViTinhManagement": "Đơn vị tính",
 	"danhmuc": "Danh mục",
 	"tonghop": {
-		"thietbiThongtin": "Cập nhật thông tin thiết bị"
+		"thietbiThongtin": "Cập nhật thông tin thiết bị",
+		"capnhatcamera": "Cập nhật camera",
+		"capnhatdienthoai": "Cập nhật điện thoại"
 	}
 }
