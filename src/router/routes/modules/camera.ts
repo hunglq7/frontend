@@ -1,17 +1,16 @@
 import type { AppRouteRecordRaw } from "#src/router/types";
-import ContainerLayout from "#src/layout/container-layout";
 import {
 	AppstoreOutlined,
 	CameraOutlined,
 	ProfileOutlined,
 } from "@ant-design/icons";
 import { createElement, lazy } from "react";
+import ContainerLayout from "#src/layout/container-layout";
 
 const DanhMucCameraPage = lazy(() => import("#src/pages/camera/danhmuc"));
 const DanhsachCameraPage = lazy(
 	() => import("#src/pages/camera/danhsach"),
 );
-const TongHopCamera = lazy(() => import("#src/pages/camera/tonghop"));
 
 const routes: AppRouteRecordRaw[] = [
 	{
@@ -52,20 +51,7 @@ const routes: AppRouteRecordRaw[] = [
 					],
 				},
 			},
-			{
-				path: "/camera/tonghop",
-				Component: TongHopCamera,
-				handle: {
-					icon: "TableOutlined",
-					title: "camera.menu.tonghop",
-					roles: ["user", "admin"],
-					permissions: [
-						"permission:button:add",
-						"permission:button:update",
-						"permission:button:delete",
-					],
-				},
-			},
+
 		],
 	},
 ];

@@ -106,5 +106,8 @@
 	"exportExcel": "Export Excel",
 	"tonghopcamera": "Update camera",
 	"createdAt": "Ngày tạo",
-	"updatedAt": "Ngày cập nhật"
+	"updatedAt": "Ngày cập nhật",
+	"deleteSelect": "Xóa dòng chọn",
+	"addThietbi": "Thêm thiết bị",
+	"updateThietbi": "Sửa thiết bị"
 }

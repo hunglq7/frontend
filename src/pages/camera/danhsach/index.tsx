@@ -1,5 +1,10 @@
-import type { DanhsachCameraItemType } from "#src/api/camera/danhsach/types";
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { DanhsachCameraItemType } from "#src/api/camera/danhsach/types";
+import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import * as XLSX from "xlsx";
 import {
 	fetchCheckStatusDanhsachCamera,
 	fetchDanhsachCamerasList,
@@ -11,12 +16,6 @@ import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
 import { useCameraStore } from "#src/store/camera/cameraStore";
-import { ClearOutlined, DeleteOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Popconfirm, Row, Select, Upload } from "antd";
-import { useEffect, useRef, useState } from "react";
-
-import { useTranslation } from "react-i18next";
-import * as XLSX from "xlsx";
 import { Detail } from "./component/detail";
 import { getConstantColumns } from "./constants";
 

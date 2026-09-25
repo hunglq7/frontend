@@ -1,265 +1,201 @@
-/* cspell:disable */
-import type { TonghopThietbiThongtinItemType, TonghopThietbiThongtinPayload } from "#src/api/capthongtin/tonghop/types";
-import type { DanhMucDonViItemType } from "#src/api/danhmuc/donvi/types";
-import type { DonViTinhItemType } from "#src/api/danhmuc/donvitinh/types";
-import type { KhuVucItemType } from "#src/api/danhmuc/khuvuc/types";
-import type { LoaiThietBiItemType } from "#src/api/danhmuc/loaithietbi/types";
-import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
-import type { ViTriLapDatItemType } from "#src/api/danhmuc/vitri/types";
-import type { ActionType } from "@ant-design/pro-components";
+import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
+import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
+import { PlusCircleOutlined, ReloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Popconfirm } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
-	fetchAddTonghopThietbiThongtin,
 	fetchDeleteMultipleTonghopThietbiThongtinItems,
 	fetchDeleteTonghopThietbiThongtinItem,
 	fetchTonghopThietbiThongtinList,
-	fetchUpdateTonghopThietbiThongtin,
-} from "#src/api/capthongtin/tonghop/index.js";
-import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
-import { fetchDonViTinhList } from "#src/api/danhmuc/donvitinh/index";
-import { fetchKhuVucList } from "#src/api/danhmuc/khuvuc/index";
-import { fetchLoaiThietBiList } from "#src/api/danhmuc/loaithietbi/index";
+} from "#src/api/capthongtin/tonghop/index";
 import { fetchThietBiList } from "#src/api/danhmuc/thietbi/index";
-import { fetchViTriLapDatList } from "#src/api/danhmuc/vitri/index";
+import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
-import { message } from "antd";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useCallback, useEffect, useRef, useState } from "react";
-import TonghopThietbiThongtinModel from "./components/TonghopThietbiThongtinModel";
-import TonghopThietbiThongtinTable from "./components/TonghopThietbiThongtinTable";
-import TonghopThietbiThongtinToolBar from "./components/TonghopThietbiThongtinToolBar";
+import { BasicTable } from "#src/components/basic-table";
+import { accessControlCodes, useAccess } from "#src/hooks/use-access";
+import Detail from "./components/Detail";
+import ExportExcel from "./components/ExportExcel";
+import { getConstantColumns } from "./constants";
 
-dayjs.extend(customParseFormat);
-
-function formatNgayLap(value: unknown) {
-	if (!value)
-		return undefined;
-	const date = dayjs.isDayjs(value)
-		? value
-		: value instanceof Date
-			? dayjs(value)
-			: typeof value === "string"
-				? dayjs(value, ["YYYY-MM-DD", "DD/MM/YYYY", "YYYY-MM-DDTHH:mm:ss.SSSZ"], true)
-				: dayjs(value as dayjs.ConfigType);
-	return date.isValid() ? date.format("YYYY-MM-DD") : undefined;
-}
-
-const FILTER_FIELDS = [
-	"ten_thiet_bi",
-	"ten_don_vi",
-	"ten_vi_tri",
-	"ten_khu_vuc",
-	"ten_loai",
-	"ten_don_vi_tinh",
-] as const;
-
-function TonghopThietbiThongtinPage() {
-	const actionRef = useRef<ActionType>(null);
-	const [openModal, setOpenModal] = useState(false);
-	const [editingRecord, setEditingRecord] = useState<TonghopThietbiThongtinItemType | null>(null);
+export default function DanhsachCameraPage() {
+	const { t } = useTranslation();
+	const [isOpen, setIsOpen] = useState(false);
+	const { hasAccessByCodes } = useAccess();
+	const [title, setTitle] = useState("");
+	const [detailData, setDetailData] = useState<Partial<TonghopThietbiThongtinItemType>>({});
+	const [filteredData, setFilteredData] = useState<TonghopThietbiThongtinItemType[]>([]);
+	const [thietBiList, setThietBiList] = useState<Awaited<ReturnType<typeof fetchThietBiList>>>([]);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-	const [tableData, setTableData] = useState<TonghopThietbiThongtinItemType[]>([]);
+	const actionRef = useRef<ActionType>(null);
 
-	// State quản lý danh mục dạng gộp
-	const [categories, setCategories] = useState<{
-		thietBi: ThietBiItemType[]
-		loaiThietBi: LoaiThietBiItemType[]
-		donViTinh: DonViTinhItemType[]
-		danhMucDonVi: DanhMucDonViItemType[]
-		viTri: ViTriLapDatItemType[]
-		khuVuc: KhuVucItemType[]
-	}>({
-		thietBi: [],
-		loaiThietBi: [],
-		donViTinh: [],
-		danhMucDonVi: [],
-		viTri: [],
-		khuVuc: [],
+	useEffect(() => {
+		fetchThietBiList().then(setThietBiList).catch((error) => {
+			console.error("Failed to load device options:", error);
+		});
+	}, []);
+
+	const handleDeleteRow = async (id: number, action?: ProCoreActionType<object>) => {
+		await fetchDeleteTonghopThietbiThongtinItem(id);
+		setSelectedRowKeys([]);
+		await action?.reload?.();
+		window.$message?.success(t("common.deleteSuccess"));
+	};
+
+	const handleBulkDelete = async () => {
+		if (selectedRowKeys.length === 0) {
+			return;
+		}
+		await fetchDeleteMultipleTonghopThietbiThongtinItems(selectedRowKeys as number[]);
+		setSelectedRowKeys([]);
+		await actionRef.current?.reload();
+		window.$message?.success(t("common.deleteSuccess"));
+	};
+
+	const filterThietbiCameras = (
+		data: TonghopThietbiThongtinItemType[],
+		thietBiId?: number | string,
+	): TonghopThietbiThongtinItemType[] => data.filter((item) => {
+		const matchesDevice = thietBiId === undefined || thietBiId === "" || String(item.thiet_bi_id) === String(thietBiId);
+		return matchesDevice && Boolean(item.tinh_trang);
 	});
 
-	const getDetailId = (record: TonghopThietbiThongtinItemType) => record.id ?? record.thiet_bi_id;
-
-	// 1. Fetch song song (Parallel Fetching) toàn bộ danh mục khi mount bằng Promise.allSettled
-	useEffect(() => {
-		const fetchAllCategories = async () => {
-			try {
-				const [
-					thietBiRes,
-					loaiThietBiRes,
-					donViTinhRes,
-					danhMucDonViRes,
-					viTriRes,
-					khuVucRes,
-				] = await Promise.all([
-					fetchThietBiList(),
-					fetchLoaiThietBiList(),
-					fetchDonViTinhList(),
-					fetchDanhMucDonViList(),
-					fetchViTriLapDatList(),
-					fetchKhuVucList(),
-				]);
-
-				setCategories({
-					thietBi: thietBiRes,
-					loaiThietBi: loaiThietBiRes,
-					donViTinh: donViTinhRes,
-					danhMucDonVi: danhMucDonViRes,
-					viTri: viTriRes,
-					khuVuc: khuVucRes,
-				});
-			}
-			catch (error) {
-				console.error("Lỗi khi tải danh mục:", error);
-				message.error("Lỗi khi tải danh sách các danh mục hệ thống");
-			}
-		};
-
-		fetchAllCategories();
-	}, []);
-
-	// 2. Tối ưu request data của ProTable
-	const handleTableRequest = useCallback(async (params: Record<string, any>) => {
-		try {
-			const result = await fetchTonghopThietbiThongtinList();
-
-			const filtered = result.filter(item =>
-				FILTER_FIELDS.every((field) => {
-					const selectedValue = params[field];
-					if (selectedValue == null || selectedValue === "")
-						return true;
-					return String(item[field]) === String(selectedValue);
-				}),
-			);
-
-			setTableData(filtered); // Lưu cache cho Toolbar nếu cần xuất Excel/báo cáo
-
-			return {
-				data: filtered,
-				success: true,
-				total: filtered.length,
-			};
-		}
-		catch (error) {
-			console.error("Error fetching data:", error);
-			return { data: [], success: false, total: 0 };
-		}
-	}, []);
-
-	// 3. Tối ưu Submit Form
-	const handleSubmit = async (values: any) => {
-		const payload: TonghopThietbiThongtinPayload = {
-			thiet_bi_id: Number(values.thiet_bi_id),
-			don_vi_id: Number(values.don_vi_id),
-			vi_tri_id: Number(values.vi_tri_id),
-			khu_vuc_id: Number(values.khu_vuc_id),
-			don_vi_tinh_id: Number(values.don_vi_tinh_id),
-			loai_thiet_bi_id: Number(values.loai_thiet_bi_id),
-			so_luong: Number(values.so_luong),
-			tinh_trang: values.tinh_trang ? 1 : 0,
-			ngay_lap: formatNgayLap(values.ngay_lap),
-			ghi_chu: values.ghi_chu ?? null,
-		};
-
-		try {
-			if (editingRecord) {
-				const id = getDetailId(editingRecord);
-				if (id == null)
-					throw new Error("Bản ghi không có ID");
-				await fetchUpdateTonghopThietbiThongtin(id, payload);
-				message.success("Cập nhật thành công");
-			}
-			else {
-				await fetchAddTonghopThietbiThongtin(payload);
-				message.success("Thêm thành công");
-			}
-
-			setOpenModal(false);
-			setEditingRecord(null);
-			actionRef.current?.reload();
-			return true;
-		}
-		catch (error) {
-			message.error(`Thao tác thất bại: ${error}`);
-			return false;
-		}
+	const handleClearFilters = (form?: { resetFields?: () => void, submit?: () => void }) => {
+		form?.resetFields?.();
+		form?.submit?.();
 	};
 
-	const handleDelete = async (id: number | undefined) => {
-		if (id == null) {
-			message.error("Bản ghi không có ID");
-			return;
-		}
-		try {
-			await fetchDeleteTonghopThietbiThongtinItem(id);
-			message.success("Xóa thành công");
-			actionRef.current?.reload();
-		}
-		catch (error) {
-			message.error(`Xóa thất bại: ${error}`);
-		}
+	const columns: ProColumns<TonghopThietbiThongtinItemType>[] = [
+		...getConstantColumns(t, thietBiList),
+		{
+			title: t("common.action"),
+			valueType: "option",
+			key: "option",
+			width: 80,
+			fixed: "right",
+			render: (_, record, __, action) => [
+				<BasicButton
+					key="editable"
+					type="link"
+					size="small"
+					onClick={() => {
+						setIsOpen(true);
+						setTitle(t("common.edit"));
+						setDetailData(record);
+						console.warn("detailData set to:", record);
+					}}
+				>
+					{t("common.edit")}
+				</BasicButton>,
+				<Popconfirm
+					key="delete"
+					title={t("common.confirmDelete")}
+					onConfirm={() => handleDeleteRow(record.id!, action)}
+					okText={t("common.confirm")}
+					cancelText={t("common.cancel")}
+				>
+					<BasicButton key="delete-btn" type="link" size="small" danger>
+						{t("common.delete")}
+					</BasicButton>
+				</Popconfirm>,
+			],
+		},
+	];
+	const onCloseChange = () => {
+		setIsOpen(false);
+		setDetailData({});
 	};
 
-	const handleDeleteMany = async () => {
-		if (!selectedRowKeys.length)
-			return;
-		try {
-			await fetchDeleteMultipleTonghopThietbiThongtinItems(selectedRowKeys as number[]);
-			message.success("Xóa nhiều thành công");
-			setSelectedRowKeys([]);
-			actionRef.current?.reload();
-		}
-		catch (error) {
-			message.error(`Xóa thất bại: ${error}`);
-		}
+	const refreshTable = () => {
+		actionRef.current?.reload();
 	};
 
 	return (
-		<BasicContent>
-			<TonghopThietbiThongtinTable
+		<BasicContent className="h-full">
+			<BasicTable<TonghopThietbiThongtinItemType>
+				adaptive
+				columns={columns}
 				actionRef={actionRef}
-				thietBiList={categories.thietBi}
-				loaiThietBiList={categories.loaiThietBi}
-				donViTinhList={categories.donViTinh}
-				danhMucDonViList={categories.danhMucDonVi}
-				viTriList={categories.viTri}
-				khuVucList={categories.khuVuc}
-				request={handleTableRequest}
-				onEdit={(record) => {
-					setEditingRecord(record);
-					setOpenModal(true);
-				}}
-				onDelete={handleDelete}
 				rowSelection={{
 					selectedRowKeys,
-					onChange: setSelectedRowKeys,
+					onChange: keys => setSelectedRowKeys(keys),
 				}}
-				toolbar={(
-					<TonghopThietbiThongtinToolBar
-						selectedRowKeys={selectedRowKeys}
-						onAdd={() => {
-							setEditingRecord(null);
-							setOpenModal(true);
-						}}
-						onDeleteMany={handleDeleteMany}
-						data={tableData}
-					/>
+				tableAlertRender={({ selectedRowKeys }) => (
+					<div>
+						{t("common.selectedRows", { count: selectedRowKeys?.length ?? 0 })}
+					</div>
 				)}
+				tableAlertOptionRender={({ onCleanSelected }) => (
+					<Button type="link" onClick={onCleanSelected}>
+						{t("common.cancelAll")}
+					</Button>
+				)}
+				request={async (params) => {
+					const data = await fetchTonghopThietbiThongtinList();
+					const filtered = filterThietbiCameras(data, params.thiet_bi_id);
+					setFilteredData(filtered);
+					return {
+						data: filtered,
+						total: filtered.length,
+					};
+				}}
+				search={{
+					labelWidth: 120,
+					optionRender: (_, props) => [
+						<Button
+							key="search"
+							type="primary"
+							size="middle"
+							icon={<SearchOutlined />}
+							onClick={() => props.form?.submit()}
+						>
+							Tìm
+						</Button>,
+						<Button
+							key="reset"
+							size="middle"
+							icon={<ReloadOutlined />}
+							onClick={() => {
+								handleClearFilters(props.form);
+							}}
+						>
+							Đặt lại
+						</Button>,
+					],
+				}}
+				headerTitle={t("home.capnhatcamera")}
+				toolBarRender={() => [
+					<Button
+						key="add-tonghopcamera"
+						icon={<PlusCircleOutlined />}
+						type="primary"
+						disabled={!hasAccessByCodes(accessControlCodes.add)}
+						onClick={() => {
+							setIsOpen(true);
+							setTitle(t("common.addThietbi"));
+							setDetailData({});
+						}}
+					>
+						{t("common.add")}
+					</Button>,
+					<ExportExcel key="export" data={filteredData} />,
+					<Button
+						key="bulk-delete"
+						danger
+						hidden={!hasAccessByCodes(accessControlCodes.delete) || selectedRowKeys.length === 0}
+						onClick={handleBulkDelete}
+					>
+						{t("common.deleteSelect")}
+					</Button>,
+				]}
 			/>
-
-			<TonghopThietbiThongtinModel
-				open={openModal}
-				onOpenChange={setOpenModal}
-				onSubmit={handleSubmit}
-				initialValues={editingRecord}
-				thietBiList={categories.thietBi}
-				loaiThietBiList={categories.loaiThietBi}
-				donViTinhList={categories.donViTinh}
-				danhMucDonViList={categories.danhMucDonVi}
-				viTriList={categories.viTri}
-				khuVucList={categories.khuVuc}
+			<Detail
+				title={title}
+				open={isOpen}
+				detailData={detailData}
+				onCloseChange={onCloseChange}
+				refreshTable={refreshTable}
 			/>
 		</BasicContent>
 	);
 }
-
-export default TonghopThietbiThongtinPage;

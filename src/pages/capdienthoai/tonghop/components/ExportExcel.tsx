@@ -2,13 +2,14 @@ import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tongho
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import dayjs from "dayjs";
+import * as React from "react";
 import * as XLSX from "xlsx";
 
 interface Props {
 	data: TonghopThietbiThongtinItemType[]
 }
 
-function TonghopThietbiThongtinExportExcel({ data }: Props) {
+function ExportExcel({ data }: Props) {
 	const handleExport = () => {
 		const exportData = data.map((item, index) => ({
 			"STT": index + 1,
@@ -35,10 +36,12 @@ function TonghopThietbiThongtinExportExcel({ data }: Props) {
 	};
 
 	return (
-		<Button icon={<DownloadOutlined />} onClick={handleExport}>
-			Xuất Excel
-		</Button>
+		<div>
+			<Button icon={<DownloadOutlined />} onClick={handleExport}>
+				Xuất Excel
+			</Button>
+		</div>
 	);
 }
 
-export default TonghopThietbiThongtinExportExcel;
+export default ExportExcel;
