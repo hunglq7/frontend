@@ -1,13 +1,23 @@
 import type { ProColumns } from "@ant-design/pro-components";
 import type { TFunction } from "i18next";
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
-import type { ThietBiItemType } from "#src/api/danhmuc/thietbi/types";
+import type { SelectOption, TonghopOptions } from "./types";
 import { Tag } from "antd";
 import dayjs from "dayjs";
 
+function toValueEnum(options: SelectOption[]) {
+	return options.reduce(
+		(result, option) => {
+			result[option.value] = { text: option.label };
+			return result;
+		},
+		{} as Record<number, { text: string }>,
+	);
+}
+
 export function getConstantColumns(
 	t: TFunction<"translation", undefined>,
-	thietBiList: ThietBiItemType[],
+	options: TonghopOptions,
 ): ProColumns<TonghopThietbiThongtinItemType>[] {
 	return [
 		{
@@ -27,42 +37,44 @@ export function getConstantColumns(
 				showSearch: true,
 				optionFilterProp: "label",
 			},
-			valueEnum: thietBiList.reduce(
-				(options, item) => {
-					options[item.id] = { text: item.ten_thiet_bi };
-					return options;
-				},
-				{} as Record<number, { text: string }>,
-			),
+			valueEnum: toValueEnum(options.thietBi),
 			render: (_, record) => record.ten_thiet_bi,
 		},
 		{
-			disable: true,
 			title: t("thietbi.ten_don_vi"),
-			dataIndex: "ten_don_vi",
+			dataIndex: "don_vi_id",
 			key: "ten_don_vi",
 			width: 200,
 			sorter: true,
+			valueType: "select",
+			fieldProps: { showSearch: true, optionFilterProp: "label" },
+			valueEnum: toValueEnum(options.donVi),
+			render: (_, record) => record.ten_don_vi,
 		},
 		{
-			disable: true,
 			title: t("thietbi.ten_vi_tri"),
-			dataIndex: "ten_vi_tri",
+			dataIndex: "vi_tri_id",
 			key: "ten_vi_tri",
 			width: 200,
 			sorter: true,
+			valueType: "select",
+			fieldProps: { showSearch: true, optionFilterProp: "label" },
+			valueEnum: toValueEnum(options.viTriLapDat),
+			render: (_, record) => record.ten_vi_tri,
 		},
 		{
-			disable: true,
 			title: t("thietbi.ten_khu_vuc"),
-			dataIndex: "ten_khu_vuc",
+			dataIndex: "khu_vuc_id",
 			key: "ten_khu_vuc",
 			width: 200,
 			sorter: true,
+			valueType: "select",
+			fieldProps: { showSearch: true, optionFilterProp: "label" },
+			valueEnum: toValueEnum(options.khuVuc),
+			render: (_, record) => record.ten_khu_vuc,
 		},
 
 		{
-			disable: true,
 			title: t("thietbi.ten_loai"),
 			dataIndex: "ten_loai",
 			key: "ten_loai",

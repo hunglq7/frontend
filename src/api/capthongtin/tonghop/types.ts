@@ -14,7 +14,6 @@ export interface TonghopThietbiThongtinItemType {
 	loai_thiet_bi_id: number
 	ten_loai: string
 	ngay_lap?: string
-	trang_thai: boolean | null
 	tinh_trang?: boolean | null
 	ghi_chu: string
 	created_at: string

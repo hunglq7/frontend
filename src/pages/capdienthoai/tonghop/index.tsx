@@ -1,7 +1,10 @@
 import type { ActionType, ProColumns, ProCoreActionType } from "@ant-design/pro-components";
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
-import { PlusCircleOutlined, ReloadOutlined, SearchOutlined } from "@ant-design/icons";
+import type { TonghopSearchValues } from "./components/SearchForm";
+import type { TonghopOptions } from "./types";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Popconfirm } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -9,32 +12,77 @@ import {
 	fetchDeleteTonghopThietbiThongtinItem,
 	fetchTonghopThietbiThongtinList,
 } from "#src/api/capthongtin/tonghop/index";
+import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
+import { fetchDonViTinhList } from "#src/api/danhmuc/donvitinh/index";
+import { fetchKhuVucList } from "#src/api/danhmuc/khuvuc/index";
+import { fetchLoaiThietBiList } from "#src/api/danhmuc/loaithietbi/index";
 import { fetchThietBiList } from "#src/api/danhmuc/thietbi/index";
+import { fetchViTriLapDatList } from "#src/api/danhmuc/vitri/index";
+
 import { BasicButton } from "#src/components/basic-button";
 import { BasicContent } from "#src/components/basic-content";
 import { BasicTable } from "#src/components/basic-table";
 import { accessControlCodes, useAccess } from "#src/hooks/use-access";
 import Detail from "./components/Detail";
 import ExportExcel from "./components/ExportExcel";
+import SearchForm from "./components/SearchForm";
 import { getConstantColumns } from "./constants";
 
-export default function DanhsachCameraPage() {
+const emptyOptions: TonghopOptions = {
+	thietBi: [],
+	donVi: [],
+	donViTinh: [],
+	khuVuc: [],
+	loaiThietBi: [],
+	viTriLapDat: [],
+};
+
+export default function TonghopCameraPage() {
 	const { t } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 	const { hasAccessByCodes } = useAccess();
 	const [title, setTitle] = useState("");
 	const [detailData, setDetailData] = useState<Partial<TonghopThietbiThongtinItemType>>({});
 	const [filteredData, setFilteredData] = useState<TonghopThietbiThongtinItemType[]>([]);
-	const [thietBiList, setThietBiList] = useState<Awaited<ReturnType<typeof fetchThietBiList>>>([]);
+	const [options, setOptions] = useState<TonghopOptions>(emptyOptions);
 	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 	const actionRef = useRef<ActionType>(null);
+	const searchFiltersRef = useRef<TonghopSearchValues>({});
 
 	useEffect(() => {
-		fetchThietBiList().then(setThietBiList).catch((error) => {
-			console.error("Failed to load device options:", error);
-		});
-	}, []);
+		let isMounted = true;
+		const loadOptions = async () => {
+			try {
+				const [donVi, donViTinh, khuVuc, loaiThietBi, thietBi, viTriLapDat] = await Promise.all([
+					fetchDanhMucDonViList(),
+					fetchDonViTinhList(),
+					fetchKhuVucList(),
+					fetchLoaiThietBiList(),
+					fetchThietBiList(),
+					fetchViTriLapDatList(),
+				]);
 
+				if (isMounted) {
+					setOptions({
+						donVi: donVi.map(item => ({ label: item.ten_don_vi, value: item.id ?? 0 })),
+						donViTinh: donViTinh.map(item => ({ label: item.ten_don_vi_tinh, value: item.id ?? 0 })),
+						khuVuc: khuVuc.map(item => ({ label: item.ten_khu_vuc, value: item.id ?? 0 })),
+						loaiThietBi: loaiThietBi.map(item => ({ label: item.ten_loai, value: item.id ?? 0 })),
+						thietBi: thietBi.map(item => ({ label: item.ten_thiet_bi, value: item.id ?? 0 })),
+						viTriLapDat: viTriLapDat.map(item => ({ label: item.ten_vi_tri, value: item.id ?? 0 })),
+					});
+				}
+			}
+			catch (error) {
+				console.error("Lỗi khi tải danh sách options:", error);
+			}
+		};
+
+		void loadOptions();
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 	const handleDeleteRow = async (id: number, action?: ProCoreActionType<object>) => {
 		await fetchDeleteTonghopThietbiThongtinItem(id);
 		setSelectedRowKeys([]);
@@ -52,21 +100,18 @@ export default function DanhsachCameraPage() {
 		window.$message?.success(t("common.deleteSuccess"));
 	};
 
-	const filterThietbiCameras = (
-		data: TonghopThietbiThongtinItemType[],
-		thietBiId?: number | string,
-	): TonghopThietbiThongtinItemType[] => data.filter((item) => {
-		const matchesDevice = thietBiId === undefined || thietBiId === "" || String(item.thiet_bi_id) === String(thietBiId);
-		return matchesDevice && Boolean(item.tinh_trang);
-	});
+	const handleSearch = (values: TonghopSearchValues) => {
+		searchFiltersRef.current = values;
+		void actionRef.current?.reload();
+	};
 
-	const handleClearFilters = (form?: { resetFields?: () => void, submit?: () => void }) => {
-		form?.resetFields?.();
-		form?.submit?.();
+	const handleResetFilters = () => {
+		searchFiltersRef.current = {};
+		void actionRef.current?.reload();
 	};
 
 	const columns: ProColumns<TonghopThietbiThongtinItemType>[] = [
-		...getConstantColumns(t, thietBiList),
+		...getConstantColumns(t, options),
 		{
 			title: t("common.action"),
 			valueType: "option",
@@ -82,7 +127,6 @@ export default function DanhsachCameraPage() {
 						setIsOpen(true);
 						setTitle(t("common.edit"));
 						setDetailData(record);
-						console.warn("detailData set to:", record);
 					}}
 				>
 					{t("common.edit")}
@@ -109,12 +153,14 @@ export default function DanhsachCameraPage() {
 	const refreshTable = () => {
 		actionRef.current?.reload();
 	};
-
 	return (
 		<BasicContent className="h-full">
+
+			<SearchForm options={options} onSearch={handleSearch} onReset={handleResetFilters} />
 			<BasicTable<TonghopThietbiThongtinItemType>
 				adaptive
 				columns={columns}
+				search={false}
 				actionRef={actionRef}
 				rowSelection={{
 					selectedRowKeys,
@@ -130,38 +176,29 @@ export default function DanhsachCameraPage() {
 						{t("common.cancelAll")}
 					</Button>
 				)}
-				request={async (params) => {
+				request={async () => {
 					const data = await fetchTonghopThietbiThongtinList();
-					const filtered = filterThietbiCameras(data, params.thiet_bi_id);
+					const filters = searchFiltersRef.current;
+					const matchesId = (itemId: number | undefined, selectedId: number | string | undefined) =>
+						selectedId === undefined || selectedId === null || selectedId === "" || String(itemId) === String(selectedId);
+					let filtered = data.filter(item =>
+						matchesId(item.thiet_bi_id, filters.thiet_bi_id)
+						&& matchesId(item.don_vi_id, filters.don_vi_id)
+						&& matchesId(item.vi_tri_id, filters.vi_tri_id)
+						&& matchesId(item.khu_vuc_id, filters.khu_vuc_id),
+					);
+					if (filters.ngay_lap) {
+						const selectedDate = dayjs(filters.ngay_lap);
+						if (selectedDate.isValid()) {
+							filtered = filtered.filter(item => item.ngay_lap && dayjs(item.ngay_lap).isSame(selectedDate, "day"));
+						}
+					}
 					setFilteredData(filtered);
 					return {
 						data: filtered,
+						success: true,
 						total: filtered.length,
 					};
-				}}
-				search={{
-					labelWidth: 120,
-					optionRender: (_, props) => [
-						<Button
-							key="search"
-							type="primary"
-							size="middle"
-							icon={<SearchOutlined />}
-							onClick={() => props.form?.submit()}
-						>
-							Tìm
-						</Button>,
-						<Button
-							key="reset"
-							size="middle"
-							icon={<ReloadOutlined />}
-							onClick={() => {
-								handleClearFilters(props.form);
-							}}
-						>
-							Đặt lại
-						</Button>,
-					],
 				}}
 				headerTitle={t("home.capnhatcamera")}
 				toolBarRender={() => [
@@ -193,6 +230,7 @@ export default function DanhsachCameraPage() {
 				title={title}
 				open={isOpen}
 				detailData={detailData}
+				options={options}
 				onCloseChange={onCloseChange}
 				refreshTable={refreshTable}
 			/>

@@ -1,5 +1,6 @@
 import type { Dayjs } from "dayjs";
 import type { TonghopThietbiThongtinItemType } from "#src/api/capthongtin/tonghop/types";
+import type { TonghopOptions } from "../types";
 import {
 	ModalForm,
 	ProFormDatePicker,
@@ -10,15 +11,9 @@ import {
 } from "@ant-design/pro-components";
 import { Form } from "antd";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchAddTonghopThietbiThongtin, fetchUpdateTonghopThietbiThongtin } from "#src/api/capthongtin/tonghop/index";
-import { fetchDanhMucDonViList } from "#src/api/danhmuc/donvi/index";
-import { fetchDonViTinhList } from "#src/api/danhmuc/donvitinh/index";
-import { fetchKhuVucList } from "#src/api/danhmuc/khuvuc/index";
-import { fetchLoaiThietBiList } from "#src/api/danhmuc/loaithietbi/index";
-import { fetchThietBiList } from "#src/api/danhmuc/thietbi/index";
-import { fetchViTriLapDatList } from "#src/api/danhmuc/vitri/index";
 
 type TonghopbienapFormType = Omit<TonghopThietbiThongtinItemType, "ngay_lap"> & {
 	ngay_lap?: Dayjs
@@ -27,6 +22,7 @@ interface Props {
 	title: React.ReactNode
 	open: boolean
 	detailData: Partial<TonghopThietbiThongtinItemType>
+	options: TonghopOptions
 	onCloseChange: () => void
 	refreshTable?: () => void
 }
@@ -35,17 +31,12 @@ function Detail({
 	title,
 	open,
 	detailData,
+	options,
 	onCloseChange,
 	refreshTable,
 }: Props) {
 	const { t } = useTranslation();
 	const [form] = Form.useForm<TonghopbienapFormType>();
-	const [phongbanOptions, setPhongbanOptions] = useState<{ label: string, value: number }[]>([]);
-	const [donvitinhOptions, setDonvitinhOptions] = useState<{ label: string, value: number }[]>([]);
-	const [khuvucOptions, setKhuvucOptions] = useState<{ label: string, value: number }[]>([]);
-	const [loaithietbiOptions, setLoaithietbiOptions] = useState<{ label: string, value: number }[]>([]);
-	const [thietbiOptions, setThietbiOptions] = useState<{ label: string, value: number }[]>([]);
-	const [vitrilapdatOptions, setVitrilapdatOptions] = useState<{ label: string, value: number }[]>([]);
 	const onFinish = async (values: TonghopbienapFormType) => {
 		try {
 			if (!values.ngay_lap) {
@@ -90,31 +81,6 @@ function Detail({
 	};
 
 	useEffect(() => {
-		const loadOptions = async () => {
-			try {
-				const [phongbanOptions, donvitinhOptions, khuvucOptions, loaithietbiOptions, thietbiOptions, vitrilapdatOptions] = await Promise.all([
-					fetchDanhMucDonViList(),
-					fetchDonViTinhList (),
-					fetchKhuVucList (),
-					fetchLoaiThietBiList(),
-					fetchThietBiList (),
-					fetchViTriLapDatList (),
-				]);
-
-				setDonvitinhOptions(donvitinhOptions.map(item => ({ label: item.ten_don_vi_tinh, value: item.id ?? 0 })));
-				setPhongbanOptions(phongbanOptions.map(item => ({ label: item.ten_don_vi, value: item.id ?? 0 })));
-				setKhuvucOptions(khuvucOptions.map(item => ({ label: item.ten_khu_vuc, value: item.id ?? 0 })));
-				setLoaithietbiOptions(loaithietbiOptions.map(item => ({ label: item.ten_loai, value: item.id ?? 0 })));
-				setThietbiOptions(thietbiOptions.map(item => ({ label: item.ten_thiet_bi, value: item.id ?? 0 })));
-				setVitrilapdatOptions(vitrilapdatOptions.map(item => ({ label: item.ten_vi_tri, value: item.id ?? 0 })));
-			}
-			catch (error) {
-				console.error("Lỗi khi tải danh sách options:", error);
-			}
-		};
-
-		loadOptions();
-
 		if (open) {
 			form.setFieldsValue({
 				thiet_bi_id: detailData?.thiet_bi_id,
@@ -125,7 +91,6 @@ function Detail({
 				so_luong: detailData.so_luong ?? 1,
 				loai_thiet_bi_id: detailData.loai_thiet_bi_id,
 				ngay_lap: detailData.ngay_lap ? dayjs(detailData.ngay_lap) : undefined,
-				trang_thai: detailData.trang_thai ?? false,
 				tinh_trang: detailData?.tinh_trang ?? false,
 				ghi_chu: detailData?.ghi_chu,
 			});
@@ -133,7 +98,7 @@ function Detail({
 		else {
 			form.resetFields();
 		}
-	}, [open, detailData]);
+	}, [open, detailData, form]);
 
 	return (
 		<ModalForm<TonghopbienapFormType>
@@ -155,7 +120,7 @@ function Detail({
 				name="thiet_bi_id"
 				label="Tên thiết bị"
 				placeholder="Chọn thiết bị"
-				options={thietbiOptions}
+				options={options.thietBi}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -166,7 +131,7 @@ function Detail({
 				name="don_vi_id"
 				label="Đơn vị"
 				placeholder="Chọn đơn vị"
-				options={phongbanOptions}
+				options={options.donVi}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -177,7 +142,7 @@ function Detail({
 				name="vi_tri_id"
 				label="Vị trí lắp đặt"
 				placeholder="Chọn vị trí"
-				options={vitrilapdatOptions}
+				options={options.viTriLapDat}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -188,7 +153,7 @@ function Detail({
 				name="khu_vuc_id"
 				label="Khu vực"
 				placeholder="Chọn khu vực"
-				options={khuvucOptions}
+				options={options.khuVuc}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -199,7 +164,7 @@ function Detail({
 				name="don_vi_tinh_id"
 				label="Đơn vị tính"
 				placeholder="Chọn đơn vị tính"
-				options={donvitinhOptions}
+				options={options.donViTinh}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -218,7 +183,7 @@ function Detail({
 				name="loai_thiet_bi_id"
 				label="Loại thiết bị"
 				placeholder="Chọn loại thiết bị"
-				options={loaithietbiOptions}
+				options={options.loaiThietBi}
 				fieldProps={{
 					showSearch: true,
 					optionFilterProp: "label",
@@ -231,10 +196,6 @@ function Detail({
 				label="Ngày lắp"
 				placeholder="Chọn ngày lắp"
 				rules={[{ required: true, message: t("form.required") }]}
-			/>
-			<ProFormSwitch
-				name="trang_thai"
-				label="Trạng thái"
 			/>
 			<ProFormSwitch
 				name="tinh_trang"
